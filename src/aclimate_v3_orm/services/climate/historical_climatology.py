@@ -1,9 +1,10 @@
-from factory.base_factory import BaseFactory
+from services.base_service import BaseService
 from models.climate import ClimateHistoricalClimatology
+from validations.climate import ClimateHistoricalClimatologyValidator
 from sqlalchemy.orm import Session
 from typing import List
 
-class ClimateHistoricalClimatologyFactory(BaseFactory[ClimateHistoricalClimatology]):
+class ClimateHistoricalClimatologyService(BaseService[ClimateHistoricalClimatology]):
     def __init__(self):
         super().__init__(ClimateHistoricalClimatology)
 
@@ -68,3 +69,7 @@ class ClimateHistoricalClimatologyFactory(BaseFactory[ClimateHistoricalClimatolo
             .filter(self.model.measure.name == measure_name)
             .all()
         )
+    
+    def validate_create(self, db: Session, obj_in: dict):
+        # Validate before create
+        ClimateHistoricalClimatologyValidator.create_validate(db, obj_in)
