@@ -1,0 +1,19 @@
+from sqlalchemy import Column, BigInteger, String, Boolean, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
+from database.base import Base
+from datetime import datetime, timezone
+
+
+class Admin2(Base):
+    __tablename__ = 'admin_2'
+
+    id = Column(BigInteger, primary_key=True)
+    admin_1_id = Column(BigInteger, ForeignKey('admin_1.id'), nullable=False)
+    name = Column(String(255), nullable=False)
+    visible = Column(Boolean, default=True)
+    enable = Column(Boolean, default=True)
+    register = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    updated = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+
+    admin_1 = relationship('Admin1', back_populates='admin_2')
+    locations = relationship('AdminLocation', back_populates='admin_2')
