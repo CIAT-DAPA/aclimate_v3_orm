@@ -1,9 +1,10 @@
-from factory.base_factory import BaseFactory
+from services.base_service import BaseService
 from models.administrative import Location
+from validations.administrative import LocationValidator
 from sqlalchemy.orm import Session
 from typing import List
 
-class LocationFactory(BaseFactory[Location]):
+class LocationService(BaseService[Location]):
     def __init__(self):
         super().__init__(Location)
 
@@ -70,3 +71,8 @@ class LocationFactory(BaseFactory[Location]):
             .filter(self.model.admin_2.name == admin2_name, self.model.enable == enabled)
             .all()
         )
+
+
+    def validate_create(self, db: Session, obj_in: dict):
+        # Validate before create
+        LocationValidator.create_validate(db, obj_in)
