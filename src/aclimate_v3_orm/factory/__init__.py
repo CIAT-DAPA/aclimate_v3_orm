@@ -1,0 +1,4 @@
+from factory.base_factory import BaseFactory
+from .administrative import LocationFactory, CountryFactory, Admin1Factory, Admin2Factory
+from .catalog import ClimateMeasureFactory
+from .climate import ClimateHistoricalMonthlyFactory, ClimateHistoricalClimatologyFactory, ClimateHistoricalDailyFactory
