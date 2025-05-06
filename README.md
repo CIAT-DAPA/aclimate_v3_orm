@@ -10,7 +10,7 @@ This is an ORM (Object-Relational Mapping) built with the SQLAlchemy library for
 
 - Modular structure organized by domain (climate, forecast, catalog, administrative, etc.)
 - Built using SQLAlchemy for efficient relational mapping
-- Compatible with Python 3.x
+- Compatible with Python > 3.10
 - Designed for integration into larger Aclimate infrastructure
 
 ## Getting Started
@@ -19,7 +19,7 @@ To use this ORM, you must have a working relational database instance and Python
 
 ### Prerequisites
 
-- Python 3.x
+- Python > 3.10
 - A relational database (PostgreSQL recommended, but also supports MySQL and SQLite)
 - [SQLAlchemy](https://www.sqlalchemy.org/) and other dependencies (see `requirements.txt`)
 
