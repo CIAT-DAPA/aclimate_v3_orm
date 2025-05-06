@@ -1,9 +1,10 @@
-from factory.base_factory import BaseFactory
+from services.base_service import BaseService
 from models.administrative import Admin2
+from validations.administrative import Admin2Validator
 from sqlalchemy.orm import Session
 from typing import List
 
-class Admin2Factory(BaseFactory[Admin2]):
+class Admin2Service(BaseService[Admin2]):
     def __init__(self):
         super().__init__(Admin2)
 
@@ -27,3 +28,7 @@ class Admin2Factory(BaseFactory[Admin2]):
     
     def get_by_visible(self, db: Session, visible: bool, enabled: bool = True) -> List[Admin2]:
         return db.query(self.model).filter(self.model.visible == visible, self.model.enable == enabled).all()
+    
+    def validate_create(self, db: Session, obj_in: dict):
+        # Validate before create
+        Admin2Validator.create_validate(db, obj_in)

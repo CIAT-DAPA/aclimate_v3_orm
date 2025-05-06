@@ -1,20 +1,21 @@
-from factory.base_factory import BaseFactory
-from models.climate import ClimateHistoricalMonthly
+from services.base_service import BaseService
+from models.climate import ClimateHistoricalDaily
+from validations.climate import ClimateHistoricalDailyValidator
 from sqlalchemy.orm import Session
 from typing import List
 from datetime import date
 
-class ClimateHistoricalMonthlyFactory(BaseFactory[ClimateHistoricalMonthly]):
+class ClimateHistoricalDailyService(BaseService[ClimateHistoricalDaily]):
     def __init__(self):
-        super().__init__(ClimateHistoricalMonthly)
+        super().__init__(ClimateHistoricalDaily)
 
-    def get_by_location_id(self, db: Session, location_id: int) -> List[ClimateHistoricalMonthly]:
+    def get_by_location_id(self, db: Session, location_id: int) -> List[ClimateHistoricalDaily]:
         return db.query(self.model).filter(self.model.location_id == location_id).all()
 
-    def get_by_location_name(self, db: Session, location_name: str) -> List[ClimateHistoricalMonthly]:
+    def get_by_location_name(self, db: Session, location_name: str) -> List[ClimateHistoricalDaily]:
         return db.query(self.model).join(self.model.location).filter(self.model.location.name == location_name).all()
 
-    def get_by_country_id(self, db: Session, country_id: int) -> List[ClimateHistoricalMonthly]:
+    def get_by_country_id(self, db: Session, country_id: int) -> List[ClimateHistoricalDaily]:
         return (
             db.query(self.model)
             .join(self.model.location)
@@ -25,7 +26,7 @@ class ClimateHistoricalMonthlyFactory(BaseFactory[ClimateHistoricalMonthly]):
             .all()
         )
 
-    def get_by_country_name(self, db: Session, country_name: str) -> List[ClimateHistoricalMonthly]:
+    def get_by_country_name(self, db: Session, country_name: str) -> List[ClimateHistoricalDaily]:
         return (
             db.query(self.model)
             .join(self.model.location)
@@ -36,7 +37,7 @@ class ClimateHistoricalMonthlyFactory(BaseFactory[ClimateHistoricalMonthly]):
             .all()
         )
 
-    def get_by_admin1_id(self, db: Session, admin1_id: int) -> List[ClimateHistoricalMonthly]:
+    def get_by_admin1_id(self, db: Session, admin1_id: int) -> List[ClimateHistoricalDaily]:
         return (
             db.query(self.model)
             .join(self.model.location)
@@ -46,7 +47,7 @@ class ClimateHistoricalMonthlyFactory(BaseFactory[ClimateHistoricalMonthly]):
             .all()
         )
 
-    def get_by_admin1_name(self, db: Session, admin1_name: str) -> List[ClimateHistoricalMonthly]:
+    def get_by_admin1_name(self, db: Session, admin1_name: str) -> List[ClimateHistoricalDaily]:
         return (
             db.query(self.model)
             .join(self.model.location)
@@ -56,10 +57,10 @@ class ClimateHistoricalMonthlyFactory(BaseFactory[ClimateHistoricalMonthly]):
             .all()
         )
 
-    def get_by_measure_id(self, db: Session, measure_id: int) -> List[ClimateHistoricalMonthly]:
+    def get_by_measure_id(self, db: Session, measure_id: int) -> List[ClimateHistoricalDaily]:
         return db.query(self.model).filter(self.model.measure_id == measure_id).all()
 
-    def get_by_measure_name(self, db: Session, measure_name: str) -> List[ClimateHistoricalMonthly]:
+    def get_by_measure_name(self, db: Session, measure_name: str) -> List[ClimateHistoricalDaily]:
         return (
             db.query(self.model)
             .join(self.model.measure)
@@ -67,10 +68,13 @@ class ClimateHistoricalMonthlyFactory(BaseFactory[ClimateHistoricalMonthly]):
             .all()
         )
 
-    def get_by_date(self, db: Session, specific_date: date) -> List[ClimateHistoricalMonthly]:
-        # Asumiendo que siempre el día es el 1, ajustamos la fecha para compararla solo con el mes y año
-        return db.query(self.model).filter(self.model.date == specific_date.replace(day=1)).all()
+    def get_by_date(self, db: Session, specific_date: date) -> List[ClimateHistoricalDaily]:
+        return db.query(self.model).filter(self.model.date == specific_date).all()
 
-    def get_by_date_range(self, db: Session, start_date: date, end_date: date) -> List[ClimateHistoricalMonthly]:
-        # Igual que antes, ajustamos el rango de fechas a solo considerar los primeros días de cada mes
+    def get_by_date_range(self, db: Session, start_date: date, end_date: date) -> List[ClimateHistoricalDaily]:
         return db.query(self.model).filter(self.model.date >= start_date, self.model.date <= end_date).all()
+    
+
+    def validate_create(self, db: Session, obj_in: dict):
+        # Validate before create
+        ClimateHistoricalDailyValidator.create_validate(db, obj_in)
