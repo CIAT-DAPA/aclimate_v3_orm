@@ -2,8 +2,6 @@
 
 The goal of this project is to provide a well-structured and scalable Object-Relational Mapping (ORM) system to support the Aclimate platform, a tool designed to process and manage agroclimatic information for decision-making. This ORM facilitates database interactions for models related to climate data, forecast systems, agricultural zones, and administrative boundaries, enabling seamless integration with other components of the Aclimate system.
 
-# ORM Name
-
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/CIAT-DAPA/aclimate_v3_orm) ![](https://img.shields.io/github/v/tag/CIAT-DAPA/aclimate_v3_orm)
 
 This is an ORM (Object-Relational Mapping) built with the SQLAlchemy library for interfacing with relational databases.
