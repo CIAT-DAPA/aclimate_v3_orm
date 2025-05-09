@@ -1,29 +1,74 @@
-from services.base_service import BaseService
-from aclimate_v3_orm.models import MngAdmin1
-from schemas.administrative import Admin1CreateSchema, Admin1ReadSchema
-from validations.administrative import Admin1Validator
-from sqlalchemy.orm import Session
 from typing import List
+from sqlalchemy.orm import Session
+from services.base_service import BaseService
+from models import MngAdmin1
+from schemas import Admin1Create, Admin1Update, Admin1Read
+from validations import MngAdmin1Validator
 
-class MngAdmin1Service(BaseService[MngAdmin1, Admin1CreateSchema, Admin1ReadSchema]):
+class MngAdmin1Service(BaseService[MngAdmin1, Admin1Create, Admin1Read, Admin1Update]):
     def __init__(self):
-        super().__init__(MngAdmin1, Admin1CreateSchema, Admin1ReadSchema)
+        super().__init__(MngAdmin1, Admin1Create, Admin1Read, Admin1Update)
 
-    def get_by_country_id(self, db: Session, country_id: int, enabled: bool = True) -> List[Admin1ReadSchema]:
-        objs = db.query(self.model).filter(self.model.country_id == country_id, self.model.enable == enabled).all()
-        return [self.schema_read.from_orm(obj) for obj in objs]
+    def get_by_country_id(self, 
+                         db: Session, 
+                         country_id: int, 
+                         enabled: bool = True) -> List[Admin1Read]:
+        """Get admin1 regions by country ID"""
+        with self._session_scope(db) as session:
+            objs = (
+                session.query(self.model)
+                .filter(
+                    self.model.country_id == country_id,
+                    self.model.enable == enabled
+                )
+                .all()
+            )
+            return [Admin1Read.model_validate(obj) for obj in objs]
 
-    def get_by_country_name(self, db: Session, country_name: str, enabled: bool = True) -> List[Admin1ReadSchema]:
-        objs = db.query(self.model).join(self.model.country).filter(self.model.country.name == country_name, self.model.enable == enabled).all()
-        return [self.schema_read.from_orm(obj) for obj in objs]
+    def get_by_country_name(self, 
+                          db: Session, 
+                          country_name: str, 
+                          enabled: bool = True) -> List[Admin1Read]:
+        """Get admin1 regions by country name"""
+        with self._session_scope(db) as session:
+            objs = (
+                session.query(self.model)
+                .join(self.model.country)
+                .filter(
+                    self.model.country.name == country_name,
+                    self.model.enable == enabled
+                )
+                .all()
+            )
+            return [Admin1Read.model_validate(obj) for obj in objs]
 
-    def get_all(self, db: Session, enabled: bool = True) -> List[Admin1ReadSchema]:
-        objs = db.query(self.model).filter(self.model.enable == enabled).all()
-        return [self.schema_read.from_orm(obj) for obj in objs]
+    def get_all(self, 
+               db: Session, 
+               enabled: bool = True) -> List[Admin1Read]:
+        """Get all admin1 regions, optionally filtered by enabled status"""
+        with self._session_scope(db) as session:
+            query = session.query(self.model)
+            if enabled is not None:
+                query = query.filter(self.model.enable == enabled)
+            objs = query.all()
+            return [Admin1Read.model_validate(obj) for obj in objs]
 
-    def get_by_name(self, db: Session, name: str, enabled: bool = True) -> List[Admin1ReadSchema]:
-        objs = db.query(self.model).filter(self.model.name == name, self.model.enable == enabled).all()
-        return [self.schema_read.from_orm(obj) for obj in objs]
+    def get_by_name(self, 
+                   db: Session, 
+                   name: str, 
+                   enabled: bool = True) -> List[Admin1Read]:
+        """Get admin1 regions by name"""
+        with self._session_scope(db) as session:
+            objs = (
+                session.query(self.model)
+                .filter(
+                    self.model.name == name,
+                    self.model.enable == enabled
+                )
+                .all()
+            )
+            return [Admin1Read.model_validate(obj) for obj in objs]
 
-    def validate_create(self, db: Session, obj_in: Admin1CreateSchema):
-        Admin1Validator.create_validate(db, obj_in)
+    def _validate_create(self, db: Session, obj_in: Admin1Create):
+        """Validation hook called automatically from BaseService.create()"""
+        MngAdmin1Validator.create_validate(db, obj_in)

@@ -1,79 +1,88 @@
+from typing import TypeVar, Generic, Type, Optional, Any, Dict, List
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
-from typing import Type, TypeVar, Generic, List, Optional
-from pydantic import BaseModel
+from contextlib import contextmanager
 
-# Type variables for SQLAlchemy model and Pydantic schemas
-T = TypeVar("T")
-SchemaCreateType = TypeVar("SchemaCreateType", bound=BaseModel)
-SchemaReadType = TypeVar("SchemaReadType", bound=BaseModel)
+T = TypeVar("T")  # Modelo SQLAlchemy
+CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
+ReadSchemaType = TypeVar("ReadSchemaType", bound=BaseModel)
+UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 
-class BaseService(Generic[T, SchemaCreateType, SchemaReadType]):
-    def __init__(self, model: Type[T], schema_create: Type[SchemaCreateType], schema_read: Type[SchemaReadType]):
-        """
-        Initialize the service with the model and associated schemas.
-        """
+class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]):
+    def __init__(self, 
+                model: Type[T],
+                create_schema: Type[CreateSchemaType],
+                read_schema: Type[ReadSchemaType],
+                update_schema: Type[UpdateSchemaType]):
         self.model = model
-        self.schema_create = schema_create
-        self.schema_read = schema_read
+        self.create_schema = create_schema
+        self.read_schema = read_schema
+        self.update_schema = update_schema
 
-    def get_by_id(self, db: Session, id: int) -> Optional[SchemaReadType]:
-        """
-        Retrieve a single record by ID and return it as a read schema.
-        """
-        obj = db.query(self.model).get(id)
-        return self.schema_read.from_orm(obj) if obj else None
-
-    def get_all(self, db: Session) -> List[SchemaReadType]:
-        """
-        Retrieve all records and return them as a list of read schemas.
-        """
-        objs = db.query(self.model).all()
-        return [self.schema_read.from_orm(obj) for obj in objs]
-
-    def create(self, db: Session, obj_in: SchemaCreateType) -> SchemaReadType:
-        """
-        Create a new record using the create schema, validate it, and return the result as a read schema.
-        """
-        self.validate_create(db, obj_in)
-
-        obj = self.model(**obj_in.dict())
-        db.add(obj)
-        db.commit()
-        db.refresh(obj)
-        return self.schema_read.from_orm(obj)
-
-    def update(self, db: Session, db_obj: T, obj_in: dict) -> SchemaReadType:
-        """
-        Update an existing record with new data and return the updated object as a read schema.
-        """
-        for key, value in obj_in.items():
-            setattr(db_obj, key, value)
-
-        db.add(db_obj)
-        db.commit()
-        db.refresh(db_obj)
-        return self.schema_read.from_orm(db_obj)
-
-    def delete(self, db: Session, db_obj: T) -> SchemaReadType:
-        """
-        Delete or disable a record and return the result as a read schema.
-        """
+    @contextmanager
+    def _session_scope(self, db: Session):
+        """Maneja el ciclo de vida de la sesión de forma segura"""
         try:
-            if hasattr(db_obj, "enabled"):
-                db_obj.enabled = False
-            else:
-                db.delete(db_obj)
-
+            yield db
             db.commit()
-        except SQLAlchemyError:
+        except SQLAlchemyError as e:
             db.rollback()
-            raise
+            raise e
+        finally:
+            db.close()
 
-        return self.schema_read.from_orm(db_obj)
 
-    def validate_create(self, db: Session, obj_in: SchemaCreateType):
-        """
-        Validation hook for child services. Override this in subclasses to add custom logic.
-        """
+    # Métodos públicos que usan schemas
+    def get_by_id(self, db: Session, id: int) -> Optional[ReadSchemaType]:
+        """Obtiene un registro por ID y lo devuelve como ReadSchema"""
+        obj = self._get_by_id(db, id)
+        return ReadSchemaType.model_validate(obj) if obj else None
+
+    def get_all(self, db: Session, filters: Optional[Dict[str, Any]] = None) -> List[ReadSchemaType]:
+        """Obtiene todos los registros como ReadSchemas"""
+        objs = self._get_all(db, filters)
+        return [ReadSchemaType.model_validate(obj) for obj in objs]
+
+    def create(self, db: Session, *, obj_in: CreateSchemaType) -> ReadSchemaType:
+        """Crea un nuevo registro desde un CreateSchema y devuelve ReadSchema"""
+        with self._session_scope(db) as session:
+            self._validate_create(session, obj_in)
+            obj_data = obj_in.model_dump()
+            db_obj = self.model(**obj_data)
+            session.add(db_obj)
+            session.refresh(db_obj)
+            return ReadSchemaType.model_validate(db_obj)
+
+    def update(self, db: Session, *, id: int, obj_in: UpdateSchemaType | Dict[str, Any]) -> Optional[ReadSchemaType]:
+        """Actualiza un registro y devuelve el ReadSchema actualizado"""
+        with self._session_scope(db) as session:
+            db_obj = session.query(self.model).get(id)
+            if not db_obj:
+                return None
+
+            update_data = obj_in.model_dump(exclude_unset=True) if isinstance(obj_in, BaseModel) else obj_in
+            for field, value in update_data.items():
+                setattr(db_obj, field, value)
+            
+            session.refresh(db_obj)
+            return ReadSchemaType.model_validate(db_obj)
+
+    def delete(self, db: Session, *, id: int) -> bool:
+        """Elimina o desactiva un registro (sin schema)"""
+        with self._session_scope(db) as session:
+            db_obj = session.query(self.model).get(id)
+            if not db_obj:
+                return False
+
+            if hasattr(db_obj, "enable"):
+                db_obj.enable = False
+                session.add(db_obj)
+            else:
+                session.delete(db_obj)
+            
+            return True
+
+    def _validate_create(self, db: Session, obj_in: CreateSchemaType):
+        """Hook para validaciones adicionales al crear"""
         pass
