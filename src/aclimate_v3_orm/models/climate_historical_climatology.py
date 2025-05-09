@@ -11,6 +11,5 @@ class ClimateHistoricalClimatology(Base):
     month = Column(Integer, nullable=False)
     value = Column(Float, nullable=False)
 
-
-    location = relationship("MngLocation", back_populates="climate_historical_climatology")
-    measure = relationship("MngClimateMeasure", back_populates="climate_historical_climatology")
+    location = relationship("MngLocation", back_populates="climatology_data")
+    measure = relationship("MngClimateMeasure", back_populates="climatology_data")

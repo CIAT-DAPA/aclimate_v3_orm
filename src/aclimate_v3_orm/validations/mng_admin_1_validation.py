@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from aclimate_v3_orm.models import MngAdmin1, MngCountry
+from models import MngAdmin1, MngCountry
 
 class MngAdmin1Validator:
 
@@ -24,9 +24,9 @@ class MngAdmin1Validator:
             raise ValueError(f"An Admin1 with the name '{name}' already exists in this country.")
 
     @staticmethod
-    def create_validate(db: Session, obj_in: dict):
+    def create_validate(db: Session, obj_in):
         """ Validate fields before creating a new Admin1 record """
         # Validate the fields for the new Admin1 entry
-        MngAdmin1Validator.validate_name(obj_in["name"])
-        MngAdmin1Validator.validate_country_id(db, obj_in["country_id"])
-        MngAdmin1Validator.validate_unique_name(db, obj_in["name"], obj_in["country_id"])
+        MngAdmin1Validator.validate_name(obj_in.name)
+        MngAdmin1Validator.validate_country_id(db, obj_in.country_id)
+        MngAdmin1Validator.validate_unique_name(db, obj_in.name, obj_in.country_id)

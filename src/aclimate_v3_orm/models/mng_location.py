@@ -19,7 +19,9 @@ class MngLocation(Base):
     updated = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
     visible = Column(Boolean, default=True)
 
-    admin_2 = relationship('MngAdmin2', back_populates='mng_location')
-    climate_historical_daily = relationship("ClimateHistoricalDaily", back_populates="mng_location")
-    climate_historical_monthly = relationship("ClimateHistoricalMonthly", back_populates="mng_location")
-    climate_historical_climatology = relationship("ClimateHistoricalClimatology", back_populates="mng_location")
+
+    admin_2_region = relationship('MngAdmin2', back_populates='locations')
+    
+    daily_measurements = relationship("ClimateHistoricalDaily", back_populates="location")
+    monthly_measurements = relationship("ClimateHistoricalMonthly", back_populates="location")
+    climatology_data = relationship("ClimateHistoricalClimatology", back_populates="location")

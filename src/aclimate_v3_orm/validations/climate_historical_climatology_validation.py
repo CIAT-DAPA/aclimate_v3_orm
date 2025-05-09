@@ -1,7 +1,5 @@
 from sqlalchemy.orm import Session
-from models import ClimateHistoricalClimatology
-from aclimate_v3_orm.models import MngLocation
-from models import MngClimateMeasure
+from models import ClimateHistoricalClimatology, MngLocation, MngClimateMeasure
 
 class ClimateHistoricalClimatologyValidator:
 

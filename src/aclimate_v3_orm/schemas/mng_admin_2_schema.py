@@ -8,10 +8,15 @@ class Admin2Base(BaseModel):
     name: str = Field(..., max_length=255, description="Name of the administrative region")
     visible: bool = Field(default=True, description="Whether the region is visible")
     enable: bool = Field(default=True, description="Whether the region is enabled")
+    registered_at: Optional[datetime] = Field(None, alias="register", description="Registration timestamp")
+    updated_at: Optional[datetime] = Field(None, alias="updated", description="Last update timestamp")
 
-class Admin2Create(Admin2Base):
+class Admin2Create(BaseModel):
     """Schema for creating new Admin2 regions"""
-    pass
+    admin_1_id: int = Field(..., gt=0, description="ID of the parent Admin1 region")
+    name: str = Field(..., max_length=255, description="Name of the administrative region")
+    visible: bool = Field(default=True, description="Whether the region is visible")
+    enable: bool = Field(default=True, description="Whether the region is enabled")
 
 class Admin2Update(BaseModel):
     """Schema for updating Admin2 regions"""
@@ -23,11 +28,9 @@ class Admin2Update(BaseModel):
 class Admin2Read(Admin2Base):
     """Complete Admin2 schema including read-only fields and relationships"""
     id: int
-    register: datetime
-    updated: datetime
     
     # Relationships (uncomment if needed in responses)
-    # admin_1: Optional['Admin1'] = None
-    # locations: List['Location'] = []
+    # admin_1: Optional['Admin1Read'] = None
+    # locations: List['LocationRead'] = []
     
     model_config = ConfigDict(from_attributes=True)  # Enable ORM compatibility

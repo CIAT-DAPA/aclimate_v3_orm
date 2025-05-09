@@ -3,7 +3,6 @@ from sqlalchemy.orm import relationship
 from database.base import Base
 from datetime import datetime, timezone
 
-
 class MngAdmin2(Base):
     __tablename__ = 'mng_admin_2'
 
@@ -15,5 +14,6 @@ class MngAdmin2(Base):
     register = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
-    admin_1 = relationship('MngAdmin1', back_populates='mng_admin_2')
-    locations = relationship('MngLocation', back_populates='mng_admin_2')
+    admin_1_region = relationship('MngAdmin1', back_populates='admin_2_regions')
+    
+    locations = relationship('MngLocation', back_populates='admin_2_region')

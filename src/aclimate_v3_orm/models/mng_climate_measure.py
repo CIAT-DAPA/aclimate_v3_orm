@@ -15,7 +15,6 @@ class MngClimateMeasure(Base):
     register = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
-
-    climate_historical_daily = relationship("ClimateHistoricalDaily", back_populates="mng_climate_measureasure")
-    climate_historical_monthly = relationship("ClimateHistoricalMonthly", back_populates="mng_climate_measure")
-    climate_historical_climatology = relationship("ClimateHistoricalClimatology", back_populates="mng_climate_measure")
+    daily_measurements = relationship("ClimateHistoricalDaily", back_populates="measure")
+    monthly_measurements = relationship("ClimateHistoricalMonthly", back_populates="measure")
+    climatology_data = relationship("ClimateHistoricalClimatology", back_populates="measure")

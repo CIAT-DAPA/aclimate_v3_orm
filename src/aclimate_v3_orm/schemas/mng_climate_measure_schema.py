@@ -9,6 +9,8 @@ class ClimateMeasureBase(BaseModel):
     unit: str = Field(..., max_length=50)
     description: Optional[str] = None
     enable: bool = Field(default=True)
+    registered_at: Optional[datetime] = Field(None, alias="register", description="Registration timestamp")
+    updated_at: Optional[datetime] = Field(None, alias="updated", description="Last update timestamp")
 
     @field_validator('name', 'short_name')
     @classmethod
@@ -19,9 +21,22 @@ class ClimateMeasureBase(BaseModel):
             raise ValueError("Field cannot be empty")
         return v
 
-class ClimateMeasureCreate(ClimateMeasureBase):
+class ClimateMeasureCreate(BaseModel):
     """Schema for creating new measures (input validation only)"""
-    pass
+    name: str = Field(..., max_length=150)
+    short_name: str = Field(..., max_length=75)
+    unit: str = Field(..., max_length=50)
+    description: Optional[str] = None
+    enable: bool = Field(default=True)
+
+    @field_validator('name', 'short_name')
+    @classmethod
+    def validate_not_empty(cls, v: str) -> str:
+        """Ensure field is not empty or whitespace"""
+        v = v.strip()
+        if not v:
+            raise ValueError("Field cannot be empty")
+        return v
 
 class ClimateMeasureUpdate(BaseModel):
     """Schema for updating measures (all fields optional)"""
@@ -45,7 +60,5 @@ class ClimateMeasureUpdate(BaseModel):
 class ClimateMeasureRead(ClimateMeasureBase):
     """Full measure schema with read-only fields (ORM compatible)"""
     id: int
-    register: datetime
-    updated: datetime
     
     model_config = ConfigDict(from_attributes=True)  # ORM compatibility

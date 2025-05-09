@@ -32,17 +32,20 @@ class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]
         finally:
             db.close()
 
-
-    # Métodos públicos que usan schemas
+            
     def get_by_id(self, db: Session, id: int) -> Optional[ReadSchemaType]:
-        """Obtiene un registro por ID y lo devuelve como ReadSchema"""
-        obj = self._get_by_id(db, id)
-        return ReadSchemaType.model_validate(obj) if obj else None
+        """Obtiene un registro por ID y lo devuelve directamente como ReadSchema"""
+        with self._session_scope(db) as session:
+            obj = session.query(self.model).get(id)
+            return self.read_schema.model_validate(obj) if obj else None
 
     def get_all(self, db: Session, filters: Optional[Dict[str, Any]] = None) -> List[ReadSchemaType]:
-        """Obtiene todos los registros como ReadSchemas"""
-        objs = self._get_all(db, filters)
-        return [ReadSchemaType.model_validate(obj) for obj in objs]
+        """Obtiene todos los registros ya convertidos a ReadSchemas"""
+        with self._session_scope(db) as session:
+            query = session.query(self.model)
+            if filters:
+                query = query.filter_by(**filters)
+            return [self.read_schema.model_validate(obj) for obj in query.all()]
 
     def create(self, db: Session, *, obj_in: CreateSchemaType) -> ReadSchemaType:
         """Crea un nuevo registro desde un CreateSchema y devuelve ReadSchema"""
@@ -51,8 +54,9 @@ class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]
             obj_data = obj_in.model_dump()
             db_obj = self.model(**obj_data)
             session.add(db_obj)
+            session.commit()
             session.refresh(db_obj)
-            return ReadSchemaType.model_validate(db_obj)
+            return self.read_schema.model_validate(db_obj)
 
     def update(self, db: Session, *, id: int, obj_in: UpdateSchemaType | Dict[str, Any]) -> Optional[ReadSchemaType]:
         """Actualiza un registro y devuelve el ReadSchema actualizado"""
@@ -66,7 +70,7 @@ class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]
                 setattr(db_obj, field, value)
             
             session.refresh(db_obj)
-            return ReadSchemaType.model_validate(db_obj)
+            return self.read_schema.model_validate(db_obj)
 
     def delete(self, db: Session, *, id: int) -> bool:
         """Elimina o desactiva un registro (sin schema)"""

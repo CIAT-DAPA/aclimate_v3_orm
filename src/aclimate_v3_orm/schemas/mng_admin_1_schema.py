@@ -7,10 +7,14 @@ class Admin1Base(BaseModel):
     country_id: int = Field(..., gt=0, description="ID of the associated country")
     name: str = Field(..., max_length=255, description="Name of the administrative region")
     enable: bool = Field(default=True, description="Whether the region is enabled")
+    registered_at: Optional[datetime] = Field(None, alias="register", description="Registration timestamp")
+    updated_at: Optional[datetime] = Field(None, alias="updated", description="Last update timestamp")
 
-class Admin1Create(Admin1Base):
+class Admin1Create(BaseModel):
     """Schema for creating new Admin1 regions"""
-    pass
+    country_id: int = Field(..., gt=0, description="ID of the associated country")
+    name: str = Field(..., max_length=255, description="Name of the administrative region")
+    enable: bool = Field(default=True, description="Whether the region is enabled")
 
 class Admin1Update(BaseModel):
     """Schema for updating Admin1 regions"""
@@ -21,8 +25,5 @@ class Admin1Update(BaseModel):
 class Admin1Read(Admin1Base):
     """Complete Admin1 schema including read-only fields"""
     id: int
-    register: datetime
-    updated: datetime
     
     model_config = ConfigDict(from_attributes=True)  # Enable ORM compatibility
-    

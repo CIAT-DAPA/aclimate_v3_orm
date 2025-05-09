@@ -11,6 +11,5 @@ class ClimateHistoricalDaily(Base):
     date = Column(Date, nullable=False)
     value = Column(Float, nullable=False)
 
-
-    location = relationship("MngLocation", back_populates="climate_historical_daily")
-    measure = relationship("MngClimateMeasure", back_populates="climate_historical_daily")
+    location = relationship("MngLocation", back_populates="daily_measurements")
+    measure = relationship("MngClimateMeasure", back_populates="daily_measurements")

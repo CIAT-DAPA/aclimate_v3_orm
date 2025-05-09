@@ -1,8 +1,6 @@
 from sqlalchemy import Date
 from sqlalchemy.orm import Session
-from models import ClimateHistoricalDaily
-from aclimate_v3_orm.models import MngLocation
-from models import MngClimateMeasure
+from models import ClimateHistoricalDaily, MngLocation, MngClimateMeasure
 from datetime import datetime
 
 class ClimateHistoricalDailyValidator:
