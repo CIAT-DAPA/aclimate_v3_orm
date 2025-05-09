@@ -19,6 +19,7 @@ setup(
         "sqlalchemy==2.0.40",
         "psycopg2==2.9.10",
         "python-dotenv==1.1.0",
-        "typing_extensions==4.13.2"
+        "typing_extensions==4.13.2",
+        "pydantic==2.11.4"
     ]
 )

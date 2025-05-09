@@ -1,84 +1,79 @@
 from sqlalchemy.orm import Session
-from typing import Type, TypeVar, Generic, List, Optional
 from sqlalchemy.exc import SQLAlchemyError
+from typing import Type, TypeVar, Generic, List, Optional
+from pydantic import BaseModel
 
-# Define a generic type T for models that will be used with BaseService
+# Type variables for SQLAlchemy model and Pydantic schemas
 T = TypeVar("T")
+SchemaCreateType = TypeVar("SchemaCreateType", bound=BaseModel)
+SchemaReadType = TypeVar("SchemaReadType", bound=BaseModel)
 
-class BaseService(Generic[T]):
-    def __init__(self, model: Type[T]):
+class BaseService(Generic[T, SchemaCreateType, SchemaReadType]):
+    def __init__(self, model: Type[T], schema_create: Type[SchemaCreateType], schema_read: Type[SchemaReadType]):
         """
-        Initialize the service with the model class.
+        Initialize the service with the model and associated schemas.
         """
         self.model = model
+        self.schema_create = schema_create
+        self.schema_read = schema_read
 
-    def get_by_id(self, db: Session, id: int) -> Optional[T]:
+    def get_by_id(self, db: Session, id: int) -> Optional[SchemaReadType]:
         """
-        Retrieve a single record from the database by its ID.
+        Retrieve a single record by ID and return it as a read schema.
         """
-        return db.query(self.model).get(id)
+        obj = db.query(self.model).get(id)
+        return self.schema_read.from_orm(obj) if obj else None
 
-    def get_all(self, db: Session) -> List[T]:
+    def get_all(self, db: Session) -> List[SchemaReadType]:
         """
-        Retrieve all records of the given model from the database.
+        Retrieve all records and return them as a list of read schemas.
         """
-        return db.query(self.model).all()
+        objs = db.query(self.model).all()
+        return [self.schema_read.from_orm(obj) for obj in objs]
 
-    def create(self, db: Session, obj_in: dict) -> T:
+    def create(self, db: Session, obj_in: SchemaCreateType) -> SchemaReadType:
         """
-        Create a new record in the database, after validation.
+        Create a new record using the create schema, validate it, and return the result as a read schema.
         """
-        # Perform validation before creating the object
         self.validate_create(db, obj_in)
 
-        # Create the model object from the provided data
-        obj = self.model(**obj_in)
-        
-        # Add, commit and refresh the object to save it in the database
+        obj = self.model(**obj_in.dict())
         db.add(obj)
         db.commit()
         db.refresh(obj)
-        
-        return obj
+        return self.schema_read.from_orm(obj)
 
-    def update(self, db: Session, db_obj: T, obj_in: dict) -> T:
+    def update(self, db: Session, db_obj: T, obj_in: dict) -> SchemaReadType:
         """
-        Update an existing record in the database.
+        Update an existing record with new data and return the updated object as a read schema.
         """
-        # Update the object fields with the new data
         for key, value in obj_in.items():
             setattr(db_obj, key, value)
-        
-        # Add, commit and refresh the object to save the changes
+
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
-        
-        return db_obj
+        return self.schema_read.from_orm(db_obj)
 
-    def delete(self, db: Session, db_obj: T) -> T:
+    def delete(self, db: Session, db_obj: T) -> SchemaReadType:
         """
-        Delete a record from the database (or mark as disabled if it has an 'enabled' attribute).
+        Delete or disable a record and return the result as a read schema.
         """
         try:
             if hasattr(db_obj, "enabled"):
-                # If the object has an 'enabled' field, set it to False instead of deleting
                 db_obj.enabled = False
             else:
-                db.delete(db_obj)  # Permanently delete the object from the database
-            
-            # Commit the changes to the database
+                db.delete(db_obj)
+
             db.commit()
         except SQLAlchemyError:
-            # In case of error, roll back the transaction
             db.rollback()
-            raise  # Reraise the exception
-        
-        return db_obj
+            raise
 
-    def validate_create(self, db: Session, obj_in: dict):
+        return self.schema_read.from_orm(db_obj)
+
+    def validate_create(self, db: Session, obj_in: SchemaCreateType):
         """
-        Validation function before creating an object. Can be overridden by child services.
+        Validation hook for child services. Override this in subclasses to add custom logic.
         """
-        # Default validation can be implemented in subclasses
         pass
