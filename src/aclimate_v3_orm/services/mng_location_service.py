@@ -1,9 +1,9 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from aclimate_v3_orm.services.base_service import BaseService
-from aclimate_v3_orm.models import MngLocation
-from aclimate_v3_orm.validations import MngLocationValidator
-from aclimate_v3_orm.schemas import LocationCreate, LocationRead, LocationUpdate
+from ..services.base_service import BaseService
+from ..models import MngLocation
+from ..validations import MngLocationValidator
+from ..schemas import LocationCreate, LocationRead, LocationUpdate
 
 class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, LocationUpdate]):
     def __init__(self):

@@ -1,6 +1,6 @@
 from sqlalchemy import Date
 from sqlalchemy.orm import Session
-from aclimate_v3_orm.models import ClimateHistoricalMonthly, MngClimateMeasure, MngLocation
+from ..models import ClimateHistoricalMonthly, MngClimateMeasure, MngLocation
 from datetime import datetime
 
 class ClimateHistoricalMonthlyValidator:
