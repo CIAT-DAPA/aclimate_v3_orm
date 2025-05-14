@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from aclimate_v3_orm.models import MngCountry
-from aclimate_v3_orm.schemas import CountryCreate
+from ..models import MngCountry
+from ..schemas import CountryCreate
 
 class MngCountryValidator:
 

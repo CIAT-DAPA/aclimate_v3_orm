@@ -1,6 +1,6 @@
 from sqlalchemy import Column, BigInteger, Integer, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
-from aclimate_v3_orm.database.base import Base
+from ..database.base import Base
 from datetime import datetime, timezone
 
 class MngAdmin1(Base):

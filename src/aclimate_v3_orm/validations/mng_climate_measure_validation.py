@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from aclimate_v3_orm.models import MngClimateMeasure
+from ..models import MngClimateMeasure
 
 class MngClimateMeasureNameValidator:
     @staticmethod
