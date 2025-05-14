@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from sqlalchemy.orm import Session
 from services.base_service import BaseService
 from models import MngAdmin1
@@ -9,10 +9,10 @@ class MngAdmin1Service(BaseService[MngAdmin1, Admin1Create, Admin1Read, Admin1Up
     def __init__(self):
         super().__init__(MngAdmin1, Admin1Create, Admin1Read, Admin1Update)
 
-    def get_by_country_id(self, 
-                         db: Session, 
-                         country_id: int, 
-                         enabled: bool = True) -> List[Admin1Read]:
+    def get_by_country_id(self,
+                          country_id: int, 
+                          enabled: bool = True,
+                          db: Optional[Session] = None) -> List[Admin1Read]:
         """Get admin1 regions by country ID"""
         with self._session_scope(db) as session:
             objs = (
@@ -25,10 +25,10 @@ class MngAdmin1Service(BaseService[MngAdmin1, Admin1Create, Admin1Read, Admin1Up
             )
             return [Admin1Read.model_validate(obj) for obj in objs]
 
-    def get_by_country_name(self, 
-                          db: Session, 
-                          country_name: str, 
-                          enabled: bool = True) -> List[Admin1Read]:
+    def get_by_country_name(self,
+                            country_name: str, 
+                            enabled: bool = True,
+                            db: Optional[Session] = None) -> List[Admin1Read]:
         """Get admin1 regions by country name"""
         with self._session_scope(db) as session:
             objs = (
@@ -42,9 +42,9 @@ class MngAdmin1Service(BaseService[MngAdmin1, Admin1Create, Admin1Read, Admin1Up
             )
             return [Admin1Read.model_validate(obj) for obj in objs]
 
-    def get_all(self, 
-               db: Session, 
-               enabled: bool = True) -> List[Admin1Read]:
+    def get_all(self,
+                enabled: bool = True,
+                db: Optional[Session] = None) -> List[Admin1Read]:
         """Get all admin1 regions, optionally filtered by enabled status"""
         with self._session_scope(db) as session:
             query = session.query(self.model)
@@ -53,10 +53,10 @@ class MngAdmin1Service(BaseService[MngAdmin1, Admin1Create, Admin1Read, Admin1Up
             objs = query.all()
             return [Admin1Read.model_validate(obj) for obj in objs]
 
-    def get_by_name(self, 
-                   db: Session, 
-                   name: str, 
-                   enabled: bool = True) -> List[Admin1Read]:
+    def get_by_name(self,
+                    name: str, 
+                    enabled: bool = True,
+                    db: Optional[Session] = None) -> List[Admin1Read]:
         """Get admin1 regions by name"""
         with self._session_scope(db) as session:
             objs = (
@@ -69,6 +69,6 @@ class MngAdmin1Service(BaseService[MngAdmin1, Admin1Create, Admin1Read, Admin1Up
             )
             return [Admin1Read.model_validate(obj) for obj in objs]
 
-    def _validate_create(self, db: Session, obj_in: Admin1Create):
+    def _validate_create(self, obj_in: Admin1Create, db: Optional[Session] = None):
         """Validation hook called automatically from BaseService.create()"""
         MngAdmin1Validator.create_validate(db, obj_in)

@@ -24,13 +24,11 @@ class MngAdmin2Validator:
             raise ValueError(f"Ya existe un Admin2 con el nombre '{name}' en este Admin1.")
 
     @staticmethod
-    def create_validate(db: Session, obj_in: dict):
+    def create_validate(db: Session, obj_in):
         """ Validar todos los campos antes de crear un nuevo Admin2 """
         # Validar el nombre
-        MngAdmin2Validator.validate_name(obj_in["name"])
-
-        # Validar que el admin_1_id corresponda a un Admin1 válido
-        MngAdmin2Validator.validate_admin_1_id(db, obj_in["admin_1_id"])
-
-        # Validar que el nombre sea único dentro del Admin1
-        MngAdmin2Validator.validate_unique_name(db, obj_in["name"], obj_in["admin_1_id"])
+        MngAdmin2Validator.validate_name(obj_in.name)
+        # Validar admin_1_id
+        MngAdmin2Validator.validate_admin_1_id(db, obj_in.admin_1_id)
+        # Validar unicidad del nombre
+        MngAdmin2Validator.validate_unique_name(db, obj_in.name, obj_in.admin_1_id)

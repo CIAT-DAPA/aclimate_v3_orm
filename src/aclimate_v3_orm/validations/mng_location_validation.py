@@ -39,10 +39,10 @@ class MngLocationValidator:
     def create_validate(db: Session, obj_in: dict):
         """ Validate fields before creating a new Location record """
         # Validate the fields for the new Location entry
-        MngLocationValidator.validate_name(obj_in["name"])
-        MngLocationValidator.validate_admin_2_id(db, obj_in["admin_2_id"])
-        MngLocationValidator.validate_unique_name(db, obj_in["name"], obj_in["admin_2_id"])
+        MngLocationValidator.validate_name(obj_in.name)
+        MngLocationValidator.validate_admin_2_id(db, obj_in.admin_2_id)
+        MngLocationValidator.validate_unique_name(db, obj_in.name, obj_in.admin_2_id)
         if "latitude" in obj_in:
-            MngLocationValidator.validate_latitude(obj_in["latitude"])
+            MngLocationValidator.validate_latitude(obj_in.latitude)
         if "longitude" in obj_in:
-            MngLocationValidator.validate_longitude(obj_in["longitude"])
+            MngLocationValidator.validate_longitude(obj_in.longitude)

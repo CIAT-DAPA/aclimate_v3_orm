@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from sqlalchemy.orm import Session
 from services.base_service import BaseService
 from models import MngLocation
@@ -9,7 +9,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
     def __init__(self):
         super().__init__(MngLocation, LocationCreate, LocationRead, LocationUpdate)
 
-    def get_by_visible(self, db: Session, visible: bool, enabled: bool = True) -> List[LocationRead]:
+    def get_by_visible(self, visible: bool, enabled: bool = True, db: Optional[Session] = None) -> List[LocationRead]:
         """Obtiene ubicaciones por visibilidad y habilitación"""
         with self._session_scope(db) as session:
             objs = db.query(self.model).filter(
@@ -18,7 +18,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
             ).all()
             return [LocationRead.model_validate(obj) for obj in objs]
 
-    def get_by_ext_id(self, db: Session, ext_id: str, enabled: bool = True) -> List[LocationRead]:
+    def get_by_ext_id(self, ext_id: str, enabled: bool = True, db: Optional[Session] = None) -> List[LocationRead]:
         """Obtiene ubicaciones por ID externo"""
         with self._session_scope(db) as session:
             objs = db.query(self.model).filter(
@@ -27,7 +27,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
             ).all()
             return [LocationRead.model_validate(obj) for obj in objs]
 
-    def get_by_name(self, db: Session, name: str, enabled: bool = True) -> List[LocationRead]:
+    def get_by_name(self, name: str, enabled: bool = True, db: Optional[Session] = None) -> List[LocationRead]:
         """Obtiene ubicaciones por nombre"""
         with self._session_scope(db) as session:
             objs = db.query(self.model).filter(
@@ -36,7 +36,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
             ).all()
             return [LocationRead.model_validate(obj) for obj in objs]
 
-    def get_all_enable(self, db: Session, enable: bool = True) -> List[LocationRead]:
+    def get_all_enable(self, db: Optional[Session] = None, enable: bool = True) -> List[LocationRead]:
         """Obtiene todas las ubicaciones filtradas por estado habilitado"""
         with self._session_scope(db) as session:
             objs = db.query(self.model).filter(
@@ -44,7 +44,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
             ).all()
             return [LocationRead.model_validate(obj) for obj in objs]
 
-    def get_by_country_id(self, db: Session, country_id: int, enabled: bool = True) -> List[LocationRead]:
+    def get_by_country_id(self, country_id: int, enabled: bool = True, db: Optional[Session] = None) -> List[LocationRead]:
         """Obtiene ubicaciones por ID de país"""
         with self._session_scope(db) as session:
             objs = (
@@ -56,7 +56,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
             )
             return [LocationRead.model_validate(obj) for obj in objs]
 
-    def get_by_admin1_id(self, db: Session, admin1_id: int, enabled: bool = True) -> List[LocationRead]:
+    def get_by_admin1_id(self, admin1_id: int, enabled: bool = True, db: Optional[Session] = None) -> List[LocationRead]:
         """Obtiene ubicaciones por ID de admin1"""
         with self._session_scope(db) as session:
             objs = (
@@ -67,7 +67,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
             )
             return [LocationRead.model_validate(obj) for obj in objs]
 
-    def get_by_country_name(self, db: Session, country_name: str, enabled: bool = True) -> List[LocationRead]:
+    def get_by_country_name(self, country_name: str, enabled: bool = True, db: Optional[Session] = None) -> List[LocationRead]:
         """Obtiene ubicaciones por nombre de país"""
         with self._session_scope(db) as session:
             objs = (
@@ -80,7 +80,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
             )
             return [LocationRead.model_validate(obj) for obj in objs]
 
-    def get_by_admin1_name(self, db: Session, admin1_name: str, enabled: bool = True) -> List[LocationRead]:
+    def get_by_admin1_name(self, admin1_name: str, enabled: bool = True, db: Optional[Session] = None) -> List[LocationRead]:
         """Obtiene ubicaciones por nombre de admin1"""
         with self._session_scope(db) as session:
             objs = (
@@ -92,7 +92,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
             )
             return [LocationRead.model_validate(obj) for obj in objs]
 
-    def get_by_admin2_id(self, db: Session, admin2_id: int, enabled: bool = True) -> List[LocationRead]:
+    def get_by_admin2_id(self, admin2_id: int, enabled: bool = True, db: Optional[Session] = None) -> List[LocationRead]:
         """Obtiene ubicaciones por ID de admin2"""
         with self._session_scope(db) as session:
             objs = (
@@ -102,7 +102,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
             )
             return [LocationRead.model_validate(obj) for obj in objs]
 
-    def get_by_admin2_name(self, db: Session, admin2_name: str, enabled: bool = True) -> List[LocationRead]:
+    def get_by_admin2_name(self, admin2_name: str, enabled: bool = True, db: Optional[Session] = None) -> List[LocationRead]:
         """Obtiene ubicaciones por nombre de admin2"""
         with self._session_scope(db) as session:
             objs = (
@@ -113,6 +113,6 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
             )
             return [LocationRead.model_validate(obj) for obj in objs]
 
-    def _validate_create(self, db: Session, obj_in: LocationCreate):
+    def _validate_create(self, obj_in: LocationCreate, db: Optional[Session] = None):
         """Validación automática llamada desde create() del BaseService"""
         MngLocationValidator.create_validate(db, obj_in)

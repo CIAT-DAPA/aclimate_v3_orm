@@ -46,8 +46,8 @@ class ClimateHistoricalDailyValidator:
     def create_validate(db: Session, obj_in: dict):
         """ Validate the fields before creating a new record """
         # Apply validations that SQLAlchemy cannot enforce
-        ClimateHistoricalDailyValidator.validate_date(obj_in["date"])
-        ClimateHistoricalDailyValidator.validate_value(obj_in["value"])
-        ClimateHistoricalDailyValidator.validate_location_exists(db, obj_in["location_id"])
-        ClimateHistoricalDailyValidator.validate_measure_exists(db, obj_in["measure_id"])
-        ClimateHistoricalDailyValidator.validate_unique_data(db, obj_in["location_id"], obj_in["measure_id"], obj_in["date"])
+        ClimateHistoricalDailyValidator.validate_date(obj_in.date)
+        ClimateHistoricalDailyValidator.validate_value(obj_in.value)
+        ClimateHistoricalDailyValidator.validate_location_exists(db, obj_in.location_id)
+        ClimateHistoricalDailyValidator.validate_measure_exists(db, obj_in.measure_id)
+        ClimateHistoricalDailyValidator.validate_unique_data(db, obj_in.location_id, obj_in.measure_id, obj_in.date)

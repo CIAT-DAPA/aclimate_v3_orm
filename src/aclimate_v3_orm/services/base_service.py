@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from contextlib import contextmanager
+from database import get_db
 
 T = TypeVar("T")  # Modelo SQLAlchemy
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
@@ -21,25 +22,36 @@ class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]
         self.update_schema = update_schema
 
     @contextmanager
-    def _session_scope(self, db: Session):
-        """Maneja el ciclo de vida de la sesión de forma segura"""
-        try:
-            yield db
-            db.commit()
-        except SQLAlchemyError as e:
-            db.rollback()
-            raise e
-        finally:
-            db.close()
-
+    def _session_scope(self, db: Optional[Session] = None):
+        """
+        Safely manages session lifecycle.
+        For internal sessions, delegates ALL handling to get_db().
+        """
+        if db:  # External session
+            try:
+                yield db
+                db.commit()
+            except SQLAlchemyError as e:
+                db.rollback()
+                print(f"⚠️ Database error: {str(e)}")
+                raise
+            except Exception as e:
+                db.rollback()
+                print(f"⚠️ Unexpected error: {str(e)}")
+                raise
+            finally:
+                db.close()
+        else:  # Internal session - FULLY delegates to get_db()
+            with get_db() as db:
+                yield db  # Let get_db() handle everything
             
-    def get_by_id(self, db: Session, id: int) -> Optional[ReadSchemaType]:
+    def get_by_id(self, id: int, db: Optional[Session] = None) -> Optional[ReadSchemaType]:
         """Obtiene un registro por ID y lo devuelve directamente como ReadSchema"""
         with self._session_scope(db) as session:
             obj = session.query(self.model).get(id)
             return self.read_schema.model_validate(obj) if obj else None
 
-    def get_all(self, db: Session, filters: Optional[Dict[str, Any]] = None) -> List[ReadSchemaType]:
+    def get_all(self, db: Optional[Session] = None, filters: Optional[Dict[str, Any]] = None) -> List[ReadSchemaType]:
         """Obtiene todos los registros ya convertidos a ReadSchemas"""
         with self._session_scope(db) as session:
             query = session.query(self.model)
@@ -47,10 +59,10 @@ class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]
                 query = query.filter_by(**filters)
             return [self.read_schema.model_validate(obj) for obj in query.all()]
 
-    def create(self, db: Session, *, obj_in: CreateSchemaType) -> ReadSchemaType:
+    def create(self, db: Optional[Session] = None, *, obj_in: CreateSchemaType) -> ReadSchemaType:
         """Crea un nuevo registro desde un CreateSchema y devuelve ReadSchema"""
         with self._session_scope(db) as session:
-            self._validate_create(session, obj_in)
+            self._validate_create(obj_in, session)
             obj_data = obj_in.model_dump()
             db_obj = self.model(**obj_data)
             session.add(db_obj)
@@ -58,7 +70,7 @@ class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]
             session.refresh(db_obj)
             return self.read_schema.model_validate(db_obj)
 
-    def update(self, db: Session, *, id: int, obj_in: UpdateSchemaType | Dict[str, Any]) -> Optional[ReadSchemaType]:
+    def update(self, db: Optional[Session] = None, *, id: int, obj_in: UpdateSchemaType | Dict[str, Any]) -> Optional[ReadSchemaType]:
         """Actualiza un registro y devuelve el ReadSchema actualizado"""
         with self._session_scope(db) as session:
             db_obj = session.query(self.model).get(id)
@@ -72,7 +84,7 @@ class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]
             session.refresh(db_obj)
             return self.read_schema.model_validate(db_obj)
 
-    def delete(self, db: Session, *, id: int) -> bool:
+    def delete(self, db: Optional[Session] = None, *, id: int) -> bool:
         """Elimina o desactiva un registro (sin schema)"""
         with self._session_scope(db) as session:
             db_obj = session.query(self.model).get(id)
@@ -87,6 +99,6 @@ class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]
             
             return True
 
-    def _validate_create(self, db: Session, obj_in: CreateSchemaType):
+    def _validate_create(self, obj_in: CreateSchemaType, db: Optional[Session] = None):
         """Hook para validaciones adicionales al crear"""
         pass

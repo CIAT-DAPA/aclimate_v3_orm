@@ -21,7 +21,7 @@ class ClimateHistoricalDailyService(
     def __init__(self):
         super().__init__(ClimateHistoricalDaily, ClimateHistoricalDailyCreate, ClimateHistoricalDailyRead, ClimateHistoricalDailyUpdate)
 
-    def get_by_location_id(self, db: Session, location_id: int) -> List[ClimateHistoricalDailyRead]:
+    def get_by_location_id(self, location_id: int, db: Optional[Session] = None) -> List[ClimateHistoricalDailyRead]:
         with self._session_scope(db) as session:
             results = (
                 session.query(self.model)
@@ -30,7 +30,7 @@ class ClimateHistoricalDailyService(
             )
             return [ClimateHistoricalDailyRead.model_validate(obj) for obj in results]
 
-    def get_by_location_name(self, db: Session, location_name: str) -> List[ClimateHistoricalDailyRead]:
+    def get_by_location_name(self, location_name: str, db: Optional[Session] = None) -> List[ClimateHistoricalDailyRead]:
         with self._session_scope(db) as session:
             results = (
                 session.query(self.model)
@@ -40,7 +40,7 @@ class ClimateHistoricalDailyService(
             )
             return [ClimateHistoricalDailyRead.model_validate(obj) for obj in results]
 
-    def get_by_country_id(self, db: Session, country_id: int) -> List[ClimateHistoricalDailyRead]:
+    def get_by_country_id(self, country_id: int, db: Optional[Session] = None) -> List[ClimateHistoricalDailyRead]:
         with self._session_scope(db) as session:
             results = (
                 session.query(self.model)
@@ -53,7 +53,7 @@ class ClimateHistoricalDailyService(
             )
             return [ClimateHistoricalDailyRead.model_validate(obj) for obj in results]
 
-    def get_by_country_name(self, db: Session, country_name: str) -> List[ClimateHistoricalDailyRead]:
+    def get_by_country_name(self, country_name: str, db: Optional[Session] = None) -> List[ClimateHistoricalDailyRead]:
         with self._session_scope(db) as session:
             results = (
                 session.query(self.model)
@@ -66,7 +66,7 @@ class ClimateHistoricalDailyService(
             )
             return [ClimateHistoricalDailyRead.model_validate(obj) for obj in results]
 
-    def get_by_admin1_id(self, db: Session, admin1_id: int) -> List[ClimateHistoricalDailyRead]:
+    def get_by_admin1_id(self, admin1_id: int, db: Optional[Session] = None) -> List[ClimateHistoricalDailyRead]:
         with self._session_scope(db) as session:
             results = (
                 session.query(self.model)
@@ -78,7 +78,7 @@ class ClimateHistoricalDailyService(
             )
             return [ClimateHistoricalDailyRead.model_validate(obj) for obj in results]
 
-    def get_by_admin1_name(self, db: Session, admin1_name: str) -> List[ClimateHistoricalDailyRead]:
+    def get_by_admin1_name(self, admin1_name: str, db: Optional[Session] = None) -> List[ClimateHistoricalDailyRead]:
         with self._session_scope(db) as session:
             results = (
                 session.query(self.model)
@@ -90,7 +90,7 @@ class ClimateHistoricalDailyService(
             )
             return [ClimateHistoricalDailyRead.model_validate(obj) for obj in results]
 
-    def get_by_measure_id(self, db: Session, measure_id: int) -> List[ClimateHistoricalDailyRead]:
+    def get_by_measure_id(self, measure_id: int, db: Optional[Session] = None) -> List[ClimateHistoricalDailyRead]:
         with self._session_scope(db) as session:
             results = (
                 session.query(self.model)
@@ -99,7 +99,7 @@ class ClimateHistoricalDailyService(
             )
             return [ClimateHistoricalDailyRead.model_validate(obj) for obj in results]
 
-    def get_by_measure_name(self, db: Session, measure_name: str) -> List[ClimateHistoricalDailyRead]:
+    def get_by_measure_name(self, measure_name: str, db: Optional[Session] = None) -> List[ClimateHistoricalDailyRead]:
         with self._session_scope(db) as session:
             results = (
                 session.query(self.model)
@@ -109,7 +109,7 @@ class ClimateHistoricalDailyService(
             )
             return [ClimateHistoricalDailyRead.model_validate(obj) for obj in results]
 
-    def get_by_date(self, db: Session, specific_date: date) -> List[ClimateHistoricalDailyRead]:
+    def get_by_date(self, specific_date: date, db: Optional[Session] = None) -> List[ClimateHistoricalDailyRead]:
         with self._session_scope(db) as session:
             results = (
                 session.query(self.model)
@@ -118,7 +118,7 @@ class ClimateHistoricalDailyService(
             )
             return [ClimateHistoricalDailyRead.model_validate(obj) for obj in results]
 
-    def get_by_date_range(self, db: Session, start_date: date, end_date: date) -> List[ClimateHistoricalDailyRead]:
+    def get_by_date_range(self, start_date: date, end_date: date, db: Optional[Session] = None) -> List[ClimateHistoricalDailyRead]:
         with self._session_scope(db) as session:
             results = (
                 session.query(self.model)
@@ -130,5 +130,5 @@ class ClimateHistoricalDailyService(
             )
             return [ClimateHistoricalDailyRead.model_validate(obj) for obj in results]
 
-    def _validate_create(self, db: Session, obj_in: ClimateHistoricalDailyCreate):
+    def _validate_create(self, obj_in: ClimateHistoricalDailyCreate, db: Optional[Session] = None):
         ClimateHistoricalDailyValidator.create_validate(db, obj_in)

@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from sqlalchemy.orm import Session
 from services.base_service import BaseService
 from models import ClimateHistoricalClimatology
@@ -20,7 +20,7 @@ class ClimateHistoricalClimatologyService(
     def __init__(self):
         super().__init__(ClimateHistoricalClimatology, ClimateHistoricalClimatologyCreate, ClimateHistoricalClimatologyRead, ClimateHistoricalClimatologyUpdate)
 
-    def get_by_location_id(self, db: Session, location_id: int) -> List[ClimateHistoricalClimatologyRead]:
+    def get_by_location_id(self, location_id: int, db: Optional[Session] = None) -> List[ClimateHistoricalClimatologyRead]:
         """Get records by location ID"""
         with self._session_scope(db) as session:
             objs = (
@@ -30,7 +30,7 @@ class ClimateHistoricalClimatologyService(
             )
             return [ClimateHistoricalClimatologyRead.model_validate(obj) for obj in objs]
 
-    def get_by_location_name(self, db: Session, location_name: str) -> List[ClimateHistoricalClimatologyRead]:
+    def get_by_location_name(self, location_name: str, db: Optional[Session] = None) -> List[ClimateHistoricalClimatologyRead]:
         """Get records by location name"""
         with self._session_scope(db) as session:
             objs = (
@@ -41,7 +41,7 @@ class ClimateHistoricalClimatologyService(
             )
             return [ClimateHistoricalClimatologyRead.model_validate(obj) for obj in objs]
 
-    def get_by_country_id(self, db: Session, country_id: int) -> List[ClimateHistoricalClimatologyRead]:
+    def get_by_country_id(self, country_id: int, db: Optional[Session] = None) -> List[ClimateHistoricalClimatologyRead]:
         """Get records by country ID"""
         with self._session_scope(db) as session:
             objs = (
@@ -55,7 +55,7 @@ class ClimateHistoricalClimatologyService(
             )
             return [ClimateHistoricalClimatologyRead.model_validate(obj) for obj in objs]
 
-    def get_by_country_name(self, db: Session, country_name: str) -> List[ClimateHistoricalClimatologyRead]:
+    def get_by_country_name(self, country_name: str, db: Optional[Session] = None ) -> List[ClimateHistoricalClimatologyRead]:
         """Get records by country name"""
         with self._session_scope(db) as session:
             objs = (
@@ -69,7 +69,7 @@ class ClimateHistoricalClimatologyService(
             )
             return [ClimateHistoricalClimatologyRead.model_validate(obj) for obj in objs]
 
-    def get_by_admin1_id(self, db: Session, admin1_id: int) -> List[ClimateHistoricalClimatologyRead]:
+    def get_by_admin1_id(self, admin1_id: int, db: Optional[Session] = None) -> List[ClimateHistoricalClimatologyRead]:
         """Get records by admin1 region ID"""
         with self._session_scope(db) as session:
             objs = (
@@ -82,7 +82,7 @@ class ClimateHistoricalClimatologyService(
             )
             return [ClimateHistoricalClimatologyRead.model_validate(obj) for obj in objs]
 
-    def get_by_admin1_name(self, db: Session, admin1_name: str) -> List[ClimateHistoricalClimatologyRead]:
+    def get_by_admin1_name(self, admin1_name: str, db: Optional[Session] = None) -> List[ClimateHistoricalClimatologyRead]:
         """Get records by admin1 region name"""
         with self._session_scope(db) as session:
             objs = (
@@ -95,7 +95,7 @@ class ClimateHistoricalClimatologyService(
             )
             return [ClimateHistoricalClimatologyRead.model_validate(obj) for obj in objs]
 
-    def get_by_month(self, db: Session, month: int) -> List[ClimateHistoricalClimatologyRead]:
+    def get_by_month(self, month: int, db: Optional[Session] = None) -> List[ClimateHistoricalClimatologyRead]:
         """Get records by month (1-12)"""
         with self._session_scope(db) as session:
             objs = (
@@ -105,7 +105,7 @@ class ClimateHistoricalClimatologyService(
             )
             return [ClimateHistoricalClimatologyRead.model_validate(obj) for obj in objs]
 
-    def get_by_measure_id(self, db: Session, measure_id: int) -> List[ClimateHistoricalClimatologyRead]:
+    def get_by_measure_id(self, measure_id: int, db: Optional[Session] = None) -> List[ClimateHistoricalClimatologyRead]:
         """Get records by measure id"""
         with self._session_scope(db) as session:
             objs = (
@@ -115,7 +115,7 @@ class ClimateHistoricalClimatologyService(
             )
             return [ClimateHistoricalClimatologyRead.model_validate(obj) for obj in objs]
 
-    def get_by_measure_name(self, db: Session, measure_name: str) -> List[ClimateHistoricalClimatologyRead]:
+    def get_by_measure_name(self, measure_name: str, db: Optional[Session] = None) -> List[ClimateHistoricalClimatologyRead]:
         """Get records by measure name"""
         with self._session_scope(db) as session:
             objs = (
@@ -126,6 +126,6 @@ class ClimateHistoricalClimatologyService(
             )
             return [ClimateHistoricalClimatologyRead.model_validate(obj) for obj in objs]
 
-    def _validate_create(self, db: Session, obj_in: ClimateHistoricalClimatologyCreate):
+    def _validate_create(self, obj_in: ClimateHistoricalClimatologyCreate, db: Optional[Session] = None):
         """Automatic validation called from BaseService.create()"""
         ClimateHistoricalClimatologyValidator.create_validate(db, obj_in)
