@@ -1,0 +1,118 @@
+from typing import List, Optional
+from sqlalchemy.orm import Session
+from aclimate_v3_orm.services.base_service import BaseService
+from aclimate_v3_orm.models import MngLocation
+from aclimate_v3_orm.validations import MngLocationValidator
+from aclimate_v3_orm.schemas import LocationCreate, LocationRead, LocationUpdate
+
+class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, LocationUpdate]):
+    def __init__(self):
+        super().__init__(MngLocation, LocationCreate, LocationRead, LocationUpdate)
+
+    def get_by_visible(self, visible: bool, enabled: bool = True, db: Optional[Session] = None) -> List[LocationRead]:
+        """Obtiene ubicaciones por visibilidad y habilitación"""
+        with self._session_scope(db) as session:
+            objs = db.query(self.model).filter(
+                self.model.visible == visible, 
+                self.model.enable == enabled
+            ).all()
+            return [LocationRead.model_validate(obj) for obj in objs]
+
+    def get_by_ext_id(self, ext_id: str, enabled: bool = True, db: Optional[Session] = None) -> List[LocationRead]:
+        """Obtiene ubicaciones por ID externo"""
+        with self._session_scope(db) as session:
+            objs = db.query(self.model).filter(
+                self.model.ext_id == ext_id, 
+                self.model.enable == enabled
+            ).all()
+            return [LocationRead.model_validate(obj) for obj in objs]
+
+    def get_by_name(self, name: str, enabled: bool = True, db: Optional[Session] = None) -> List[LocationRead]:
+        """Obtiene ubicaciones por nombre"""
+        with self._session_scope(db) as session:
+            objs = db.query(self.model).filter(
+                self.model.name == name, 
+                self.model.enable == enabled
+            ).all()
+            return [LocationRead.model_validate(obj) for obj in objs]
+
+    def get_all_enable(self, db: Optional[Session] = None, enable: bool = True) -> List[LocationRead]:
+        """Obtiene todas las ubicaciones filtradas por estado habilitado"""
+        with self._session_scope(db) as session:
+            objs = db.query(self.model).filter(
+                self.model.enable == enable
+            ).all()
+            return [LocationRead.model_validate(obj) for obj in objs]
+
+    def get_by_country_id(self, country_id: int, enabled: bool = True, db: Optional[Session] = None) -> List[LocationRead]:
+        """Obtiene ubicaciones por ID de país"""
+        with self._session_scope(db) as session:
+            objs = (
+                db.query(self.model)
+                .join(self.model.admin_2)
+                .join(self.model.admin_2.admin_1)
+                .filter(self.model.admin_2.admin_1.country_id == country_id, self.model.enable == enabled)
+                .all()
+            )
+            return [LocationRead.model_validate(obj) for obj in objs]
+
+    def get_by_admin1_id(self, admin1_id: int, enabled: bool = True, db: Optional[Session] = None) -> List[LocationRead]:
+        """Obtiene ubicaciones por ID de admin1"""
+        with self._session_scope(db) as session:
+            objs = (
+                db.query(self.model)
+                .join(self.model.admin_2)
+                .filter(self.model.admin_2.admin_1_id == admin1_id, self.model.enable == enabled)
+                .all()
+            )
+            return [LocationRead.model_validate(obj) for obj in objs]
+
+    def get_by_country_name(self, country_name: str, enabled: bool = True, db: Optional[Session] = None) -> List[LocationRead]:
+        """Obtiene ubicaciones por nombre de país"""
+        with self._session_scope(db) as session:
+            objs = (
+                db.query(self.model)
+                .join(self.model.admin_2)
+                .join(self.model.admin_2.admin_1)
+                .join(self.model.admin_2.admin_1.country)
+                .filter(self.model.admin_2.admin_1.country.name == country_name, self.model.enable == enabled)
+                .all()
+            )
+            return [LocationRead.model_validate(obj) for obj in objs]
+
+    def get_by_admin1_name(self, admin1_name: str, enabled: bool = True, db: Optional[Session] = None) -> List[LocationRead]:
+        """Obtiene ubicaciones por nombre de admin1"""
+        with self._session_scope(db) as session:
+            objs = (
+                db.query(self.model)
+                .join(self.model.admin_2)
+                .join(self.model.admin_2.admin_1)
+                .filter(self.model.admin_2.admin_1.name == admin1_name, self.model.enable == enabled)
+                .all()
+            )
+            return [LocationRead.model_validate(obj) for obj in objs]
+
+    def get_by_admin2_id(self, admin2_id: int, enabled: bool = True, db: Optional[Session] = None) -> List[LocationRead]:
+        """Obtiene ubicaciones por ID de admin2"""
+        with self._session_scope(db) as session:
+            objs = (
+                db.query(self.model)
+                .filter(self.model.admin_2_id == admin2_id, self.model.enable == enabled)
+                .all()
+            )
+            return [LocationRead.model_validate(obj) for obj in objs]
+
+    def get_by_admin2_name(self, admin2_name: str, enabled: bool = True, db: Optional[Session] = None) -> List[LocationRead]:
+        """Obtiene ubicaciones por nombre de admin2"""
+        with self._session_scope(db) as session:
+            objs = (
+                db.query(self.model)
+                .join(self.model.admin_2)
+                .filter(self.model.admin_2.name == admin2_name, self.model.enable == enabled)
+                .all()
+            )
+            return [LocationRead.model_validate(obj) for obj in objs]
+
+    def _validate_create(self, obj_in: LocationCreate, db: Optional[Session] = None):
+        """Validación automática llamada desde create() del BaseService"""
+        MngLocationValidator.create_validate(db, obj_in)

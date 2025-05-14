@@ -1,84 +1,104 @@
+from typing import TypeVar, Generic, Type, Optional, Any, Dict, List
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from typing import Type, TypeVar, Generic, List, Optional
 from sqlalchemy.exc import SQLAlchemyError
+from contextlib import contextmanager
+from aclimate_v3_orm.database import get_db
 
-# Define a generic type T for models that will be used with BaseService
-T = TypeVar("T")
+T = TypeVar("T")  # Modelo SQLAlchemy
+CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
+ReadSchemaType = TypeVar("ReadSchemaType", bound=BaseModel)
+UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 
-class BaseService(Generic[T]):
-    def __init__(self, model: Type[T]):
-        """
-        Initialize the service with the model class.
-        """
+class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]):
+    def __init__(self, 
+                model: Type[T],
+                create_schema: Type[CreateSchemaType],
+                read_schema: Type[ReadSchemaType],
+                update_schema: Type[UpdateSchemaType]):
         self.model = model
+        self.create_schema = create_schema
+        self.read_schema = read_schema
+        self.update_schema = update_schema
 
-    def get_by_id(self, db: Session, id: int) -> Optional[T]:
+    @contextmanager
+    def _session_scope(self, db: Optional[Session] = None):
         """
-        Retrieve a single record from the database by its ID.
+        Safely manages session lifecycle.
+        For internal sessions, delegates ALL handling to get_db().
         """
-        return db.query(self.model).get(id)
-
-    def get_all(self, db: Session) -> List[T]:
-        """
-        Retrieve all records of the given model from the database.
-        """
-        return db.query(self.model).all()
-
-    def create(self, db: Session, obj_in: dict) -> T:
-        """
-        Create a new record in the database, after validation.
-        """
-        # Perform validation before creating the object
-        self.validate_create(db, obj_in)
-
-        # Create the model object from the provided data
-        obj = self.model(**obj_in)
-        
-        # Add, commit and refresh the object to save it in the database
-        db.add(obj)
-        db.commit()
-        db.refresh(obj)
-        
-        return obj
-
-    def update(self, db: Session, db_obj: T, obj_in: dict) -> T:
-        """
-        Update an existing record in the database.
-        """
-        # Update the object fields with the new data
-        for key, value in obj_in.items():
-            setattr(db_obj, key, value)
-        
-        # Add, commit and refresh the object to save the changes
-        db.add(db_obj)
-        db.commit()
-        db.refresh(db_obj)
-        
-        return db_obj
-
-    def delete(self, db: Session, db_obj: T) -> T:
-        """
-        Delete a record from the database (or mark as disabled if it has an 'enabled' attribute).
-        """
-        try:
-            if hasattr(db_obj, "enabled"):
-                # If the object has an 'enabled' field, set it to False instead of deleting
-                db_obj.enabled = False
-            else:
-                db.delete(db_obj)  # Permanently delete the object from the database
+        if db:  # External session
+            try:
+                yield db
+                db.commit()
+            except SQLAlchemyError as e:
+                db.rollback()
+                print(f"⚠️ Database error: {str(e)}")
+                raise
+            except Exception as e:
+                db.rollback()
+                print(f"⚠️ Unexpected error: {str(e)}")
+                raise
+            finally:
+                db.close()
+        else:  # Internal session - FULLY delegates to get_db()
+            with get_db() as db:
+                yield db  # Let get_db() handle everything
             
-            # Commit the changes to the database
-            db.commit()
-        except SQLAlchemyError:
-            # In case of error, roll back the transaction
-            db.rollback()
-            raise  # Reraise the exception
-        
-        return db_obj
+    def get_by_id(self, id: int, db: Optional[Session] = None) -> Optional[ReadSchemaType]:
+        """Obtiene un registro por ID y lo devuelve directamente como ReadSchema"""
+        with self._session_scope(db) as session:
+            obj = session.query(self.model).get(id)
+            return self.read_schema.model_validate(obj) if obj else None
 
-    def validate_create(self, db: Session, obj_in: dict):
-        """
-        Validation function before creating an object. Can be overridden by child services.
-        """
-        # Default validation can be implemented in subclasses
+    def get_all(self, db: Optional[Session] = None, filters: Optional[Dict[str, Any]] = None) -> List[ReadSchemaType]:
+        """Obtiene todos los registros ya convertidos a ReadSchemas"""
+        with self._session_scope(db) as session:
+            query = session.query(self.model)
+            if filters:
+                query = query.filter_by(**filters)
+            return [self.read_schema.model_validate(obj) for obj in query.all()]
+
+    def create(self, db: Optional[Session] = None, *, obj_in: CreateSchemaType) -> ReadSchemaType:
+        """Crea un nuevo registro desde un CreateSchema y devuelve ReadSchema"""
+        with self._session_scope(db) as session:
+            self._validate_create(obj_in, session)
+            obj_data = obj_in.model_dump()
+            db_obj = self.model(**obj_data)
+            session.add(db_obj)
+            session.commit()
+            session.refresh(db_obj)
+            return self.read_schema.model_validate(db_obj)
+
+    def update(self, db: Optional[Session] = None, *, id: int, obj_in: UpdateSchemaType | Dict[str, Any]) -> Optional[ReadSchemaType]:
+        """Actualiza un registro y devuelve el ReadSchema actualizado"""
+        with self._session_scope(db) as session:
+            db_obj = session.query(self.model).get(id)
+            if not db_obj:
+                return None
+
+            update_data = obj_in.model_dump(exclude_unset=True) if isinstance(obj_in, BaseModel) else obj_in
+            for field, value in update_data.items():
+                setattr(db_obj, field, value)
+            
+            session.refresh(db_obj)
+            return self.read_schema.model_validate(db_obj)
+
+    def delete(self, db: Optional[Session] = None, *, id: int) -> bool:
+        """Elimina o desactiva un registro (sin schema)"""
+        with self._session_scope(db) as session:
+            db_obj = session.query(self.model).get(id)
+            if not db_obj:
+                return False
+
+            if hasattr(db_obj, "enable"):
+                db_obj.enable = False
+                session.add(db_obj)
+            else:
+                session.delete(db_obj)
+            
+            return True
+
+    def _validate_create(self, obj_in: CreateSchemaType, db: Optional[Session] = None):
+        """Hook para validaciones adicionales al crear"""
         pass

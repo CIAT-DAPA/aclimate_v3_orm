@@ -1,0 +1,8 @@
+from .mng_admin_1_schema import Admin1Read, Admin1Create, Admin1Update
+from .mng_admin_2_schema import Admin2Read, Admin2Create, Admin2Update
+from .mng_country_schema import CountryCreate, CountryRead, CountryUpdate
+from .mng_location_schema import LocationCreate, LocationRead, LocationUpdate
+from .mng_climate_measure_schema import ClimateMeasureRead, ClimateMeasureCreate, ClimateMeasureUpdate
+from .climate_historical_climatology_schema import ClimateHistoricalClimatologyRead, ClimateHistoricalClimatologyCreate, ClimateHistoricalClimatologyUpdate
+from .climate_historical_daily_schema import ClimateHistoricalDailyCreate, ClimateHistoricalDailyUpdate, ClimateHistoricalDailyRead
+from .climate_historical_monthly_schema import ClimateHistoricalMonthlyCreate, ClimateHistoricalMonthlyRead, ClimateHistoricalMonthlyUpdate
