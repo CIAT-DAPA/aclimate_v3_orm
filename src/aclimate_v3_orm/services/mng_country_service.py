@@ -12,7 +12,7 @@ class MngCountryService(BaseService[MngCountry, CountryCreate, CountryRead, Coun
     def get_by_name(self, name: str, enabled: bool = True, db: Optional[Session] = None) -> List[CountryRead]:
         """Obtiene países por nombre"""
         with self._session_scope(db) as session:
-            objs = db.query(self.model).filter(
+            objs = session.query(self.model).filter(
                 self.model.name == name, 
                 self.model.enable == enabled
             ).all()
@@ -21,7 +21,7 @@ class MngCountryService(BaseService[MngCountry, CountryCreate, CountryRead, Coun
     def get_all_enable(self, db: Optional[Session] = None, enabled: bool = True) -> List[CountryRead]:
         """Obtiene todos los países, filtrados por estado habilitado"""
         with self._session_scope(db) as session:
-            objs = db.query(self.model).filter(
+            objs = session.query(self.model).filter(
                 self.model.enable == enabled
             ).all()
             return [CountryRead.model_validate(obj) for obj in objs]
