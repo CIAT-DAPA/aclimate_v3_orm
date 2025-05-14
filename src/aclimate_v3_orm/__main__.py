@@ -1,6 +1,12 @@
-from aclimate_v3_orm.database.base import Base, create_tables
-from aclimate_v3_orm.database import engine, get_db
-from aclimate_v3_orm.models import *
-from aclimate_v3_orm.services import *
-from aclimate_v3_orm.schemas import *
+from .database.base import Base, create_tables
+from .database import engine, get_db
+from .models import *
+from .services import *
+from .schemas import *
+
+def main():
+    print("ORM Installed")
+
+if __name__ == "__main__":
+    main()
 

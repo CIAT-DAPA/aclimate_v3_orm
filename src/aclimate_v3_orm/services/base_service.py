@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from contextlib import contextmanager
-from aclimate_v3_orm.database import get_db
+from ..database import get_db
 
 T = TypeVar("T")  # Modelo SQLAlchemy
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)

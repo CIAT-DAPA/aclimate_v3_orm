@@ -1,10 +1,10 @@
 from typing import List, Optional
 from datetime import date
 from sqlalchemy.orm import Session
-from aclimate_v3_orm.services.base_service import BaseService
-from aclimate_v3_orm.models import ClimateHistoricalMonthly
-from aclimate_v3_orm.validations import ClimateHistoricalMonthlyValidator
-from aclimate_v3_orm.schemas import (
+from ..services.base_service import BaseService
+from ..models import ClimateHistoricalMonthly
+from ..validations import ClimateHistoricalMonthlyValidator
+from ..schemas import (
     ClimateHistoricalMonthlyCreate,
     ClimateHistoricalMonthlyUpdate,
     ClimateHistoricalMonthlyRead
