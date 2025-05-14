@@ -1,9 +1,9 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from services.base_service import BaseService
-from models import MngCountry
-from validations import MngCountryValidator
-from schemas import CountryCreate, CountryRead, CountryUpdate
+from aclimate_v3_orm.services.base_service import BaseService
+from aclimate_v3_orm.models import MngCountry
+from aclimate_v3_orm.validations import MngCountryValidator
+from aclimate_v3_orm.schemas import CountryCreate, CountryRead, CountryUpdate
 
 class MngCountryService(BaseService[MngCountry, CountryCreate, CountryRead, CountryUpdate]):
     def __init__(self):

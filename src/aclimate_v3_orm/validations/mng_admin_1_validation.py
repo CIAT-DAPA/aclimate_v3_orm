@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models import MngAdmin1, MngCountry
+from aclimate_v3_orm.models import MngAdmin1, MngCountry
 
 class MngAdmin1Validator:
 

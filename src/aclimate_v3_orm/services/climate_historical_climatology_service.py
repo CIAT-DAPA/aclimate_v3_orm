@@ -1,9 +1,9 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from services.base_service import BaseService
-from models import ClimateHistoricalClimatology
-from validations import ClimateHistoricalClimatologyValidator
-from schemas import (
+from aclimate_v3_orm.services.base_service import BaseService
+from aclimate_v3_orm.models import ClimateHistoricalClimatology
+from aclimate_v3_orm.validations import ClimateHistoricalClimatologyValidator
+from aclimate_v3_orm.schemas import (
     ClimateHistoricalClimatologyCreate,
     ClimateHistoricalClimatologyUpdate,
     ClimateHistoricalClimatologyRead

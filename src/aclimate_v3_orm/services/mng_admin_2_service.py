@@ -1,9 +1,9 @@
-from services.base_service import BaseService
-from models import MngAdmin2
-from validations import MngAdmin2Validator
+from aclimate_v3_orm.services.base_service import BaseService
+from aclimate_v3_orm.models import MngAdmin2
+from aclimate_v3_orm.validations import MngAdmin2Validator
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from schemas import Admin2Create, Admin2Read, Admin2Update
+from aclimate_v3_orm.schemas import Admin2Create, Admin2Read, Admin2Update
 
 class MngAdmin2Service(BaseService[MngAdmin2, Admin2Create, Admin2Read, Admin2Update]):
     def __init__(self):

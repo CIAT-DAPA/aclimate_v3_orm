@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models import MngLocation, MngAdmin2
+from aclimate_v3_orm.models import MngLocation, MngAdmin2
 
 class MngLocationValidator:
 

@@ -21,5 +21,24 @@ setup(
         "python-dotenv==1.1.0",
         "typing_extensions==4.13.2",
         "pydantic==2.11.4"
-    ]
+    ],
+    extras_require={
+        'dev': [
+            'pytest==8.2.0',
+            'pytest-cov==4.1.0',
+            'pytest-mock==3.14.0',
+            'pytest-xdist==3.6.1',
+            'factory-boy==3.3.0',
+            'Faker==25.0.0',
+            'mypy==1.10.0',
+            'flake8==7.1.0',
+            'black==24.4.2',
+        ],
+        'test': [
+            'pytest==8.2.0',
+            'pytest-cov==4.1.0',
+            'pytest-mock==3.14.0',
+            'factory-boy==3.3.0',
+        ]
+    }
 )

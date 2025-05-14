@@ -1,10 +1,10 @@
 from typing import List, Optional
 from datetime import date
 from sqlalchemy.orm import Session
-from services.base_service import BaseService
-from models import ClimateHistoricalDaily
-from validations import ClimateHistoricalDailyValidator
-from schemas import (
+from aclimate_v3_orm.services.base_service import BaseService
+from aclimate_v3_orm.models import ClimateHistoricalDaily
+from aclimate_v3_orm.validations import ClimateHistoricalDailyValidator
+from aclimate_v3_orm.schemas import (
     ClimateHistoricalDailyCreate,
     ClimateHistoricalDailyUpdate,
     ClimateHistoricalDailyRead

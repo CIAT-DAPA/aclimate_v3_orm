@@ -1,6 +1,6 @@
 from sqlalchemy import Column, BigInteger, Integer, Float, ForeignKey
 from sqlalchemy.orm import relationship
-from database.base import Base
+from aclimate_v3_orm.database.base import Base
 
 class ClimateHistoricalClimatology(Base):
     __tablename__ = 'climate_historical_climatology'

@@ -1,9 +1,9 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from services.base_service import BaseService
-from models import MngClimateMeasure
-from validations import MngClimateMeasureNameValidator
-from schemas import (
+from aclimate_v3_orm.services.base_service import BaseService
+from aclimate_v3_orm.models import MngClimateMeasure
+from aclimate_v3_orm.validations import MngClimateMeasureNameValidator
+from aclimate_v3_orm.schemas import (
     ClimateMeasureCreate,
     ClimateMeasureUpdate,
     ClimateMeasureRead

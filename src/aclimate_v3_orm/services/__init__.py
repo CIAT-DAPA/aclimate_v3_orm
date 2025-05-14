@@ -1,4 +1,4 @@
-from services.base_service import BaseService
+from .base_service import BaseService
 from .climate_historical_climatology_service import ClimateHistoricalClimatologyService
 from .climate_historical_monthly_service import ClimateHistoricalMonthlyService
 from .climate_historical_daily_service import ClimateHistoricalDailyService

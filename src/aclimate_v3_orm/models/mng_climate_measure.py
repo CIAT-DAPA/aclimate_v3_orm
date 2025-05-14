@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime, timezone
-from database.base import Base
+from aclimate_v3_orm.database.base import Base
 
 class MngClimateMeasure(Base):
     __tablename__ = 'mng_climate_measure'

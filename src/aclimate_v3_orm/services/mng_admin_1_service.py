@@ -1,9 +1,9 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from services.base_service import BaseService
-from models import MngAdmin1
-from schemas import Admin1Create, Admin1Update, Admin1Read
-from validations import MngAdmin1Validator
+from aclimate_v3_orm.services.base_service import BaseService
+from aclimate_v3_orm.models import MngAdmin1
+from aclimate_v3_orm.schemas import Admin1Create, Admin1Update, Admin1Read
+from aclimate_v3_orm.validations import MngAdmin1Validator
 
 class MngAdmin1Service(BaseService[MngAdmin1, Admin1Create, Admin1Read, Admin1Update]):
     def __init__(self):
