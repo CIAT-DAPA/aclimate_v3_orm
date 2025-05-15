@@ -1,7 +1,7 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from ..services.base_service import BaseService
-from ..models import MngLocation
+from ..models import MngLocation, MngCountry, MngAdmin1, MngAdmin2
 from ..validations import MngLocationValidator
 from ..schemas import LocationCreate, LocationRead, LocationUpdate
 
@@ -49,9 +49,9 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
         with self._session_scope(db) as session:
             objs = (
                 session.query(self.model)
-                .join(self.model.admin_2)
-                .join(self.model.admin_2.admin_1)
-                .filter(self.model.admin_2.admin_1.country_id == country_id, self.model.enable == enabled)
+                .join(self.model.admin_2_region)
+                .join(MngAdmin2.admin_1_region)
+                .filter(MngAdmin1.country_id == country_id, self.model.enable == enabled)
                 .all()
             )
             return [LocationRead.model_validate(obj) for obj in objs]
@@ -61,8 +61,8 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
         with self._session_scope(db) as session:
             objs = (
                 session.query(self.model)
-                .join(self.model.admin_2)
-                .filter(self.model.admin_2.admin_1_id == admin1_id, self.model.enable == enabled)
+                .join(self.model.admin_2_region)
+                .filter(MngAdmin2.admin_1_id == admin1_id, self.model.enable == enabled)
                 .all()
             )
             return [LocationRead.model_validate(obj) for obj in objs]
@@ -72,10 +72,10 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
         with self._session_scope(db) as session:
             objs = (
                 session.query(self.model)
-                .join(self.model.admin_2)
-                .join(self.model.admin_2.admin_1)
-                .join(self.model.admin_2.admin_1.country)
-                .filter(self.model.admin_2.admin_1.country.name == country_name, self.model.enable == enabled)
+                .join(self.model.admin_2_region)
+                .join(MngAdmin2.admin_1_region)
+                .join(MngAdmin1.country)
+                .filter(MngCountry.name == country_name, self.model.enable == enabled)
                 .all()
             )
             return [LocationRead.model_validate(obj) for obj in objs]
@@ -85,9 +85,9 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
         with self._session_scope(db) as session:
             objs = (
                 session.query(self.model)
-                .join(self.model.admin_2)
-                .join(self.model.admin_2.admin_1)
-                .filter(self.model.admin_2.admin_1.name == admin1_name, self.model.enable == enabled)
+                .join(self.model.admin_2_region)
+                .join(MngAdmin2.admin_1_region)
+                .filter(MngAdmin1.name == admin1_name, self.model.enable == enabled)
                 .all()
             )
             return [LocationRead.model_validate(obj) for obj in objs]
@@ -107,8 +107,8 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
         with self._session_scope(db) as session:
             objs = (
                 session.query(self.model)
-                .join(self.model.admin_2)
-                .filter(self.model.admin_2.name == admin2_name, self.model.enable == enabled)
+                .join(self.model.admin_2_region)
+                .filter(MngAdmin2.name == admin2_name, self.model.enable == enabled)
                 .all()
             )
             return [LocationRead.model_validate(obj) for obj in objs]
