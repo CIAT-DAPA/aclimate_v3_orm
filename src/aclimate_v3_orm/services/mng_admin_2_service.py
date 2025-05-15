@@ -20,7 +20,7 @@ class MngAdmin2Service(BaseService[MngAdmin2, Admin2Create, Admin2Read, Admin2Up
         with self._session_scope(db) as session:
             objs = (
                 session.query(self.model)
-                .join(self.model.admin_1_region)
+                .join(self.model.admin_1)
                 .filter(
                     MngAdmin1.name == admin1_name,
                     self.model.enable == enabled
@@ -35,7 +35,7 @@ class MngAdmin2Service(BaseService[MngAdmin2, Admin2Create, Admin2Read, Admin2Up
         with self._session_scope(db) as session:
             objs = (
                 session.query(self.model)
-                .join(self.model.admin_1_region)
+                .join(self.model.admin_1)
                 .join(MngAdmin1.country)
                 .filter(
                     MngAdmin1.country_id == country_id,
@@ -51,7 +51,7 @@ class MngAdmin2Service(BaseService[MngAdmin2, Admin2Create, Admin2Read, Admin2Up
         with self._session_scope(db) as session:
             objs = (
                 session.query(self.model)
-                .join(MngAdmin2.admin_1_region)
+                .join(MngAdmin2.admin_1)
                 .join(MngAdmin1.country)
                 .filter(
                     MngCountry.name == country_name,

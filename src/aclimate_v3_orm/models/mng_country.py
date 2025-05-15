@@ -13,4 +13,4 @@ class MngCountry(Base):
     register = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
-    admin_1_regions = relationship('MngAdmin1', back_populates='country')
+    admin_1 = relationship('MngAdmin1', back_populates='country')
