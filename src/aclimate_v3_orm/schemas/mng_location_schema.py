@@ -1,4 +1,7 @@
 from typing import Optional
+from .mng_admin_1_schema import Admin1Read
+from .mng_admin_2_schema import Admin2Read
+from .mng_country_schema import CountryRead
 from pydantic import BaseModel, Field, field_validator, ConfigDict
 from datetime import datetime
 
@@ -71,5 +74,7 @@ class LocationUpdate(BaseModel):
 class LocationRead(LocationBase):
     """Full location schema with read-only fields"""
     id: int
-    
+    admin_1: Optional[Admin1Read] = None
+    admin_2: Optional[Admin2Read] = None
+    country: Optional[CountryRead] = None
     model_config = ConfigDict(from_attributes=True)  # ORM compatibility

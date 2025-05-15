@@ -1,6 +1,8 @@
 from datetime import date as Date
 from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict
+from .mng_location_schema import LocationRead
+from .mng_climate_measure_schema import ClimateMeasureRead
 
 class ClimateHistoricalMonthlyBase(BaseModel):
     """Base fields for monthly climate historical data"""
@@ -25,7 +27,7 @@ class ClimateHistoricalMonthlyRead(ClimateHistoricalMonthlyBase):
     id: int
     
     # Relationships (uncomment if needed in responses)
-    # location: Optional['Location'] = None
-    # measure: Optional['ClimateMeasure'] = None
+    location: Optional[LocationRead] = None
+    measure: Optional[ClimateMeasureRead] = None
     
     model_config = ConfigDict(from_attributes=True)  # Enable ORM compatibility

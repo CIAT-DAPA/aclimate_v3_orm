@@ -1,7 +1,7 @@
 from typing import List, Optional
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from ..services.base_service import BaseService
-from ..models import MngAdmin1
+from ..models import MngAdmin1, MngCountry
 from ..schemas import Admin1Create, Admin1Update, Admin1Read
 from ..validations import MngAdmin1Validator
 
@@ -33,9 +33,9 @@ class MngAdmin1Service(BaseService[MngAdmin1, Admin1Create, Admin1Read, Admin1Up
         with self._session_scope(db) as session:
             objs = (
                 session.query(self.model)
-                .join(self.model.country)
+                .join(MngAdmin1.country)
                 .filter(
-                    self.model.country.name == country_name,
+                    MngCountry.name == country_name,
                     self.model.enable == enabled
                 )
                 .all()

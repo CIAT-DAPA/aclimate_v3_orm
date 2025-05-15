@@ -51,7 +51,4 @@ class CountryRead(CountryBase):
     """Complete country schema including read-only fields"""
     id: int
     
-    # Relationship (uncomment if needed in responses)
-    # admin_1: List['Admin1'] = []
-    
     model_config = ConfigDict(from_attributes=True)  # Enable ORM compatibility
