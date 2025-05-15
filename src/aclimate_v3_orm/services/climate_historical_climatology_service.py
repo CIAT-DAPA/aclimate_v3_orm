@@ -47,8 +47,8 @@ class ClimateHistoricalClimatologyService(
             objs = (
                 session.query(self.model)
                 .join(self.model.location)
-                .join(MngLocation.admin_2_region)
-                .join(MngAdmin2.admin_1_region)
+                .join(MngLocation.admin_2)
+                .join(MngAdmin2.admin_1)
                 .filter(MngAdmin1.country_id == country_id)
                 .all()
             )
@@ -60,8 +60,8 @@ class ClimateHistoricalClimatologyService(
             objs = (
                 session.query(self.model)
                 .join(self.model.location)
-                .join(MngLocation.admin_2_region)
-                .join(MngAdmin2.admin_1_region)
+                .join(MngLocation.admin_2)
+                .join(MngAdmin2.admin_1)
                 .join(MngAdmin1.country)
                 .filter(MngCountry.name == country_name)
                 .all()
@@ -74,7 +74,7 @@ class ClimateHistoricalClimatologyService(
             objs = (
                 session.query(self.model)
                 .join(self.model.location)
-                .join(MngLocation.admin_2_region)
+                .join(MngLocation.admin_2)
                 .filter(MngAdmin2.admin_1_id == admin1_id)
                 .all()
             )
@@ -86,8 +86,8 @@ class ClimateHistoricalClimatologyService(
             objs = (
                 session.query(self.model)
                 .join(self.model.location)
-                .join(MngLocation.admin_2_region)
-                .join(MngAdmin2.admin_1_region)
+                .join(MngLocation.admin_2)
+                .join(MngAdmin2.admin_1)
                 .filter(MngAdmin1.name == admin1_name)
                 .all()
             )

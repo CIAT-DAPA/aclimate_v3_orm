@@ -43,9 +43,9 @@ def test_get_by_admin1_id(admin2_service, mock_db):
 def test_get_by_admin1_name(admin2_service, mock_db):
     """Test para obtener regiones Admin2 por nombre de Admin1"""
     admin1_name = "TestAdmin1"
-    mock_admin1 = MngAdmin1(id=1, name=admin1_name)
+    mock_admin1 = MngAdmin1(id=1, name=admin1_name, enable=True, country_id=1)
     mock_admin2 = MngAdmin2(id=1, admin_1_id=1, name="Region 2-1", visible=True, enable=True)
-    mock_admin2.admin_1_region = mock_admin1
+    mock_admin2.admin_1 = mock_admin1
     
     # Configurar mocks complejos para el join
     query_mock = MagicMock()
@@ -61,7 +61,7 @@ def test_get_by_admin1_name(admin2_service, mock_db):
     
     assert len(result) == 1
     assert result[0].name == "Region 2-1"
-    query_mock.join.assert_called_once_with(MngAdmin2.admin_1_region)
+    query_mock.join.assert_called_once_with(MngAdmin2.admin_1)
 
 # ---- Tests para get_by_country_id ----
 def test_get_by_country_id(admin2_service, mock_db):
@@ -69,10 +69,10 @@ def test_get_by_country_id(admin2_service, mock_db):
     country_id = 1
 
     # Crear objetos mock con relaciones simuladas
-    mock_country = MngCountry(id=country_id, name="TestCountry")
-    mock_admin1 = MngAdmin1(id=1, country_id=country_id, country=mock_country)
+    mock_country = MngCountry(id=country_id, name="TestCountry", iso2="CL", enable=True)
+    mock_admin1 = MngAdmin1(id=1, country_id=country_id, country=mock_country, name="Test", enable=True)
     mock_admin2 = MngAdmin2(id=1, admin_1_id=1, name="Region 2-1", visible=True, enable=True)
-    mock_admin2.admin_1_region = mock_admin1
+    mock_admin2.admin_1 = mock_admin1
 
     # Mocks de SQLAlchemy para las llamadas en cadena
     query_mock = MagicMock()
@@ -94,7 +94,7 @@ def test_get_by_country_id(admin2_service, mock_db):
     assert result[0].name == "Region 2-1"
 
     # Validar la cadena de joins
-    query_mock.join.assert_called_once_with(MngAdmin2.admin_1_region)
+    query_mock.join.assert_called_once_with(MngAdmin2.admin_1)
     join1_mock.join.assert_called_once_with(MngAdmin1.country)
 
 
@@ -104,10 +104,10 @@ def test_get_by_country_name(admin2_service, mock_db):
     country_name = "TestCountry"
     
     # 1. Configurar objetos de prueba con relaciones
-    mock_country = MngCountry(id=1, name=country_name)
-    mock_admin1 = MngAdmin1(id=1, country_id=1, country=mock_country)
+    mock_country = MngCountry(id=1, name=country_name, iso2="CL", enable=True)
+    mock_admin1 = MngAdmin1(id=1, country_id=1, country=mock_country, enable=True, name="Test")
     mock_admin2 = MngAdmin2(id=1, admin_1_id=1, name="Region 2-1", visible=True, enable=True)
-    mock_admin2.admin_1_region = mock_admin1
+    mock_admin2.admin_1 = mock_admin1
     
     # 2. Configurar mocks para la cadena de llamadas
     query_mock = MagicMock()
@@ -130,7 +130,7 @@ def test_get_by_country_name(admin2_service, mock_db):
     assert result[0].name == "Region 2-1"
     
     # 5. Verificar llamadas a los joins
-    query_mock.join.assert_called_once_with(MngAdmin2.admin_1_region)
+    query_mock.join.assert_called_once_with(MngAdmin2.admin_1)
     join1_mock.join.assert_called_once_with(MngAdmin1.country)
 
 # ---- Tests para get_all ----
