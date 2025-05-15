@@ -59,7 +59,7 @@ class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]
                 query = query.filter_by(**filters)
             return [self.read_schema.model_validate(obj) for obj in query.all()]
 
-    def create(self, db: Optional[Session] = None, *, obj_in: CreateSchemaType) -> ReadSchemaType:
+    def create(self, obj_in: CreateSchemaType, db: Optional[Session] = None) -> ReadSchemaType:
         """Crea un nuevo registro desde un CreateSchema y devuelve ReadSchema"""
         with self._session_scope(db) as session:
             self._validate_create(obj_in, session)
@@ -70,7 +70,7 @@ class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]
             session.refresh(db_obj)
             return self.read_schema.model_validate(db_obj)
 
-    def update(self, db: Optional[Session] = None, *, id: int, obj_in: UpdateSchemaType | Dict[str, Any]) -> Optional[ReadSchemaType]:
+    def update(self, id: int, obj_in: UpdateSchemaType | Dict[str, Any], db: Optional[Session] = None) -> Optional[ReadSchemaType]:
         """Actualiza un registro y devuelve el ReadSchema actualizado"""
         with self._session_scope(db) as session:
             db_obj = session.query(self.model).get(id)
@@ -84,7 +84,7 @@ class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]
             session.refresh(db_obj)
             return self.read_schema.model_validate(db_obj)
 
-    def delete(self, db: Optional[Session] = None, *, id: int) -> bool:
+    def delete(self, id: int, db: Optional[Session] = None) -> bool:
         """Elimina o desactiva un registro (sin schema)"""
         with self._session_scope(db) as session:
             db_obj = session.query(self.model).get(id)

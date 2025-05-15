@@ -12,7 +12,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
     def get_by_visible(self, visible: bool, enabled: bool = True, db: Optional[Session] = None) -> List[LocationRead]:
         """Obtiene ubicaciones por visibilidad y habilitación"""
         with self._session_scope(db) as session:
-            objs = db.query(self.model).filter(
+            objs = session.query(self.model).filter(
                 self.model.visible == visible, 
                 self.model.enable == enabled
             ).all()
@@ -21,7 +21,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
     def get_by_ext_id(self, ext_id: str, enabled: bool = True, db: Optional[Session] = None) -> List[LocationRead]:
         """Obtiene ubicaciones por ID externo"""
         with self._session_scope(db) as session:
-            objs = db.query(self.model).filter(
+            objs = session.query(self.model).filter(
                 self.model.ext_id == ext_id, 
                 self.model.enable == enabled
             ).all()
@@ -30,7 +30,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
     def get_by_name(self, name: str, enabled: bool = True, db: Optional[Session] = None) -> List[LocationRead]:
         """Obtiene ubicaciones por nombre"""
         with self._session_scope(db) as session:
-            objs = db.query(self.model).filter(
+            objs = session.query(self.model).filter(
                 self.model.name == name, 
                 self.model.enable == enabled
             ).all()
@@ -39,7 +39,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
     def get_all_enable(self, db: Optional[Session] = None, enable: bool = True) -> List[LocationRead]:
         """Obtiene todas las ubicaciones filtradas por estado habilitado"""
         with self._session_scope(db) as session:
-            objs = db.query(self.model).filter(
+            objs = session.query(self.model).filter(
                 self.model.enable == enable
             ).all()
             return [LocationRead.model_validate(obj) for obj in objs]
@@ -48,7 +48,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
         """Obtiene ubicaciones por ID de país"""
         with self._session_scope(db) as session:
             objs = (
-                db.query(self.model)
+                session.query(self.model)
                 .join(self.model.admin_2)
                 .join(self.model.admin_2.admin_1)
                 .filter(self.model.admin_2.admin_1.country_id == country_id, self.model.enable == enabled)
@@ -60,7 +60,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
         """Obtiene ubicaciones por ID de admin1"""
         with self._session_scope(db) as session:
             objs = (
-                db.query(self.model)
+                session.query(self.model)
                 .join(self.model.admin_2)
                 .filter(self.model.admin_2.admin_1_id == admin1_id, self.model.enable == enabled)
                 .all()
@@ -71,7 +71,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
         """Obtiene ubicaciones por nombre de país"""
         with self._session_scope(db) as session:
             objs = (
-                db.query(self.model)
+                session.query(self.model)
                 .join(self.model.admin_2)
                 .join(self.model.admin_2.admin_1)
                 .join(self.model.admin_2.admin_1.country)
@@ -84,7 +84,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
         """Obtiene ubicaciones por nombre de admin1"""
         with self._session_scope(db) as session:
             objs = (
-                db.query(self.model)
+                session.query(self.model)
                 .join(self.model.admin_2)
                 .join(self.model.admin_2.admin_1)
                 .filter(self.model.admin_2.admin_1.name == admin1_name, self.model.enable == enabled)
@@ -96,7 +96,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
         """Obtiene ubicaciones por ID de admin2"""
         with self._session_scope(db) as session:
             objs = (
-                db.query(self.model)
+                session.query(self.model)
                 .filter(self.model.admin_2_id == admin2_id, self.model.enable == enabled)
                 .all()
             )
@@ -106,7 +106,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
         """Obtiene ubicaciones por nombre de admin2"""
         with self._session_scope(db) as session:
             objs = (
-                db.query(self.model)
+                session.query(self.model)
                 .join(self.model.admin_2)
                 .filter(self.model.admin_2.name == admin2_name, self.model.enable == enabled)
                 .all()
