@@ -36,7 +36,7 @@ class ClimateHistoricalClimatologyService(
             objs = (
                 session.query(self.model)
                 .join(self.model.location)
-                .filter(self.model.location.name == location_name)
+                .filter(MngLocation.name == location_name)
                 .all()
             )
             return [ClimateHistoricalClimatologyRead.model_validate(obj) for obj in objs]
