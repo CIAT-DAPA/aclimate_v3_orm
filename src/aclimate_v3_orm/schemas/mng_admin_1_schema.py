@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict
+from .mng_country_schema import CountryRead
 
 class Admin1Base(BaseModel):
     """Base fields for administrative level 1 regions"""
@@ -25,5 +26,5 @@ class Admin1Update(BaseModel):
 class Admin1Read(Admin1Base):
     """Complete Admin1 schema including read-only fields"""
     id: int
-    
+    country: Optional[CountryRead] = None
     model_config = ConfigDict(from_attributes=True)  # Enable ORM compatibility

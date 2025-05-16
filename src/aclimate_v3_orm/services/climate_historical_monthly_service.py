@@ -2,7 +2,7 @@ from typing import List, Optional
 from datetime import date
 from sqlalchemy.orm import Session
 from ..services.base_service import BaseService
-from ..models import ClimateHistoricalMonthly
+from ..models import ClimateHistoricalMonthly, MngLocation, MngClimateMeasure, MngAdmin1, MngAdmin2, MngCountry
 from ..validations import ClimateHistoricalMonthlyValidator
 from ..schemas import (
     ClimateHistoricalMonthlyCreate,
@@ -37,7 +37,7 @@ class ClimateHistoricalMonthlyService(
             results = (
                 session.query(self.model)
                 .join(self.model.location)
-                .filter(self.model.location.name == location_name)
+                .filter(MngLocation.name == location_name)
                 .all()
             )
             return [ClimateHistoricalMonthlyRead.model_validate(obj) for obj in results]
@@ -48,10 +48,9 @@ class ClimateHistoricalMonthlyService(
             results = (
                 session.query(self.model)
                 .join(self.model.location)
-                .join(self.model.location.admin_2)
-                .join(self.model.location.admin_2.admin_1)
-                .join(self.model.location.admin_2.admin_1.country)
-                .filter(self.model.location.admin_2.admin_1.country_id == country_id)
+                .join(MngLocation.admin_2)
+                .join(MngAdmin2.admin_1)
+                .filter(MngAdmin1.country_id == country_id)
                 .all()
             )
             return [ClimateHistoricalMonthlyRead.model_validate(obj) for obj in results]
@@ -62,10 +61,10 @@ class ClimateHistoricalMonthlyService(
             results = (
                 session.query(self.model)
                 .join(self.model.location)
-                .join(self.model.location.admin_2)
-                .join(self.model.location.admin_2.admin_1)
-                .join(self.model.location.admin_2.admin_1.country)
-                .filter(self.model.location.admin_2.admin_1.country.name == country_name)
+                .join(MngLocation.admin_2)
+                .join(MngAdmin2.admin_1)
+                .join(MngAdmin1.country)
+                .filter(MngCountry.name == country_name)
                 .all()
             )
             return [ClimateHistoricalMonthlyRead.model_validate(obj) for obj in results]
@@ -76,9 +75,8 @@ class ClimateHistoricalMonthlyService(
             results = (
                 session.query(self.model)
                 .join(self.model.location)
-                .join(self.model.location.admin_2)
-                .join(self.model.location.admin_2.admin_1)
-                .filter(self.model.location.admin_2.admin_1_id == admin1_id)
+                .join(MngLocation.admin_2)
+                .filter(MngAdmin2.admin_1_id == admin1_id)
                 .all()
             )
             return [ClimateHistoricalMonthlyRead.model_validate(obj) for obj in results]
@@ -89,9 +87,9 @@ class ClimateHistoricalMonthlyService(
             results = (
                 session.query(self.model)
                 .join(self.model.location)
-                .join(self.model.location.admin_2)
-                .join(self.model.location.admin_2.admin_1)
-                .filter(self.model.location.admin_2.admin_1.name == admin1_name)
+                .join(MngLocation.admin_2)
+                .join(MngAdmin2.admin_1)
+                .filter(MngAdmin1.name == admin1_name)
                 .all()
             )
             return [ClimateHistoricalMonthlyRead.model_validate(obj) for obj in results]
@@ -112,7 +110,7 @@ class ClimateHistoricalMonthlyService(
             results = (
                 session.query(self.model)
                 .join(self.model.measure)
-                .filter(self.model.measure.name == measure_name)
+                .filter(MngClimateMeasure.name == measure_name)
                 .all()
             )
             return [ClimateHistoricalMonthlyRead.model_validate(obj) for obj in results]

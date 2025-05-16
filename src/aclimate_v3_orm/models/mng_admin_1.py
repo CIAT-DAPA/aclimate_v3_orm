@@ -13,5 +13,5 @@ class MngAdmin1(Base):
     register = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
-    country = relationship('MngCountry', back_populates='admin_1_regions')
-    admin_2_regions = relationship('MngAdmin2', back_populates='admin_1_region')
+    country = relationship('MngCountry', back_populates='admin_1')
+    admin_2 = relationship('MngAdmin2', back_populates='admin_1')

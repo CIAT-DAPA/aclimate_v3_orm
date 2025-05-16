@@ -1,5 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict, field_validator
+from .mng_location_schema import LocationRead
+from .mng_climate_measure_schema import ClimateMeasureRead
 
 class ClimateHistoricalClimatologyBase(BaseModel):
     """Base fields for climate climatology data"""
@@ -38,5 +40,6 @@ class ClimateHistoricalClimatologyUpdate(BaseModel):
 class ClimateHistoricalClimatologyRead(ClimateHistoricalClimatologyBase):
     """Complete climatology record including read-only fields"""
     id: int
-    
+    location: Optional[LocationRead] = None
+    measure: Optional[ClimateMeasureRead] = None
     model_config = ConfigDict(from_attributes=True)  # Enable ORM compatibility
