@@ -348,7 +348,6 @@ def test_get_by_admin1_name(location_service, mock_db):
     filter_mock.all.return_value = [mock_location]
     
     result = location_service.get_by_admin1_name(admin1_name, db=mock_db)
-    print(result)
     assert len(result) == 1
     assert result[0].name == "Test Location"
     query_mock.join.assert_called_once_with(MngLocation.admin_2)

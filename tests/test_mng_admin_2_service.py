@@ -87,7 +87,6 @@ def test_get_by_country_id(admin2_service, mock_db):
     filter_mock.all.return_value = [mock_admin2]
 
     result = admin2_service.get_by_country_id(country_id, db=mock_db)
-    print(result)
     # Validaciones
     assert len(result) == 1
     assert result[0].id == 1
