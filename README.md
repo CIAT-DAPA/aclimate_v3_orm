@@ -6,6 +6,10 @@ The goal of this project is to provide a well-structured and scalable Object-Rel
 
 This is an ORM (Object-Relational Mapping) built with the SQLAlchemy library for interfacing with relational databases.
 
+## Documentation
+
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/CIAT-DAPA/aclimate_v3_orm)
+
 ## Features
 
 - Modular structure organized by domain (climate, forecast, catalog, administrative, etc.)
