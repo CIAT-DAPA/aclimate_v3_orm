@@ -49,8 +49,8 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
         with self._session_scope(db) as session:
             objs = (
                 session.query(self.model)
-                .join(self.model.admin_2_region)
-                .join(MngAdmin2.admin_1_region)
+                .join(self.model.admin_2)
+                .join(MngAdmin2.admin_1)
                 .filter(MngAdmin1.country_id == country_id, self.model.enable == enabled)
                 .all()
             )
@@ -61,7 +61,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
         with self._session_scope(db) as session:
             objs = (
                 session.query(self.model)
-                .join(self.model.admin_2_region)
+                .join(self.model.admin_2)
                 .filter(MngAdmin2.admin_1_id == admin1_id, self.model.enable == enabled)
                 .all()
             )
@@ -72,8 +72,8 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
         with self._session_scope(db) as session:
             objs = (
                 session.query(self.model)
-                .join(self.model.admin_2_region)
-                .join(MngAdmin2.admin_1_region)
+                .join(self.model.admin_2)
+                .join(MngAdmin2.admin_1)
                 .join(MngAdmin1.country)
                 .filter(MngCountry.name == country_name, self.model.enable == enabled)
                 .all()
@@ -85,8 +85,8 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
         with self._session_scope(db) as session:
             objs = (
                 session.query(self.model)
-                .join(self.model.admin_2_region)
-                .join(MngAdmin2.admin_1_region)
+                .join(self.model.admin_2)
+                .join(MngAdmin2.admin_1)
                 .filter(MngAdmin1.name == admin1_name, self.model.enable == enabled)
                 .all()
             )
@@ -107,7 +107,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
         with self._session_scope(db) as session:
             objs = (
                 session.query(self.model)
-                .join(self.model.admin_2_region)
+                .join(self.model.admin_2)
                 .filter(MngAdmin2.name == admin2_name, self.model.enable == enabled)
                 .all()
             )

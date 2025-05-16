@@ -79,7 +79,6 @@ def test_get_by_country_name_with_patch(admin1_service, mock_db):
     mock_db.query.return_value.join.return_value.filter.return_value.all.return_value = [mock_admin1]
 
     result = admin1_service.get_by_country_name(country_name, db=mock_db)
-    print(result)
     assert len(result) == 1
     assert result[0].name == "Region 1"
     assert result[0].country is not None

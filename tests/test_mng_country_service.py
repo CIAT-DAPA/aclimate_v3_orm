@@ -160,7 +160,6 @@ def test_delete_country(country_service, mock_db):
     # Verificar resultados (ahora esperando un booleano)
     assert isinstance(result, bool)
     assert result is True  # Debería devolver True si la eliminación fue exitosa
-    print(existing_country.enable)
     # Verificar que el país fue deshabilitado
     assert existing_country.enable is False
     

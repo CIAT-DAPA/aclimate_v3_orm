@@ -215,9 +215,9 @@ def test_get_all_enable(location_service, mock_db):
 def test_get_by_country_id(location_service, mock_db):
     """Test para obtener ubicaciones por country_id"""
     country_id = 1
-    mock_country = MngCountry(id=1, name="Test Country", iso2="CC")
-    mock_admin1 = MngAdmin1(id=1, country_id=country_id, country=mock_country, enable=True)
-    mock_admin2 = MngAdmin2(id=1, admin_1_id=1, admin_1_region=mock_admin1, visible=True, enable=True)
+    mock_country = MngCountry(id=1, name="Test Country", iso2="CC", enable=True)
+    mock_admin1 = MngAdmin1(id=1, country_id=country_id, name="Test", country=mock_country, enable=True)
+    mock_admin2 = MngAdmin2(id=1, admin_1_id=1, admin_1=mock_admin1, name="Test", visible=True, enable=True)
     mock_location = MngLocation(id=1, 
                                 admin_2_id=1, 
                                 name="Test Location",
@@ -228,7 +228,7 @@ def test_get_by_country_id(location_service, mock_db):
                                 origin="CHIRPS",
                                 visible=True,
                                 enable=True,
-                                admin_2_region=mock_admin2)
+                                admin_2=mock_admin2)
     
     # Configurar mocks para la cadena de joins
     query_mock = MagicMock()
@@ -246,12 +246,12 @@ def test_get_by_country_id(location_service, mock_db):
     
     assert len(result) == 1
     assert result[0].name == "Test Location"
-    query_mock.join.assert_called_once_with(MngLocation.admin_2_region)
+    query_mock.join.assert_called_once_with(MngLocation.admin_2)
 
 def test_get_by_admin1_id(location_service, mock_db):
     """Test para obtener ubicaciones por admin1_id"""
     admin1_id = 1
-    mock_admin2 = MngAdmin2(id=1, admin_1_id=admin1_id, visible=True, enable=True)
+    mock_admin2 = MngAdmin2(id=1, admin_1_id=admin1_id, name="Test", visible=True, enable=True)
     mock_location = MngLocation(id=1, 
                                 admin_2_id=1, 
                                 name="Test Location",
@@ -262,7 +262,7 @@ def test_get_by_admin1_id(location_service, mock_db):
                                 origin="CHIRPS",
                                 visible=True,
                                 enable=True,
-                                admin_2_region=mock_admin2)
+                                admin_2=mock_admin2)
     
     # Configurar mocks
     query_mock = MagicMock()
@@ -278,14 +278,14 @@ def test_get_by_admin1_id(location_service, mock_db):
     
     assert len(result) == 1
     assert result[0].name == "Test Location"
-    query_mock.join.assert_called_once_with(MngLocation.admin_2_region)
+    query_mock.join.assert_called_once_with(MngLocation.admin_2)
 
 def test_get_by_country_name(location_service, mock_db):
     """Test para obtener ubicaciones por nombre de país"""
     country_name = "Test Country"
-    mock_country = MngCountry(id=1, name=country_name, iso2="CC")
-    mock_admin1 = MngAdmin1(id=1, country=mock_country, enable=True, country_id=1)
-    mock_admin2 = MngAdmin2(id=1, admin_1_region=mock_admin1, admin_1_id=1, visible=True, enable=True)
+    mock_country = MngCountry(id=1, name=country_name, iso2="CC", enable=True)
+    mock_admin1 = MngAdmin1(id=1, country=mock_country, name="test", enable=True, country_id=1)
+    mock_admin2 = MngAdmin2(id=1, admin_1=mock_admin1, admin_1_id=1, name="test", visible=True, enable=True)
     mock_location = MngLocation(id=1, 
                                 admin_2_id=1, 
                                 name="Test Location",
@@ -296,7 +296,7 @@ def test_get_by_country_name(location_service, mock_db):
                                 origin="CHIRPS",
                                 visible=True,
                                 enable=True,
-                                admin_2_region=mock_admin2)
+                                admin_2=mock_admin2)
     
     # Configurar mocks para múltiples joins
     query_mock = MagicMock()
@@ -316,13 +316,13 @@ def test_get_by_country_name(location_service, mock_db):
     
     assert len(result) == 1
     assert result[0].name == "Test Location"
-    query_mock.join.assert_called_once_with(MngLocation.admin_2_region)
+    query_mock.join.assert_called_once_with(MngLocation.admin_2)
 
 def test_get_by_admin1_name(location_service, mock_db):
     """Test para obtener ubicaciones por nombre de admin1"""
     admin1_name = "Test Admin1"
     mock_admin1 = MngAdmin1(id=1, name=admin1_name, enable=True, country_id=1)
-    mock_admin2 = MngAdmin2(id=1, admin_1_region=mock_admin1, admin_1_id=1, visible=True, enable=True)
+    mock_admin2 = MngAdmin2(id=1, admin_1=mock_admin1,name="test", admin_1_id=1, visible=True, enable=True)
     mock_location = MngLocation(id=1, 
                                 admin_2_id=1, 
                                 name="Test Location",
@@ -333,7 +333,7 @@ def test_get_by_admin1_name(location_service, mock_db):
                                 origin="CHIRPS",
                                 visible=True,
                                 enable=True,
-                                admin_2_region=mock_admin2)
+                                admin_2=mock_admin2)
     
     # Configurar mocks
     query_mock = MagicMock()
@@ -348,10 +348,9 @@ def test_get_by_admin1_name(location_service, mock_db):
     filter_mock.all.return_value = [mock_location]
     
     result = location_service.get_by_admin1_name(admin1_name, db=mock_db)
-    
     assert len(result) == 1
     assert result[0].name == "Test Location"
-    query_mock.join.assert_called_once_with(MngLocation.admin_2_region)
+    query_mock.join.assert_called_once_with(MngLocation.admin_2)
 
 def test_get_by_admin2_id(location_service, mock_db):
     """Test para obtener ubicaciones por admin2_id"""
@@ -388,7 +387,7 @@ def test_get_by_admin2_name(location_service, mock_db):
                                 origin="CHIRPS",
                                 visible=True,
                                 enable=True,
-                                admin_2_region=mock_admin2)
+                                admin_2=mock_admin2)
     
     # Configurar mocks
     query_mock = MagicMock()
@@ -403,7 +402,7 @@ def test_get_by_admin2_name(location_service, mock_db):
     result = location_service.get_by_admin2_name(admin2_name, db=mock_db)
     assert len(result) == 1
     assert result[0].name == "Test Location"
-    query_mock.join.assert_called_once_with(MngLocation.admin_2_region)
+    query_mock.join.assert_called_once_with(MngLocation.admin_2)
 
 # ---- Tests de validación ----
 def test_validate_create_duplicate(location_service, mock_db):

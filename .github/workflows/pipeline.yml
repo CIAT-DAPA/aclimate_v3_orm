@@ -32,13 +32,10 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
 
-      - name: Set PYTHONPATH
-        run: echo "PYTHONPATH=aclimate_v3_orm"
-
       - name: Run Tests with pytest
         run: |
           source env/bin/activate
-          python -m pytest tests/
+          PYTHONPATH=$PYTHONPATH:./src pytest tests/
 
 # ------- END ORM PROCCESS -------- #    
 

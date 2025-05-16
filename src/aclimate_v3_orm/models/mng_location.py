@@ -20,7 +20,7 @@ class MngLocation(Base):
     visible = Column(Boolean, default=True)
 
 
-    admin_2_region = relationship('MngAdmin2', back_populates='locations')
+    admin_2 = relationship('MngAdmin2', back_populates='location')
     
     daily_measurements = relationship("ClimateHistoricalDaily", back_populates="location")
     monthly_measurements = relationship("ClimateHistoricalMonthly", back_populates="location")
