@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from typing import List
 from pydantic import ValidationError
 
-from aclimate_v3_orm.models import MngLocation, MngAdmin2, MngAdmin1, MngCountry
+from aclimate_v3_orm.models import MngLocation, MngAdmin2, MngAdmin1, MngCountry, MngSource
 from aclimate_v3_orm.schemas import LocationCreate, LocationRead, LocationUpdate
 from aclimate_v3_orm.services import MngLocationService
 from aclimate_v3_orm.validations import MngLocationValidator
@@ -27,12 +27,12 @@ def test_create_location(location_service, mock_db):
     location_data = LocationCreate(
         name="Test Location",
         admin_2_id=1,
+        source_id=1,
         latitude=12.34,
         longitude=56.78,
         visible=True,
         altitude=23,
-        ext_id="Test1",
-        origin="CHIRPS"
+        ext_id="Test1"
     )
     
     # 2. Configurar mocks
@@ -65,6 +65,7 @@ def test_update_location(location_service, mock_db):
     existing_location = MngLocation(
         id=location_id,
         admin_2_id=1,
+        source_id=1,
         name="Original Location",
         visible=True,
         enable=True
@@ -84,6 +85,7 @@ def test_delete_location(location_service, mock_db):
     existing_location = MngLocation(
         id=location_id,
         admin_2_id=1,
+        source_id=1,
         name="Location to Delete",
         enable=True
     )
@@ -106,9 +108,9 @@ def test_get_by_visible(location_service, mock_db):
                     enable=True,
                     altitude=23,
                     ext_id="Test1",
-                    origin="CHIRPS",
                     latitude=12.34,
                     longitude=56.78,
+                    source_id=1,
                     admin_2_id=1)
     hidden_location = MngLocation(id=2, 
                     name="Hidden Location", 
@@ -116,9 +118,9 @@ def test_get_by_visible(location_service, mock_db):
                     enable=True,
                     altitude=24,
                     ext_id="Test2",
-                    origin="CHIRPS",
                     latitude=12.34,
                     longitude=56.78,
+                    source_id=1,
                     admin_2_id=1)
     
     # Configurar mocks separados para cada caso de prueba
@@ -147,7 +149,7 @@ def test_get_by_ext_id(location_service, mock_db):
                                 latitude=12.34,
                                 longitude=56.78,
                                 altitude=23,
-                                origin="CHIRPS",
+                                source_id=1,
                                 admin_2_id=1,
                                 visible=True)
     
@@ -169,7 +171,7 @@ def test_get_by_name(location_service, mock_db):
                     longitude=56.78,
                     altitude=23,
                     ext_id="Test1",
-                    origin="CHIRPS",
+                    source_id=1,
                     admin_2_id=1,
                     visible=True)
     ]
@@ -190,7 +192,7 @@ def test_get_all_enable(location_service, mock_db):
                     longitude=56.78,
                     altitude=23,
                     ext_id="Test1",
-                    origin="CHIRPS",
+                    source_id=1,
                     visible=True),
         MngLocation(id=2, 
                     name="Location 2", 
@@ -200,7 +202,7 @@ def test_get_all_enable(location_service, mock_db):
                     longitude=56.78,
                     altitude=23,
                     ext_id="Test1",
-                    origin="CHIRPS",
+                    source_id=1,
                     visible=True)
     ]
     
@@ -225,7 +227,7 @@ def test_get_by_country_id(location_service, mock_db):
                                 longitude=56.78,
                                 altitude=23,
                                 ext_id="Test1",
-                                origin="CHIRPS",
+                                source_id=1,
                                 visible=True,
                                 enable=True,
                                 admin_2=mock_admin2)
@@ -259,9 +261,9 @@ def test_get_by_admin1_id(location_service, mock_db):
                                 longitude=56.78,
                                 altitude=23,
                                 ext_id="Test1",
-                                origin="CHIRPS",
                                 visible=True,
                                 enable=True,
+                                source_id=1,
                                 admin_2=mock_admin2)
     
     # Configurar mocks
@@ -293,8 +295,8 @@ def test_get_by_country_name(location_service, mock_db):
                                 longitude=56.78,
                                 altitude=23,
                                 ext_id="Test1",
-                                origin="CHIRPS",
                                 visible=True,
+                                source_id=1,
                                 enable=True,
                                 admin_2=mock_admin2)
     
@@ -330,7 +332,7 @@ def test_get_by_admin1_name(location_service, mock_db):
                                 longitude=56.78,
                                 altitude=23,
                                 ext_id="Test1",
-                                origin="CHIRPS",
+                                source_id=1,
                                 visible=True,
                                 enable=True,
                                 admin_2=mock_admin2)
@@ -362,7 +364,7 @@ def test_get_by_admin2_id(location_service, mock_db):
                                 longitude=56.78,
                                 altitude=23,
                                 ext_id="Test1",
-                                origin="CHIRPS",
+                                source_id=1,
                                 visible=True,
                                 enable=True)
     
@@ -384,7 +386,7 @@ def test_get_by_admin2_name(location_service, mock_db):
                                 longitude=56.78,
                                 altitude=23,
                                 ext_id="Test1",
-                                origin="CHIRPS",
+                                source_id=1,
                                 visible=True,
                                 enable=True,
                                 admin_2=mock_admin2)
@@ -409,6 +411,7 @@ def test_validate_create_duplicate(location_service, mock_db):
     """Test para validar duplicados al crear ubicación"""
     location_data = LocationCreate(
         admin_2_id=1,
+        source_id=1,
         name="Duplicate Location",
         ext_id="DUPL123"
     )
@@ -421,3 +424,86 @@ def test_validate_create_duplicate(location_service, mock_db):
             location_service.create(location_data, db=mock_db)
         
         assert "Location already exists" in str(excinfo.value)
+
+
+def test_get_by_source_id(location_service, mock_db):
+    """Test para obtener ubicaciones por source_id"""
+    source_id = 5
+    mock_locations = [
+        MngLocation(
+            id=1,
+            name="Location 1",
+            source_id=source_id,
+            enable=True,
+            altitude=23,
+            admin_2_id=1,
+            ext_id="Test1",
+            latitude=12.34,
+            longitude=56.78,
+            visible=True
+        ),
+        MngLocation(
+            id=2,
+            name="Location 2",
+            source_id=source_id,
+            enable=True,
+            altitude=23,
+            admin_2_id=1,
+            ext_id="Test2",
+            latitude=12.35,
+            longitude=56.79,
+            visible=True
+        )
+    ]
+    
+    # Configurar mock
+    mock_db.query.return_value.filter.return_value.all.return_value = mock_locations
+    
+    # Ejecutar
+    result = location_service.get_by_source_id(source_id, db=mock_db)
+    
+    # Verificar
+    assert len(result) == 2
+    assert all(loc.source_id == source_id for loc in result)
+    assert result[0].name == "Location 1"
+    assert result[1].name == "Location 2"
+    mock_db.query.return_value.filter.assert_called_once()
+
+def test_get_by_source_type(location_service, mock_db):
+    """Test para obtener ubicaciones por tipo de fuente (MA/AU)"""
+    source_type = "MA"
+    mock_source = MngSource(id=1, name="Manual Source", source_type=source_type, enable=True)
+    mock_locations = [
+        MngLocation(
+            id=1,
+            name="Manual Location 1",
+            source_id=1,
+            enable=True,
+            admin_2_id=1,
+            altitude=23,
+            latitude=12.34,
+            ext_id="Test2",
+            longitude=56.78,
+            visible=True,
+            source=mock_source
+        )
+    ]
+    
+    # Configurar mocks para el join
+    query_mock = MagicMock()
+    join_mock = MagicMock()
+    filter_mock = MagicMock()
+    
+    mock_db.query.return_value = query_mock
+    query_mock.join.return_value = join_mock
+    join_mock.filter.return_value = filter_mock
+    filter_mock.all.return_value = mock_locations
+    
+    # Ejecutar
+    result = location_service.get_by_source_type(source_type, db=mock_db)
+    
+    # Verificar
+    assert len(result) == 1
+    assert result[0].name == "Manual Location 1"
+    assert result[0].source.source_type == source_type
+    query_mock.join.assert_called_once_with(MngLocation.source)

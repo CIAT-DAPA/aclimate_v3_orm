@@ -1,7 +1,7 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from ..services.base_service import BaseService
-from ..models import MngLocation, MngCountry, MngAdmin1, MngAdmin2
+from ..models import MngLocation, MngCountry, MngAdmin1, MngAdmin2, MngSource
 from ..validations import MngLocationValidator
 from ..schemas import LocationCreate, LocationRead, LocationUpdate
 
@@ -109,6 +109,39 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
                 session.query(self.model)
                 .join(self.model.admin_2)
                 .filter(MngAdmin2.name == admin2_name, self.model.enable == enabled)
+                .all()
+            )
+            return [LocationRead.model_validate(obj) for obj in objs]
+        
+    def get_by_source_id(self, 
+                        source_id: int, 
+                        enabled: bool = True,
+                        db: Optional[Session] = None) -> List[LocationRead]:
+        """Get by source id"""
+        with self._session_scope(db) as session:
+            objs = (
+                session.query(self.model)
+                .filter(
+                    self.model.source_id == source_id,
+                    self.model.enable == enabled
+                )
+                .all()
+            )
+            return [LocationRead.model_validate(obj) for obj in objs]
+
+    def get_by_source_type(self,
+                         source_type: str,
+                         enabled: bool = True,
+                         db: Optional[Session] = None) -> List[LocationRead]:
+        """Get by source type (MA/AU)"""
+        with self._session_scope(db) as session:
+            objs = (
+                session.query(self.model)
+                .join(self.model.source)
+                .filter(
+                    MngSource.source_type == source_type,
+                    self.model.enable == enabled
+                )
                 .all()
             )
             return [LocationRead.model_validate(obj) for obj in objs]

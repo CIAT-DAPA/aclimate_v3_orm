@@ -2,15 +2,16 @@ from typing import Optional
 from .mng_admin_1_schema import Admin1Read
 from .mng_admin_2_schema import Admin2Read
 from .mng_country_schema import CountryRead
+from .mng_source_schema import MngSourceRead  # Asegúrate de que el import es correcto
 from pydantic import BaseModel, Field, field_validator, ConfigDict
 from datetime import datetime
 
 class LocationBase(BaseModel):
     """Base fields for locations"""
     admin_2_id: int = Field(..., gt=0, description="ID of the parent Admin2 region")
+    source_id: int = Field(..., gt=0, description="ID of the associated source")
     name: str = Field(..., max_length=255, description="Name of the location")
     ext_id: Optional[str] = Field(None, max_length=255, description="External ID/reference")
-    origin: Optional[str] = Field(None, max_length=255, description="Data origin/source")
     latitude: Optional[float] = Field(None, ge=-90, le=90, description="Latitude coordinate")
     longitude: Optional[float] = Field(None, ge=-180, le=180, description="Longitude coordinate")
     altitude: Optional[float] = Field(None, description="Altitude in meters")
@@ -31,9 +32,9 @@ class LocationBase(BaseModel):
 class LocationCreate(BaseModel):
     """Schema for creating new locations"""
     admin_2_id: int = Field(..., gt=0)
+    source_id: int = Field(..., gt=0)
     name: str = Field(..., max_length=255)
     ext_id: Optional[str] = Field(None, max_length=255)
-    origin: Optional[str] = Field(None, max_length=255)
     latitude: Optional[float] = Field(None, ge=-90, le=90)
     longitude: Optional[float] = Field(None, ge=-180, le=180)
     altitude: Optional[float] = None
@@ -51,9 +52,9 @@ class LocationCreate(BaseModel):
 class LocationUpdate(BaseModel):
     """Schema for updating locations (all fields optional)"""
     admin_2_id: Optional[int] = Field(None, gt=0)
+    source_id: Optional[int] = Field(None, gt=0)
     name: Optional[str] = Field(None, max_length=255)
     ext_id: Optional[str] = Field(None, max_length=255)
-    origin: Optional[str] = Field(None, max_length=255)
     latitude: Optional[float] = Field(None, ge=-90, le=90)
     longitude: Optional[float] = Field(None, ge=-180, le=180)
     altitude: Optional[float] = None
@@ -77,4 +78,6 @@ class LocationRead(LocationBase):
     admin_1: Optional[Admin1Read] = None
     admin_2: Optional[Admin2Read] = None
     country: Optional[CountryRead] = None
+    source: Optional[MngSourceRead] = None
+    
     model_config = ConfigDict(from_attributes=True)  # ORM compatibility

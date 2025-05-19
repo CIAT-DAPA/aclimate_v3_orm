@@ -7,3 +7,4 @@ from .mng_admin_2_service import MngAdmin2Service
 from .mng_climate_measure_service import MngClimateMeasureService
 from .mng_location_service import MngLocationService
 from .mng_country_service import MngCountryService
+from .mng_source_service import MngSourceService
