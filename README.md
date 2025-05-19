@@ -264,6 +264,7 @@ aclimate_v3_orm/
 │     ├── schemas/ # Pydantic schemas for validation
 │     ├── services/ # Service layer for database operations
 │     ├── validations/ # Validation logic
+│     ├── enums/ # Application enumerations for type-safe fixed value sets
 │     └── database/ # Database connection management
 │
 ├── tests/ # Test suite organized by service
