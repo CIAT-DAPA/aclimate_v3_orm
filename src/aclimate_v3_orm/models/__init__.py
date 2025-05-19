@@ -6,3 +6,4 @@ from .mng_admin_2 import MngAdmin2
 from .mng_climate_measure import MngClimateMeasure
 from .mng_country import MngCountry
 from .mng_location import MngLocation
+from .mng_source import MngSource

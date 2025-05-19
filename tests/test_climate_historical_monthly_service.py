@@ -102,8 +102,8 @@ def test_get_by_location_name(monthly_service, mock_db):
                                 latitude=12.34,
                                 longitude=56.78,
                                 altitude=23,
+                                source_id=1,
                                 ext_id="Test1",
-                                origin="CHIRPS",
                                 visible=True,
                                 enable=True)
     mock_record = ClimateHistoricalMonthly(id=1, location_id=1, measure_id=1, date=date(2023, 1, 1), value=20.0)
@@ -136,8 +136,8 @@ def test_get_by_country_id(monthly_service, mock_db):
                                 latitude=12.34,
                                 longitude=56.78,
                                 altitude=23,
+                                source_id=1,
                                 ext_id="Test1",
-                                origin="CHIRPS",
                                 visible=True,
                                 enable=True)
     mock_record = ClimateHistoricalMonthly(id=1, location_id=1, measure_id=1, date=date(2023, 1, 1), value=20.0)
@@ -172,8 +172,8 @@ def test_get_by_admin1_id(monthly_service, mock_db):
                                 latitude=12.34,
                                 longitude=56.78,
                                 altitude=23,
+                                source_id=1,
                                 ext_id="Test1",
-                                origin="CHIRPS",
                                 visible=True,
                                 enable=True)
     mock_record = ClimateHistoricalMonthly(id=1, location_id=1, measure_id=1, date=date(2023, 1, 1), value=20.0)

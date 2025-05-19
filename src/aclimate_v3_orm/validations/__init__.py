@@ -6,3 +6,4 @@ from .mng_climate_measure_validation import MngClimateMeasureNameValidator
 from .climate_historical_monthly_validation import ClimateHistoricalMonthlyValidator
 from .climate_historical_climatology_validation import ClimateHistoricalClimatologyValidator
 from .climate_historical_daily_validation import ClimateHistoricalDailyValidator
+from .mng_source_validation import MngSourceValidator
