@@ -1,10 +1,10 @@
-# Aclimate V3 ORM
+# AClimate V3 ORM
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/CIAT-DAPA/aclimate_v3_orm) ![](https://img.shields.io/github/v/tag/CIAT-DAPA/aclimate_v3_orm)
 
 ## Introduction
 
-Aclimate V3 ORM is an Object-Relational Mapping package designed for the Aclimate platform. It facilitates interaction with relational databases for climate data models, forecast systems, agricultural zones, and administrative boundaries. The package provides a structured interface for accessing and manipulating climate historical data at different temporal resolutions.
+AClimate V3 ORM is an Object-Relational Mapping package designed for the AClimate platform. It facilitates interaction with relational databases for climate data models, forecast systems, agricultural zones, and administrative boundaries. The package provides a structured interface for accessing and manipulating climate historical data at different temporal resolutions.
 
 This is an ORM (Object-Relational Mapping) built with the SQLAlchemy library for interfacing with relational databases.
 
@@ -17,7 +17,7 @@ For complete documentation, visit the [![Ask DeepWiki](https://deepwiki.com/badg
 - Modular structure organized by domain (climate, forecast, catalog, administrative, etc.)
 - Built using SQLAlchemy for efficient relational mapping
 - Compatible with Python > 3.10
-- Designed for integration into larger Aclimate infrastructure
+- Designed for integration into larger AClimate infrastructure
 
 ## Requirements
 
