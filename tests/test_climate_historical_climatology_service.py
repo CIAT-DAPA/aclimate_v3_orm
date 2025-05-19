@@ -102,11 +102,11 @@ def test_get_by_location_name(climatology_service, mock_db):
     location_name = "Test Location"
     mock_location = MngLocation(id=1, admin_2_id=1,
                                 name=location_name,
+                                source_id=1,
                                 latitude=12.34,
                                 longitude=56.78,
                                 altitude=23,
                                 ext_id="Test1",
-                                origin="CHIRPS",
                                 visible=True,
                                 enable=True)
     mock_record = ClimateHistoricalClimatology(id=1, location_id=1, measure_id=1, month=1, value=20.0)
@@ -137,10 +137,10 @@ def test_get_by_country_id(climatology_service, mock_db):
     mock_location = MngLocation(id=1, admin_2_id=1, admin_2=mock_admin2,
                                 name="Test Location",
                                 latitude=12.34,
+                                source_id=1,
                                 longitude=56.78,
                                 altitude=23,
                                 ext_id="Test1",
-                                origin="CHIRPS",
                                 visible=True,
                                 enable=True)
 
@@ -177,8 +177,8 @@ def test_get_by_country_name(climatology_service, mock_db):
                                 latitude=12.34,
                                 longitude=56.78,
                                 altitude=23,
+                                source_id=1,
                                 ext_id="Test1",
-                                origin="CHIRPS",
                                 visible=True,
                                 enable=True)
     mock_record = ClimateHistoricalClimatology(id=1, location_id=1, measure_id=1, month=1, value=20.0)
@@ -218,10 +218,10 @@ def test_get_by_admin1_id(climatology_service, mock_db):
                                 latitude=12.34,
                                 longitude=56.78,
                                 visible=True,
+                                source_id=1,
                                 name="Test Location",
                                 altitude=23,
                                 ext_id="Test1",
-                                origin="CHIRPS",
                                 enable=True)
         
 
