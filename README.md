@@ -1,8 +1,10 @@
-# AClimate V3 ORM
+# AClimate V3 ORM ⛅️💾
+
+## 🏷️ Version & Tags
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/CIAT-DAPA/aclimate_v3_orm) ![](https://img.shields.io/github/v/tag/CIAT-DAPA/aclimate_v3_orm)
 
-## Introduction
+## 📌 Introduction
 
 AClimate V3 ORM is an Object-Relational Mapping package designed for the AClimate platform. It facilitates interaction with relational databases for climate data models, forecast systems, agricultural zones, and administrative boundaries. The package provides a structured interface for accessing and manipulating climate historical data at different temporal resolutions.
 
@@ -19,7 +21,7 @@ For complete documentation, visit the [![Ask DeepWiki](https://deepwiki.com/badg
 - Compatible with Python > 3.10
 - Designed for integration into larger AClimate infrastructure
 
-## Requirements
+## ✅ Requirements
 
 - Python > 3.10
 - Relational database (PostgreSQL recommended, also compatible with MySQL and SQLite)
@@ -39,7 +41,7 @@ To install a specific version:
 pip install git+https://github.com/CIAT-DAPA/aclimate_v3_orm@v0.0.9
 ```
 
-## Environment Configuration
+## 🔧 Environment Configuration
 
 You can configure the database connection either by:
 
@@ -73,7 +75,7 @@ export DATABASE_URL="postgresql://username:password@localhost:5432/database"
 > [!NOTE]  
 > Replace username, password and localhost with your actual credentials
 
-## Usage
+## 🚀 Usage
 
 ### Import
 
@@ -124,7 +126,7 @@ print(countries)
 
 ```
 
-## Testing
+## 🧪 Testing
 
 ### Test Structure
 
@@ -186,7 +188,7 @@ pytest -k "test_get_daily_data"  # Run tests matching pattern
 > [!NOTE]  
 > All tests use an isolated SQLite in-memory database configured in conftest.py, ensuring test independence and execution speed.
 
-## CI/CD Pipeline Overview
+## 🔄 CI/CD Pipeline Overview
 
 ### Workflow Architecture
 
@@ -250,7 +252,7 @@ Code Push → Test Stage → Merge Stage → Release Stage
 - Traceable version history
 - Automated semantic versioning
 
-## Project Structure
+## 📊 Project Structure
 
 ```bash
 aclimate_v3_orm/
