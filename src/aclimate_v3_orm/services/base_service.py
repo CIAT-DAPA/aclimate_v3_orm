@@ -27,20 +27,12 @@ class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]
         Safely manages session lifecycle.
         For internal sessions, delegates ALL handling to get_db().
         """
-        if db:  # External session
+        if db:
             try:
                 yield db
-                db.commit()
-            except SQLAlchemyError as e:
-                db.rollback()
-                print(f"⚠️ Database error: {str(e)}")
-                raise
             except Exception as e:
-                db.rollback()
-                print(f"⚠️ Unexpected error: {str(e)}")
+                print(f"⚠️ Error during session operation: {str(e)}")
                 raise
-            finally:
-                db.close()
         else:  # Internal session - FULLY delegates to get_db()
             with get_db() as db:
                 yield db  # Let get_db() handle everything
