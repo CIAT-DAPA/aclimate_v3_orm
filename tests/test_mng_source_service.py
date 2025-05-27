@@ -158,7 +158,7 @@ def test_get_all(source_service, mock_db):
     
     # Test all sources
     mock_db.query.return_value.all.return_value = mock_sources
-    result = source_service.get_all(enabled=None, db=mock_db)
+    result = source_service.get_all_enable(enabled=None, db=mock_db)
     assert len(result) == 2
 
 # ---- Validation Tests ----

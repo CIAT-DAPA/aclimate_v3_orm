@@ -149,7 +149,7 @@ def test_get_all(climate_measure_service, mock_db):
     
     # Test para todas las medidas
     mock_db.query.return_value.all.return_value = mock_measures
-    result = climate_measure_service.get_all(enabled=None, db=mock_db)
+    result = climate_measure_service.get_all_enable(enabled=None, db=mock_db)
     assert len(result) == 3
 
 # ---- Tests de validación ----
