@@ -62,7 +62,7 @@ class MngAdmin2Service(BaseService[MngAdmin2, Admin2Create, Admin2Read, Admin2Up
             return [Admin2Read.model_validate(obj) for obj in objs]
 
 
-    def get_all(self, enabled: bool = True, db: Optional[Session] = None) -> List[Admin2Read]:
+    def get_all_enable(self, enabled: bool = True, db: Optional[Session] = None) -> List[Admin2Read]:
         """Get all admin2 regions, optionally filtered by enabled status"""
         with self._session_scope(db) as session:
             objs = session.query(self.model).filter(self.model.enable == enabled).all()

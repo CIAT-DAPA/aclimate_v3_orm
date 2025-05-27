@@ -57,7 +57,7 @@ class MngSourceService(BaseService[MngSource, MngSourceCreate, MngSourceRead, Mn
             )
             return [MngSourceRead.model_validate(obj) for obj in objs]
 
-    def get_all(self,
+    def get_all_enable(self,
                enabled: bool = True,
                db: Optional[Session] = None) -> List[MngSourceRead]:
         """Get all sources, optionally filtered by enabled status"""

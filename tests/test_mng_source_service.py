@@ -152,7 +152,7 @@ def test_get_all(source_service, mock_db):
     
     # Test enabled only
     mock_db.query.return_value.filter.return_value.all.return_value = [mock_sources[0]]
-    result = source_service.get_all(enabled=True, db=mock_db)
+    result = source_service.get_all_enable(enabled=True, db=mock_db)
     assert len(result) == 1
     assert result[0].enable is True
     

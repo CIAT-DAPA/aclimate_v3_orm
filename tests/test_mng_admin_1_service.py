@@ -99,7 +99,7 @@ def test_get_all_enabled(admin1_service, mock_db):
     mock_db.query.return_value.filter.return_value.all.return_value = mock_admin1s
     
     # Ejecutar el método
-    result = admin1_service.get_all(db=mock_db)
+    result = admin1_service.get_all_enable(db=mock_db)
     
     # Verificar resultados
     assert len(result) == 2
