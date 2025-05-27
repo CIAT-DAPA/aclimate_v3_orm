@@ -42,7 +42,7 @@ class MngAdmin1Service(BaseService[MngAdmin1, Admin1Create, Admin1Read, Admin1Up
             )
             return [Admin1Read.model_validate(obj) for obj in objs]
 
-    def get_all(self,
+    def get_all_enable(self,
                 enabled: bool = True,
                 db: Optional[Session] = None) -> List[Admin1Read]:
         """Get all admin1 regions, optionally filtered by enabled status"""

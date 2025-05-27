@@ -67,8 +67,12 @@ def test_update_location(location_service, mock_db):
         admin_2_id=1,
         source_id=1,
         name="Original Location",
-        visible=True,
-        enable=True
+        enable=True,
+        altitude=23,
+        ext_id="Test1",
+        latitude=12.34,
+        longitude=56.78,
+        visible=True   
     )
     
     mock_db.query.return_value.get.return_value = existing_location
@@ -87,7 +91,12 @@ def test_delete_location(location_service, mock_db):
         admin_2_id=1,
         source_id=1,
         name="Location to Delete",
-        enable=True
+        enable=True,
+        altitude=23,
+        ext_id="Test1",
+        latitude=12.34,
+        longitude=56.78,
+        visible=True    
     )
     
     mock_db.query.return_value.get.return_value = existing_location
@@ -413,7 +422,12 @@ def test_validate_create_duplicate(location_service, mock_db):
         admin_2_id=1,
         source_id=1,
         name="Duplicate Location",
-        ext_id="DUPL123"
+        ext_id="DUPL123",
+        latitude=12.34,
+        longitude=56.78,
+        altitude=23,
+        visible=True,
+        enable=True,
     )
     
     # Simular que ya existe

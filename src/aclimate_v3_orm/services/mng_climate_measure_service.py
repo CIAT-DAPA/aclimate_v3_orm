@@ -42,7 +42,7 @@ class MngClimateMeasureService(
                 .all()
             return [ClimateMeasureRead.model_validate(obj) for obj in objs]
 
-    def get_all(self, db: Optional[Session] = None, enabled: bool = True) -> List[ClimateMeasureRead]:
+    def get_all_enable(self, db: Optional[Session] = None, enabled: bool = True) -> List[ClimateMeasureRead]:
         """Obtiene todas las medidas climáticas, filtradas por estado"""
         with self._session_scope(db) as session:
             query = session.query(self.model)

@@ -143,13 +143,13 @@ def test_get_all(climate_measure_service, mock_db):
     
     # Test para medidas habilitadas
     mock_db.query.return_value.filter.return_value.all.return_value = mock_measures[:2]
-    result = climate_measure_service.get_all(db=mock_db)
+    result = climate_measure_service.get_all_enable(db=mock_db)
     assert len(result) == 2
     assert all(m.enable is True for m in result)
     
     # Test para todas las medidas
     mock_db.query.return_value.all.return_value = mock_measures
-    result = climate_measure_service.get_all(enabled=None, db=mock_db)
+    result = climate_measure_service.get_all_enable(enabled=None, db=mock_db)
     assert len(result) == 3
 
 # ---- Tests de validación ----
