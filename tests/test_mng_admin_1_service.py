@@ -117,7 +117,7 @@ def test_get_all_include_disabled(admin1_service, mock_db):
     mock_db.query.return_value.all.return_value = mock_admin1s
     
     # Ejecutar el método con enabled=None
-    result = admin1_service.get_all(enabled=None, db=mock_db)
+    result = admin1_service.get_all_enable(enabled=None, db=mock_db)
     
     # Verificar resultados
     assert len(result) == 2
