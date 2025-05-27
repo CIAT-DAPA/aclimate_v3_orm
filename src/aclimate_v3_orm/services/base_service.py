@@ -30,13 +30,20 @@ class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]
         if db:
             try:
                 yield db
-            except Exception as e:
-                print(f"⚠️ Error during session operation: {str(e)}")
+                db.commit()
+            except SQLAlchemyError as e:
+                db.rollback()
+                print(f"⚠️ Database error: {str(e)}")
                 raise
-        else:  # Internal session - FULLY delegates to get_db()
-            with get_db() as db:
-                yield db  # Let get_db() handle everything
+            except Exception as e:
+                db.rollback()
+                print(f"⚠️ Unexpected error: {str(e)}")
+                raise
+        else:
             
+            with get_db() as session:
+                yield session
+                
     def get_by_id(self, id: int, db: Optional[Session] = None) -> Optional[ReadSchemaType]:
         """Obtiene un registro por ID y lo devuelve directamente como ReadSchema"""
         with self._session_scope(db) as session:
@@ -73,7 +80,8 @@ class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]
             for field, value in update_data.items():
                 setattr(db_obj, field, value)
                 
-            session.commit()
+            session.flush()
+
             session.refresh(db_obj)
             return self.read_schema.model_validate(db_obj)
 
@@ -89,7 +97,8 @@ class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]
                 session.add(db_obj)
             else:
                 session.delete(db_obj)
-            
+                session.flush()
+
             return True
 
     def _validate_create(self, obj_in: CreateSchemaType, db: Optional[Session] = None):
