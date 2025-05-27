@@ -5,7 +5,7 @@ setup(
     version='v0.0.12',
     author="santiago123x",
     author_email="s.calderon@cgiar.com",
-    description="ORM para la base de datos de AClimate y sus metodos",
+    description="ORM for AClimate database and its methods",
     url="https://github.com/CIAT-DAPA/aclimate_v3_orm",
     download_url="https://github.com/CIAT-DAPA/aclimate_v3_orm",
     packages=find_packages('src'),

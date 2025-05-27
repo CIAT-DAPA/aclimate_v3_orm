@@ -27,7 +27,7 @@ class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]
         Safely manages session lifecycle.
         For internal sessions, delegates ALL handling to get_db().
         """
-        if db:  # External session
+        if db:
             try:
                 yield db
                 db.commit()
@@ -39,12 +39,11 @@ class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]
                 db.rollback()
                 print(f"⚠️ Unexpected error: {str(e)}")
                 raise
-            finally:
-                db.close()
-        else:  # Internal session - FULLY delegates to get_db()
-            with get_db() as db:
-                yield db  # Let get_db() handle everything
+        else:
             
+            with get_db() as session:
+                yield session
+                
     def get_by_id(self, id: int, db: Optional[Session] = None) -> Optional[ReadSchemaType]:
         """Obtiene un registro por ID y lo devuelve directamente como ReadSchema"""
         with self._session_scope(db) as session:
@@ -80,7 +79,9 @@ class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]
             update_data = obj_in.model_dump(exclude_unset=True) if isinstance(obj_in, BaseModel) else obj_in
             for field, value in update_data.items():
                 setattr(db_obj, field, value)
-            
+                
+            session.flush()
+
             session.refresh(db_obj)
             return self.read_schema.model_validate(db_obj)
 
@@ -96,7 +97,8 @@ class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]
                 session.add(db_obj)
             else:
                 session.delete(db_obj)
-            
+                session.flush()
+
             return True
 
     def _validate_create(self, obj_in: CreateSchemaType, db: Optional[Session] = None):
