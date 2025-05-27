@@ -80,7 +80,8 @@ class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]
             update_data = obj_in.model_dump(exclude_unset=True) if isinstance(obj_in, BaseModel) else obj_in
             for field, value in update_data.items():
                 setattr(db_obj, field, value)
-            
+                
+            session.commit()
             session.refresh(db_obj)
             return self.read_schema.model_validate(db_obj)
 
