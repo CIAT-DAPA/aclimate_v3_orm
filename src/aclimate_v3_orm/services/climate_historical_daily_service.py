@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from ..services.base_service import BaseService
 from ..models import ClimateHistoricalDaily, MngLocation, MngClimateMeasure, MngAdmin1, MngAdmin2, MngCountry
 from ..validations import ClimateHistoricalDailyValidator
+from sqlalchemy.sql import func
 from ..schemas import (
     ClimateHistoricalDailyCreate,
     ClimateHistoricalDailyUpdate,
@@ -127,6 +128,14 @@ class ClimateHistoricalDailyService(
                 .all()
             )
             return [ClimateHistoricalDailyRead.model_validate(obj) for obj in results]
+    def get_date_range_by_location_id(self, location_id: int, db: Optional[Session] = None):
+        
+        with self._session_scope(db) as session:
+            min_date, max_date = session.query(
+                func.min(self.model.date),
+                func.max(self.model.date)
+            ).filter(self.model.location_id == location_id).one()
+            return {"location_id": location_id, "min_date": min_date, "max_date": max_date}
 
     def _validate_create(self, obj_in: ClimateHistoricalDailyCreate, db: Optional[Session] = None):
         ClimateHistoricalDailyValidator.create_validate(db, obj_in)
