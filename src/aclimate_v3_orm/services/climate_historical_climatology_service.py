@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from ..services.base_service import BaseService
 from ..models import ClimateHistoricalClimatology, MngLocation, MngClimateMeasure, MngAdmin1, MngAdmin2, MngCountry
 from ..validations import ClimateHistoricalClimatologyValidator
+from sqlalchemy.sql import func
 from ..schemas import (
     ClimateHistoricalClimatologyCreate,
     ClimateHistoricalClimatologyUpdate,
@@ -112,6 +113,16 @@ class ClimateHistoricalClimatologyService(
                 .all()
             )
             return [ClimateHistoricalClimatologyRead.model_validate(obj) for obj in objs]
+    def get_date_range_by_location_id(self, location_id: int, db: Optional[Session] = None):
+        """
+        Get the minimum and maximum month for a given location ID.
+        """
+        with self._session_scope(db) as session:
+            min_month, max_month = session.query(
+                func.min(self.model.month),
+                func.max(self.model.month)
+            ).filter(self.model.location_id == location_id).one()
+            return {"location_id": location_id, "min_month": min_month, "max_month": max_month}
 
     def get_by_measure_name(self, measure_name: str, db: Optional[Session] = None) -> List[ClimateHistoricalClimatologyRead]:
         """Get records by measure name"""
