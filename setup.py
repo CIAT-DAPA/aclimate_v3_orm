@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="aclimate_v3_orm",
-    version='v0.0.14',
+    version='v0.0.15',
     author="santiago123x",
     author_email="s.calderon@cgiar.com",
     description="ORM for AClimate database and its methods",
