@@ -26,7 +26,7 @@ class SourceUpdate(BaseModel):
     source_type: Optional[SourceType] = None
     enable: Optional[bool] = None
 
-class MngSourceRead(SourceBase):
+class SourceRead(SourceBase):
     """Complete management source schema including read-only fields"""
     id: int
     
