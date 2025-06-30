@@ -1,0 +1,20 @@
+# mng_phenological_stage.py
+from sqlalchemy import Column, Integer, String, Text, ForeignKey
+from sqlalchemy.orm import relationship
+from ..database.base import Base
+
+class MngPhenologicalStage(Base):
+    __tablename__ = 'mng_phenological_stage'
+
+    id = Column(Integer, primary_key=True)
+    crop_id = Column(Integer, ForeignKey('mng_crop.id'), nullable=False)
+    name = Column(String(255), nullable=False)
+    short_name = Column(String(50))
+    description = Column(Text)
+    order_stage = Column(Integer, nullable=False)
+    duration_avg_day = Column(Integer)
+    start_model = Column(String(100))
+    end_model = Column(String(100))
+
+    # Relationship
+    crop = relationship("MngCrop", back_populates="stages")
