@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from ..models import MngSource
-from ..schemas import MngSourceCreate, MngSourceUpdate
+from ..schemas import SourceCreate, SourceUpdate
 from ..enums import SourceType
 
 class MngSourceValidator:
@@ -40,7 +40,7 @@ class MngSourceValidator:
             raise ValueError(f"A {source_type} source with name '{name}' already exists")
 
     @staticmethod
-    def create_validate(db: Session, obj_in: MngSourceCreate):
+    def create_validate(db: Session, obj_in: SourceCreate):
         """Validation for source creation"""
         MngSourceValidator.validate_name(obj_in.name)
         MngSourceValidator.validate_type(obj_in.source_type)
@@ -48,7 +48,7 @@ class MngSourceValidator:
         MngSourceValidator.validate_unique_type_name_combination(db, obj_in.name, obj_in.source_type)
 
     @staticmethod
-    def update_validate(db: Session, obj_in: MngSourceUpdate, source_id: int):
+    def update_validate(db: Session, obj_in: SourceUpdate, source_id: int):
         """Validation for source updates"""
         if hasattr(obj_in, 'name') and obj_in.name is not None:
             MngSourceValidator.validate_name(obj_in.name)
