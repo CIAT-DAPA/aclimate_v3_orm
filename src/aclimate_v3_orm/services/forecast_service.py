@@ -1,3 +1,4 @@
+from datetime import date
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from ..services.base_service import BaseService

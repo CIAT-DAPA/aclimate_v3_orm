@@ -20,3 +20,4 @@ class MngCultivar(Base):
     # Relationships
     crop = relationship("MngCrop", back_populates="cultivars")
     setups = relationship("MngSetup", back_populates="cultivar")
+    country = relationship("MngCountry", back_populates="cultivars")

@@ -1,6 +1,5 @@
 # mng_setup_validation.py
 from sqlalchemy.orm import Session
-from src.aclimate_v3_orm.schemas.mng_setup_schema import MngSetupCreate
 from ..models import MngCultivar, MngSoil, Season
 
 class MngSetupValidator:
@@ -24,6 +23,6 @@ class MngSetupValidator:
             raise ValueError("Invalid season ID")
     
     @staticmethod
-    def create_validate(db: Session, obj_in: MngSetupCreate):
+    def create_validate(db: Session, obj_in):
         MngSetupValidator.validate_frequency(obj_in.frequency)
         MngSetupValidator.validate_foreign_keys(db, obj_in.cultivar_id, obj_in.soil_id, obj_in.season_id)

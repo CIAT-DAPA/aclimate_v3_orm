@@ -6,7 +6,7 @@ from typing import List
 from pydantic import ValidationError
 
 from aclimate_v3_orm.models import MngSource
-from aclimate_v3_orm.schemas import MngSourceCreate, MngSourceRead, MngSourceUpdate
+from aclimate_v3_orm.schemas import SourceCreate, SourceRead, SourceUpdate
 from aclimate_v3_orm.services import MngSourceService
 from aclimate_v3_orm.validations import MngSourceValidator
 
@@ -24,7 +24,7 @@ def source_service():
 def test_create_source(source_service, mock_db):
     """Test creating a source"""
     # 1. Setup valid test data
-    source_data = MngSourceCreate(
+    source_data = SourceCreate(
         name="Test Source",
         source_type="MA",  # Using MA/AU instead of type
         enable=True
@@ -46,7 +46,7 @@ def test_create_source(source_service, mock_db):
         result = source_service.create(source_data, db=mock_db)
     
     # 4. Assertions
-    assert isinstance(result, MngSourceRead)
+    assert isinstance(result, SourceRead)
     assert result.id == 1
     assert result.name == "Test Source"
     assert result.source_type == "MA"
@@ -55,7 +55,7 @@ def test_create_source(source_service, mock_db):
 def test_update_source(source_service, mock_db):
     """Test updating a source"""
     source_id = 1
-    update_data = MngSourceUpdate(name="Updated Source", source_type="AU")
+    update_data = SourceUpdate(name="Updated Source", source_type="AU")
     existing_source = MngSource(
         id=source_id,
         name="Original Source",
@@ -164,7 +164,7 @@ def test_get_all(source_service, mock_db):
 # ---- Validation Tests ----
 def test_validate_create_duplicate(source_service, mock_db):
     """Test validation for duplicate source creation"""
-    source_data = MngSourceCreate(
+    source_data = SourceCreate(
         name="Duplicate Source",
         source_type="MA"
     )
@@ -181,7 +181,7 @@ def test_validate_create_duplicate(source_service, mock_db):
 def test_validate_invalid_source_type(source_service, mock_db):
     """Test validation for invalid source types"""
     # Usa un tipo que pase Pydantic pero falle en tu validador
-    invalid_source_data = MngSourceCreate(
+    invalid_source_data = SourceCreate(
         name="Invalid Source",
         source_type="MA"  # Tipo válido para Pydantic
     )
@@ -198,7 +198,7 @@ def test_validate_invalid_source_type(source_service, mock_db):
 
 def test_validate_type_name_combination(source_service, mock_db):
     """Test validation for type-name combination"""
-    source_data = MngSourceCreate(
+    source_data = SourceCreate(
         name="Test Source",
         source_type="MA"
     )
@@ -231,7 +231,7 @@ def test_update_with_partial_data(source_service, mock_db):
     mock_db.query.return_value.get.return_value = existing_source
     
     # Update only the name
-    update_data = MngSourceUpdate(name="Updated Name")
+    update_data = SourceUpdate(name="Updated Name")
     result = source_service.update(source_id, update_data, db=mock_db)
     
     assert result.name == "Updated Name"
@@ -239,7 +239,7 @@ def test_update_with_partial_data(source_service, mock_db):
 
 def test_create_with_minimal_data(source_service, mock_db):
     """Test creation with minimal required data"""
-    minimal_data = MngSourceCreate(
+    minimal_data = SourceCreate(
         name="Minimal Source",
         source_type="AU"
     )

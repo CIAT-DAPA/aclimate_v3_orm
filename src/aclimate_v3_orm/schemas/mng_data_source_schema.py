@@ -7,7 +7,7 @@ class DataSourceBase(BaseModel):
     name: str = Field(..., max_length=255, description="Nombre de la fuente")
     description: Optional[str] = Field(None, description="Descripción")
     type: str = Field(..., max_length=50, description="Tipo de fuente")
-    active: bool = Field(default=True, description="Activo")
+    enable: bool = Field(default=True, description="Habilitado")
     created_at: Optional[datetime] = Field(None, description="Fecha de creación")
     content: Optional[str] = Field(None, description="Contenido")
 
@@ -16,7 +16,7 @@ class DataSourceCreate(BaseModel):
     name: str = Field(..., max_length=255)
     description: Optional[str] = None
     type: str = Field(..., max_length=50)
-    active: bool = Field(default=True)
+    enable: bool = Field(default=True)
     content: Optional[str] = None
 
 class DataSourceUpdate(BaseModel):
@@ -24,7 +24,7 @@ class DataSourceUpdate(BaseModel):
     name: Optional[str] = Field(None, max_length=255)
     description: Optional[str] = None
     type: Optional[str] = Field(None, max_length=50)
-    active: Optional[bool] = None
+    enable: Optional[bool] = None
     content: Optional[str] = None
 
 class DataSourceRead(DataSourceBase):
