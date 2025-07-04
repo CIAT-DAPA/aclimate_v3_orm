@@ -18,3 +18,6 @@ class MngPhenologicalStage(Base):
 
     # Relationship
     crop = relationship("MngCrop", back_populates="stages")
+
+    historical_agroclimatic_indicators = relationship("HistoricalAgroclimaticIndicator", back_populates="phenological_stage")
+    phenological_stage_stresses = relationship("PhenologicalStageStress", back_populates="phenological_stage")

@@ -8,7 +8,7 @@ class MngSoil(Base):
     __tablename__ = 'mng_soil'
 
     id = Column(Integer, primary_key=True)
-    country_id = Column(Integer, ForeignKey('country.id'), nullable=False)
+    country_id = Column(Integer, ForeignKey('mng_country.id'), nullable=False)
     crop_id = Column(Integer, ForeignKey('mng_crop.id'), nullable=False)
     name = Column(String(255), nullable=False)
     sort_order = Column(Integer, nullable=False)
@@ -19,3 +19,4 @@ class MngSoil(Base):
     # Relationships
     crop = relationship("MngCrop", back_populates="soils")
     setups = relationship("MngSetup", back_populates="soil")
+    country = relationship("MngCountry", back_populates="soils")

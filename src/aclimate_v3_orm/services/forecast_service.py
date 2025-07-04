@@ -1,3 +1,4 @@
+from datetime import date
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from ..services.base_service import BaseService
@@ -7,7 +8,7 @@ from ..validations import ForecastValidator
 
 class ForecastService(BaseService[Forecast, ForecastCreate, ForecastRead, ForecastUpdate]):
     def __init__(self):
-        super().__init__(Forecast)
+        super().__init__(Forecast, ForecastCreate, ForecastRead, ForecastUpdate)
 
     def get_by_run_date(self, 
                        run_date: date,

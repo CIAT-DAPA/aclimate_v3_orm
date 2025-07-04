@@ -23,3 +23,7 @@ class MngIndicator(Base):
         back_populates="indicator",
         cascade="all, delete-orphan"
     )
+
+    historical_agroclimatic_indicators = relationship(
+    "HistoricalAgroclimaticIndicator", back_populates="indicator"
+    )
