@@ -27,3 +27,5 @@ class MngLocation(Base):
     monthly_measurements = relationship("ClimateHistoricalMonthly", back_populates="location")
     climatology_data = relationship("ClimateHistoricalClimatology", back_populates="location")
     climate_historical_indicators = relationship('ClimateHistoricalIndicator', back_populates='location')
+    seasons = relationship("Season", back_populates="location")
+    historical_agroclimatic_indicators = relationship("HistoricalAgroclimaticIndicator", back_populates="location")
