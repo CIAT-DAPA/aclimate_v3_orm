@@ -128,3 +128,4 @@ secrets.env
 
 # Ignore Sphinx documentation build
 docs/_build/
+notes.txt
