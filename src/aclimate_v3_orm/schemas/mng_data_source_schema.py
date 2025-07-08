@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict
+from .mng_country_schema import CountryRead
 
 class DataSourceBase(BaseModel):
     country_id: int = Field(..., gt=0, description="ID del país")
@@ -29,4 +30,5 @@ class DataSourceUpdate(BaseModel):
 
 class DataSourceRead(DataSourceBase):
     id: int
+    country: Optional[CountryRead] = None
     model_config = ConfigDict(from_attributes=True)
