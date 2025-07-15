@@ -9,7 +9,7 @@ class SeasonBase(BaseModel):
     planting_end: date
     season_start: date
     season_end: date
-
+    enable: Optional[bool] = Field(default=True, description="Habilitado")
 class SeasonCreate(SeasonBase):
     pass
 
@@ -20,6 +20,7 @@ class SeasonUpdate(BaseModel):
     planting_end: Optional[date] = None
     season_start: Optional[date] = None
     season_end: Optional[date] = None
+    enable: Optional[bool] = Field(default=True)
 
 class SeasonRead(SeasonBase):
     id: int

@@ -1,9 +1,9 @@
-from sqlalchemy import Column, BigInteger, Integer, Date, ForeignKey
+from sqlalchemy import Column, BigInteger, Integer, Date, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from ..database.base import Base
 
-class Season(Base):
-    __tablename__ = 'season'
+class MngSeason(Base):
+    __tablename__ = 'mng_season'
 
     id = Column(BigInteger, primary_key=True)
     location_id = Column(BigInteger, ForeignKey('mng_location.id'), nullable=False)
@@ -12,6 +12,7 @@ class Season(Base):
     planting_end = Column(Date, nullable=False)
     season_start = Column(Date, nullable=False)
     season_end = Column(Date, nullable=False)
+    enable = Column(Boolean, default=True)
 
     # Relaciones
     location = relationship("MngLocation", back_populates="seasons")
