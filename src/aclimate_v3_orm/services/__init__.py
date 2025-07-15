@@ -18,7 +18,7 @@ from .mng_stress_service import MngStressService
 from .mng_crop_service import MngCropService
 from .mng_setup_service import MngSetupService
 from .mng_configuration_file_service import MngConfigurationFileService
-from .season_service import SeasonService
+from .mng_season_service import MngSeasonService
 from .forecast_service import ForecastService
 from .forecast_analogue_service import ForecastAnalogueService
 from .historical_agroclimatic_indicator_service import HistoricalAgroclimaticIndicatorService

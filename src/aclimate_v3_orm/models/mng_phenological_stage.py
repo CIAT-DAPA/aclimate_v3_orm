@@ -1,5 +1,5 @@
 # mng_phenological_stage.py
-from sqlalchemy import Column, Integer, String, Text, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from ..database.base import Base
 
@@ -15,6 +15,7 @@ class MngPhenologicalStage(Base):
     duration_avg_day = Column(Integer)
     start_model = Column(String(100))
     end_model = Column(String(100))
+    enable = Column(Boolean, default=True)
 
     # Relationship
     crop = relationship("MngCrop", back_populates="stages")

@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
-from ..models import Season, MngLocation, MngCrop
+from ..models import MngSeason, MngLocation, MngCrop
 
-class SeasonValidator:
+class MngSeasonValidator:
 
     @staticmethod
     def validate_location_id(db: Session, location_id: int):
@@ -22,6 +22,6 @@ class SeasonValidator:
 
     @staticmethod
     def create_validate(db: Session, obj_in):
-        SeasonValidator.validate_location_id(db, obj_in.location_id)
-        SeasonValidator.validate_crop_id(db, obj_in.crop_id)
-        SeasonValidator.validate_dates(obj_in.planting_start, obj_in.planting_end, obj_in.season_start, obj_in.season_end)
+        MngSeasonValidator.validate_location_id(db, obj_in.location_id)
+        MngSeasonValidator.validate_crop_id(db, obj_in.crop_id)
+        MngSeasonValidator.validate_dates(obj_in.planting_start, obj_in.planting_end, obj_in.season_start, obj_in.season_end)

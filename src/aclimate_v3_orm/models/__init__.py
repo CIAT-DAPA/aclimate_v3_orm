@@ -17,7 +17,7 @@ from .mng_stress import MngStress
 from .mng_crop import MngCrop
 from .mng_setup import MngSetup
 from .mng_configuration_file import MngConfigurationFile
-from .season import Season
+from .mng_season import MngSeason
 from .forecast import Forecast
 from .forecast_analogue import ForecastAnalogue
 from .historical_agroclimatic_indicator import HistoricalAgroclimaticIndicator
