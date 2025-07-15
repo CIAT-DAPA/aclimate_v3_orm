@@ -17,7 +17,7 @@ from .mng_stress_schema import StressCreate, StressRead, StressUpdate
 from .mng_crop_schema import CropCreate, CropRead, CropUpdate
 from .mng_setup_schema import SetupCreate, SetupRead, SetupUpdate
 from .mng_configuration_file_schema import ConfigurationFileCreate, ConfigurationFileRead, ConfigurationFileUpdate
-from .season_schema import SeasonCreate, SeasonRead, SeasonUpdate
+from .mng_season_schema import SeasonCreate, SeasonRead, SeasonUpdate
 from .forecast_schema import ForecastCreate, ForecastRead, ForecastUpdate
 from .forecast_analogue_schema import ForecastAnalogueCreate, ForecastAnalogueRead, ForecastAnalogueUpdate
 from .historical_agroclimatic_indicator_schema import HistoricalAgroclimaticIndicatorCreate, HistoricalAgroclimaticIndicatorRead, HistoricalAgroclimaticIndicatorUpdate

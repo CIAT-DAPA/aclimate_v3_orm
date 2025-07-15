@@ -6,10 +6,10 @@ from datetime import date
 from typing import List
 
 # Importaciones de tu proyecto
-from aclimate_v3_orm.models import Season
+from aclimate_v3_orm.models import MngSeason
 from aclimate_v3_orm.schemas import SeasonCreate, SeasonRead, SeasonUpdate
-from aclimate_v3_orm.services import SeasonService
-from aclimate_v3_orm.validations import SeasonValidator
+from aclimate_v3_orm.services import MngSeasonService
+from aclimate_v3_orm.validations import MngSeasonValidator
 
 @pytest.fixture
 def mock_db():
@@ -19,16 +19,16 @@ def mock_db():
 @pytest.fixture
 def service():
     """Fixture para el servicio de temporadas"""
-    return SeasonService()
+    return MngSeasonService()
 
 def test_get_by_location(service, mock_db):
     """Test para obtener temporadas por location_id"""
     # Configurar datos de prueba
     mock_seasons = [
-        Season(id=1, location_id=100, crop_id=200, 
+        MngSeason(id=1, location_id=100, crop_id=200, 
             planting_start=date(2023, 1, 1), planting_end=date(2023, 1, 31),
             season_start=date(2023, 1, 1), season_end=date(2023, 4, 30)),
-        Season(id=2, location_id=100, crop_id=201, 
+        MngSeason(id=2, location_id=100, crop_id=201, 
             planting_start=date(2023, 2, 1), planting_end=date(2023, 2, 28),
             season_start=date(2023, 2, 1), season_end=date(2023, 5, 31))
     ]
@@ -45,17 +45,17 @@ def test_get_by_location(service, mock_db):
     assert all(item.location_id == 100 for item in result)
     
     # Verificar llamadas a la base de datos
-    mock_db.query.assert_called_once_with(Season)
+    mock_db.query.assert_called_once_with(MngSeason)
     mock_db.query.return_value.filter.assert_called_once()
 
 def test_get_by_crop(service, mock_db):
     """Test para obtener temporadas por crop_id"""
     # Configurar datos de prueba
     mock_seasons = [
-        Season(id=3, location_id=101, crop_id=300, 
+        MngSeason(id=3, location_id=101, crop_id=300, 
                planting_start=date(2023, 3, 1), planting_end=date(2023, 3, 31), 
                season_start=date(2023, 3, 1), season_end=date(2023, 6, 30)),
-        Season(id=4, location_id=102, crop_id=300, 
+        MngSeason(id=4, location_id=102, crop_id=300, 
                planting_start=date(2023, 4, 1), planting_end=date(2023, 4, 30),
                season_start=date(2023, 4, 1), season_end=date(2023, 7, 31))
     ]
@@ -72,7 +72,7 @@ def test_get_by_crop(service, mock_db):
     assert all(item.crop_id == 300 for item in result)
     
     # Verificar llamadas a la base de datos
-    mock_db.query.assert_called_once_with(Season)
+    mock_db.query.assert_called_once_with(MngSeason)
     mock_db.query.return_value.filter.assert_called_once()
 
 def test_create_season_valid(service, mock_db):
@@ -86,7 +86,7 @@ def test_create_season_valid(service, mock_db):
         season_start=date(2024, 1, 1),
         season_end=date(2024, 4, 30)
     )
-    mock_new_season = Season(
+    mock_new_season = MngSeason(
         id=5, 
         location_id=season_data.location_id,
         crop_id=season_data.crop_id,
@@ -107,7 +107,7 @@ def test_create_season_valid(service, mock_db):
     mock_db.refresh.side_effect = mock_refresh
     
     # Mockear la validación
-    with patch.object(SeasonValidator, 'create_validate') as mock_validate:
+    with patch.object(MngSeasonValidator, 'create_validate') as mock_validate:
         # Ejecutar el método
         result = service.create(obj_in=season_data, db=mock_db)
     
@@ -128,7 +128,7 @@ def test_update_season(service, mock_db):
     """Test para actualizar una temporada"""
     # Configurar datos de prueba
     season_id = 6
-    existing_season = Season(
+    existing_season = MngSeason(
         id=season_id,
         location_id=300,
         crop_id=500,
@@ -167,7 +167,7 @@ def test_delete_season(service, mock_db):
     """Test para eliminar una temporada"""
     # Configurar datos de prueba
     season_id = 7
-    existing_season = Season(
+    existing_season = MngSeason(
         id=season_id,
         location_id=400,
         crop_id=600,
@@ -226,7 +226,7 @@ def test_create_season_validation_failure(service, mock_db):
     )
     
     # Mockear la validación para que lance excepción
-    with patch.object(SeasonValidator, 'create_validate', 
+    with patch.object(MngSeasonValidator, 'create_validate', 
                      side_effect=ValueError("Planting end date must be after start date")):
         with pytest.raises(ValueError) as excinfo:
             service.create(season_data, db=mock_db)
@@ -240,7 +240,7 @@ def test_partial_update_season(service, mock_db):
     """Test para actualización parcial de una temporada"""
     # Configurar datos de prueba
     season_id = 8
-    existing_season = Season(
+    existing_season = MngSeason(
         id=season_id,
         location_id=600,
         crop_id=800,
@@ -269,7 +269,7 @@ def test_update_season_dates(service, mock_db):
     """Test para actualizar solo las fechas de una temporada"""
     # Configurar datos de prueba
     season_id = 9
-    existing_season = Season(
+    existing_season = MngSeason(
         id=season_id,
         location_id=700,
         crop_id=900,

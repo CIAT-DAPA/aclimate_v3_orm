@@ -17,7 +17,7 @@ from .mng_stress_validation import MngStressValidator
 from .mng_crop_validation import MngCropValidator
 from .mng_setup_validation import MngSetupValidator
 from .mng_configuration_file_validation import MngConfigurationFileValidator
-from .season_validation import SeasonValidator
+from .mng_season_validation import MngSeasonValidator
 from .forecast_validation import ForecastValidator
 from .forecast_analogue_validation import ForecastAnalogueValidator
 from .historical_agroclimatic_indicator_validation import HistoricalAgroclimaticIndicatorValidator

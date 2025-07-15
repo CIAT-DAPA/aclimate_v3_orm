@@ -1,13 +1,13 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from ..services.base_service import BaseService
-from ..models import Season
+from .base_service import BaseService
+from ..models import MngSeason
 from ..schemas import SeasonCreate, SeasonUpdate, SeasonRead
 from ..validations import SeasonValidator
 
-class SeasonService(BaseService[Season, SeasonCreate, SeasonRead, SeasonUpdate]):
+class MngSeasonService(BaseService[MngSeason, SeasonCreate, SeasonRead, SeasonUpdate]):
     def __init__(self):
-        super().__init__(Season, SeasonCreate, SeasonRead, SeasonUpdate)
+        super().__init__(MngSeason, SeasonCreate, SeasonRead, SeasonUpdate)
 
     def get_by_location(self, location_id: int, db: Optional[Session] = None) -> List[SeasonRead]:
         with self._session_scope(db) as session:
