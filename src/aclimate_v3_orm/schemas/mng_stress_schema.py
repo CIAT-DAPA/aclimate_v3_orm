@@ -7,6 +7,7 @@ class StressBase(BaseModel):
     short_name: str = Field(..., max_length=100)
     category: StressCategory
     description: Optional[str] = None
+    enable: bool = Field(default=True, description="Habilitado")
 
 class StressCreate(StressBase):
     pass
