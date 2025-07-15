@@ -26,8 +26,8 @@ def test_get_by_category(stress_service, mock_db):
     # Configurar datos de prueba
     
     mock_stresses = [
-        MngStress(id=1, name="Stress1", short_name="S1", category=StressCategory.CROP),
-        MngStress(id=2, name="Stress2", short_name="S2", category=StressCategory.CROP)
+        MngStress(id=1, name="Stress1", short_name="S1", category=StressCategory.CROP, enable=True),
+        MngStress(id=2, name="Stress2", short_name="S2", category=StressCategory.CROP, enable=True)
     ]
     # Configurar el mock
     mock_db.query.return_value.filter.return_value.all.return_value = mock_stresses
