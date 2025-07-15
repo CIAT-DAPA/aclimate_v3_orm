@@ -19,6 +19,6 @@ class MngSetup(Base):
     # Relationships
     cultivar = relationship("MngCultivar", back_populates="setups")
     soil = relationship("MngSoil", back_populates="setups")
-    season = relationship("Season", back_populates="setups")
+    season = relationship("MngSeason", back_populates="setups")
 
     configuration_files = relationship("MngConfigurationFile", back_populates="setup")
