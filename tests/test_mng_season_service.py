@@ -185,8 +185,8 @@ def test_delete_season(service, mock_db):
     
     # Verificar resultados
     assert result is True
-    # Como no hay campo enable, debería eliminarse físicamente
-    mock_db.delete.assert_called_once_with(existing_season)
+    # Debería ser un soft delete (deshabilitar)
+    assert existing_season.enable is False
     mock_db.commit.assert_called_once()
 
 def test_get_by_location_empty(service, mock_db):
