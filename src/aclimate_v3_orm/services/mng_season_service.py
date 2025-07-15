@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from .base_service import BaseService
 from ..models import MngSeason
 from ..schemas import SeasonCreate, SeasonUpdate, SeasonRead
-from ..validations import SeasonValidator
+from ..validations import MngSeasonValidator
 
 class MngSeasonService(BaseService[MngSeason, SeasonCreate, SeasonRead, SeasonUpdate]):
     def __init__(self):
@@ -20,4 +20,4 @@ class MngSeasonService(BaseService[MngSeason, SeasonCreate, SeasonRead, SeasonUp
             return [SeasonRead.model_validate(obj) for obj in objs]
 
     def _validate_create(self, obj_in: SeasonCreate, db: Optional[Session] = None):
-        SeasonValidator.create_validate(db, obj_in)
+        MngSeasonValidator.create_validate(db, obj_in)

@@ -1,6 +1,6 @@
 # mng_setup_validation.py
 from sqlalchemy.orm import Session
-from ..models import MngCultivar, MngSoil, Season
+from ..models import MngCultivar, MngSoil, MngSeason
 
 class MngSetupValidator:
     @staticmethod
@@ -19,7 +19,7 @@ class MngSetupValidator:
             raise ValueError("Invalid soil ID")
         
         # Validate season exists
-        if not db.query(Season).filter(Season.id == season_id).first():
+        if not db.query(MngSeason).filter(MngSeason.id == season_id).first():
             raise ValueError("Invalid season ID")
     
     @staticmethod
