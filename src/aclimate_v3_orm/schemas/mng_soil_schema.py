@@ -9,8 +9,8 @@ class SoilBase(BaseModel):
     name: str = Field(..., max_length=255, description="Name of the soil type")
     sort_order: int = Field(..., ge=0, description="Sort order for the soil type")
     enable: bool = Field(default=True, description="Whether the soil type is enabled")
-    register: Optional[datetime] = Field(None, alias="register", description="Registration timestamp")
-    updated: Optional[datetime] = Field(None, alias="updated", description="Last update timestamp")
+    registered_at: Optional[datetime] = Field(None, alias="register", description="Registration timestamp")
+    updated_at: Optional[datetime] = Field(None, alias="updated", description="Last update timestamp")
 
 class SoilCreate(BaseModel):
     """Schema for creating new soil records"""

@@ -19,5 +19,10 @@ class MngSeasonService(BaseService[MngSeason, SeasonCreate, SeasonRead, SeasonUp
             objs = session.query(self.model).filter(self.model.crop_id == crop_id).all()
             return [SeasonRead.model_validate(obj) for obj in objs]
 
+    def get_all_enable(self, db: Optional[Session] = None) -> List[SeasonRead]:
+        with self._session_scope(db) as session:
+            objs = session.query(self.model).filter(self.model.enable == True).all()
+            return [SeasonRead.model_validate(obj) for obj in objs]
+
     def _validate_create(self, obj_in: SeasonCreate, db: Optional[Session] = None):
         MngSeasonValidator.create_validate(db, obj_in)

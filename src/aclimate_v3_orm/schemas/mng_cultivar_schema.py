@@ -9,8 +9,8 @@ class CultivarBase(BaseModel):
     sort_order: int = Field(..., description="Orden")
     rainfed: bool = Field(default=False, description="Secano")
     enable: bool = Field(default=True, description="Habilitado")
-    register: Optional[datetime] = Field(None, description="Fecha de registro")
-    updated: Optional[datetime] = Field(None, description="Fecha de actualización")
+    registered_at: Optional[datetime] = Field(None, alias="register", description="Registration timestamp")
+    updated_at: Optional[datetime] = Field(None, alias="updated", description="Last update timestamp")
 
 class CultivarCreate(BaseModel):
     country_id: int = Field(..., gt=0)

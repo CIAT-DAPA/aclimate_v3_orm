@@ -14,5 +14,10 @@ class MngPhenologicalStageService(BaseService[MngPhenologicalStage, Phenological
             objs = session.query(self.model).filter(self.model.crop_id == crop_id).all()
             return [PhenologicalStageRead.model_validate(obj) for obj in objs]
 
+    def get_all_enable(self, db: Optional[Session] = None) -> List[PhenologicalStageRead]:
+        with self._session_scope(db) as session:
+            objs = session.query(self.model).filter(self.model.enable == True).all()
+            return [PhenologicalStageRead.model_validate(obj) for obj in objs]
+
     def _validate_create(self, obj_in: PhenologicalStageCreate, db: Optional[Session] = None):
         MngPhenologicalStageValidator.create_validate(db, obj_in)
