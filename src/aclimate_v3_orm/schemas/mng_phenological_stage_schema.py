@@ -1,5 +1,6 @@
 from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict
+from .mng_crop_schema import CropRead
 
 class PhenologicalStageBase(BaseModel):
     crop_id: int = Field(..., gt=0, description="ID del cultivo")
@@ -29,3 +30,4 @@ class PhenologicalStageUpdate(BaseModel):
 class PhenologicalStageRead(PhenologicalStageBase):
     id: int
     model_config = ConfigDict(from_attributes=True)
+    crop: Optional[CropRead]

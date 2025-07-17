@@ -19,5 +19,10 @@ class MngCultivarService(BaseService[MngCultivar, CultivarCreate, CultivarRead, 
             objs = session.query(self.model).filter(self.model.country_id == country_id).all()
             return [CultivarRead.model_validate(obj) for obj in objs]
 
+    def get_all_enable(self, db: Optional[Session] = None) -> List[CultivarRead]:
+        with self._session_scope(db) as session:
+            objs = session.query(self.model).filter(self.model.enable == True).all()
+            return [CultivarRead.model_validate(obj) for obj in objs]
+
     def _validate_create(self, obj_in: CultivarCreate, db: Optional[Session] = None):
         MngCultivarValidator.create_validate(db, obj_in)
