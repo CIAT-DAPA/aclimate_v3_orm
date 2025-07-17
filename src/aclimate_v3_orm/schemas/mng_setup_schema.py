@@ -2,6 +2,9 @@
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict
+from .mng_cultivar_schema import CultivarRead
+from .mng_soil_schema import SoilRead
+from .mng_season_schema import SeasonRead
 
 class SetupBase(BaseModel):
     cultivar_id: int = Field(..., description="Cultivar ID reference")
@@ -28,4 +31,7 @@ class SetupUpdate(BaseModel):
 
 class SetupRead(SetupBase):
     id: int
+    cultivar: Optional[CultivarRead] = None
+    soil: Optional[SoilRead] = None
+    season: Optional[SeasonRead] = None
     model_config = ConfigDict(from_attributes=True)

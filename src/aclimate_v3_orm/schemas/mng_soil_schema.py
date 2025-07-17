@@ -1,6 +1,8 @@
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict
+from .mng_country_schema import CountryRead
+from .mng_crop_schema import CropRead
 
 class SoilBase(BaseModel):
     """Base fields for soil records"""
@@ -9,8 +11,8 @@ class SoilBase(BaseModel):
     name: str = Field(..., max_length=255, description="Name of the soil type")
     sort_order: int = Field(..., ge=0, description="Sort order for the soil type")
     enable: bool = Field(default=True, description="Whether the soil type is enabled")
-    register: Optional[datetime] = Field(None, alias="register", description="Registration timestamp")
-    updated: Optional[datetime] = Field(None, alias="updated", description="Last update timestamp")
+    registered_at: Optional[datetime] = Field(None, alias="register", description="Registration timestamp")
+    updated_at: Optional[datetime] = Field(None, alias="updated", description="Last update timestamp")
 
 class SoilCreate(BaseModel):
     """Schema for creating new soil records"""
@@ -31,4 +33,6 @@ class SoilUpdate(BaseModel):
 class SoilRead(SoilBase):
     """Complete soil schema including read-only fields"""
     id: int
+    country: Optional[CountryRead] = None
+    crop: Optional[CropRead] = None
     model_config = ConfigDict(from_attributes=True)  # Enable ORM compatibility

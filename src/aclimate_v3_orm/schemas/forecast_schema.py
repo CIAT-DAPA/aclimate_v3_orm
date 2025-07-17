@@ -6,8 +6,8 @@ class ForecastBase(BaseModel):
     country_id: int = Field(..., gt=0, description="ID of the country")
     run_date: date = Field(..., description="The date when the forecast was run")
     enable: bool = Field(default=True, description="Whether the forecast is enabled")
-    register: Optional[datetime] = Field(None, alias="register", description="Registration timestamp")
-    updated: Optional[datetime] = Field(None, alias="updated", description="Last update timestamp")
+    registered_at: Optional[datetime] = Field(None, alias="register", description="Registration timestamp")
+    updated_at: Optional[datetime] = Field(None, alias="updated", description="Last update timestamp")
 
 class ForecastCreate(BaseModel):
     country_id: int

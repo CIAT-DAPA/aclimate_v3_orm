@@ -318,9 +318,9 @@ def test_get_by_crop_with_relations(cultivar_service, mock_db):
         enable=True
     )
     # Agregar relaciones ficticias
-    mock_cultivar.crop = MagicMock()
-    mock_cultivar.setups = [MagicMock()]
-    mock_cultivar.country = MagicMock()
+    mock_cultivar.crop = None
+    mock_cultivar.setups = []
+    mock_cultivar.country = None
     
     # Configurar el mock
     mock_db.query.return_value.filter.return_value.all.return_value = [mock_cultivar]
@@ -331,10 +331,8 @@ def test_get_by_crop_with_relations(cultivar_service, mock_db):
     # Verificar resultados
     assert len(result) == 1
     assert result[0].id == 11
-    # Las relaciones no deberían estar en el resultado serializado
-    assert not hasattr(result[0], 'crop')
-    assert not hasattr(result[0], 'setups')
-    assert not hasattr(result[0], 'country')
+    assert result[0].crop is None
+    assert result[0].country is None
 
 def test_delete_cultivar_soft_delete(cultivar_service, mock_db):
     """Test que verifica que el delete es un soft delete (deshabilitar)"""
