@@ -432,8 +432,8 @@ def test_create_soil_with_optional_fields(soil_service, mock_db):
     assert result.id == 18
     # Campos opcionales deben tener valores por defecto
     assert result.enable is True
-    assert isinstance(result.register, datetime)
-    assert isinstance(result.updated, datetime)
+    assert isinstance(result.registered_at, datetime)
+    assert isinstance(result.updated_at, datetime)
 
 def test_update_soil_multiple_fields(soil_service, mock_db):
     """Test para actualizar múltiples campos de un suelo"""

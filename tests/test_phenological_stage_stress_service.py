@@ -29,8 +29,8 @@ def test_get_by_stress(service, mock_db):
     """Test para obtener relaciones por stress_id"""
     # Configurar datos de prueba
     mock_relations = [
-        PhenologicalStageStress(id=1, stress_id=10, phenological_stage_id=100, max=1.0, min=0.0),
-        PhenologicalStageStress(id=2, stress_id=10, phenological_stage_id=101, max=1.0, min=0.0)
+        PhenologicalStageStress(id=1, stress_id=10, phenological_stage_id=100, max=1.0, min=0.0, enable=True),
+        PhenologicalStageStress(id=2, stress_id=10, phenological_stage_id=101, max=1.0, min=0.0, enable=True)
     ]
     
     # Configurar el mock
@@ -52,8 +52,8 @@ def test_get_by_phenological_stage(service, mock_db):
     """Test para obtener relaciones por phenological_stage_id"""
     # Configurar datos de prueba
     mock_relations = [
-        PhenologicalStageStress(id=3, stress_id=20, phenological_stage_id=200, max=1.0, min=0.0),
-        PhenologicalStageStress(id=4, stress_id=21, phenological_stage_id=200, max=1.0, min=0.0)
+        PhenologicalStageStress(id=3, stress_id=20, phenological_stage_id=200, max=1.0, min=0.0, enable=True),
+        PhenologicalStageStress(id=4, stress_id=21, phenological_stage_id=200, max=1.0, min=0.0, enable=True)
     ]
     
     # Configurar el mock
@@ -79,7 +79,8 @@ def test_create_relation_valid(service, mock_db):
         stress_id=30, 
         phenological_stage_id=300,
         max=1.0,
-        min=0.0
+        min=0.0,
+        enable=True
     )
     mock_new_relation = PhenologicalStageStress(
         id=5, 
@@ -124,7 +125,8 @@ def test_update_relation(service, mock_db):
         stress_id=40,
         phenological_stage_id=400,
         max=1.0,
-        min=0.0
+        min=0.0,
+        enable=True
     )
     update_data = PhenologicalStageStressUpdate(
         stress_id=41,
@@ -156,7 +158,8 @@ def test_delete_relation(service, mock_db):
         stress_id=50,
         phenological_stage_id=500,
         max=1.0,
-        min=0.0
+        min=0.0,
+        enable=True
     )
     
     # Configurar el mock
@@ -201,7 +204,8 @@ def test_create_relation_validation_failure(service, mock_db):
         stress_id=60, 
         phenological_stage_id=600,
         max=1.0,
-        min=0.0
+        min=0.0,
+        enable=True
     )
     
     # Mockear la validación para que lance excepción
@@ -224,7 +228,8 @@ def test_partial_update(service, mock_db):
         stress_id=70,
         phenological_stage_id=700,
         max=1.0,
-        min=0.0
+        min=0.0,
+        enable=True
     )
     update_data = PhenologicalStageStressUpdate(
         phenological_stage_id=701  # Solo actualizar phenological_stage_id
