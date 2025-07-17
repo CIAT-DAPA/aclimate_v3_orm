@@ -1,6 +1,8 @@
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict
+from .mng_country_schema import CountryRead
+from .mng_crop_schema import CropRead
 
 class SoilBase(BaseModel):
     """Base fields for soil records"""
@@ -31,4 +33,6 @@ class SoilUpdate(BaseModel):
 class SoilRead(SoilBase):
     """Complete soil schema including read-only fields"""
     id: int
+    country: Optional[CountryRead] = None
+    crop: Optional[CropRead] = None
     model_config = ConfigDict(from_attributes=True)  # Enable ORM compatibility

@@ -1,6 +1,8 @@
 from datetime import date
 from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict
+from .mng_crop_schema import CropRead
+from .mng_location_schema import LocationRead
 
 class SeasonBase(BaseModel):
     location_id: int = Field(..., gt=0)
@@ -24,4 +26,6 @@ class SeasonUpdate(BaseModel):
 
 class SeasonRead(SeasonBase):
     id: int
+    location: Optional[LocationRead] = None
+    crop: Optional[CropRead] = None
     model_config = ConfigDict(from_attributes=True)

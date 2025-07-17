@@ -1,6 +1,8 @@
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict
+from .mng_country_schema import CountryRead
+from .mng_crop_schema import CropRead
 
 class CultivarBase(BaseModel):
     country_id: int = Field(..., gt=0, description="ID del país")
@@ -30,4 +32,6 @@ class CultivarUpdate(BaseModel):
 
 class CultivarRead(CultivarBase):
     id: int
+    country: Optional[CountryRead] = None
+    crop: Optional[CropRead] = None
     model_config = ConfigDict(from_attributes=True)
