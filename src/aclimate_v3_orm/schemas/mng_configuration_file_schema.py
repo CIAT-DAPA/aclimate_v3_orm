@@ -24,4 +24,5 @@ class ConfigurationFileUpdate(BaseModel):
 
 class ConfigurationFileRead(ConfigurationFileBase):
     id: int
+    name: str
     model_config = ConfigDict(from_attributes=True)

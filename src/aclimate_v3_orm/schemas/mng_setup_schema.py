@@ -1,10 +1,11 @@
 # mng_setup_schema.py
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel, Field, ConfigDict
 from .mng_cultivar_schema import CultivarRead
 from .mng_soil_schema import SoilRead
 from .mng_season_schema import SeasonRead
+from .mng_configuration_file_schema import ConfigurationFileRead
 
 class SetupBase(BaseModel):
     cultivar_id: int = Field(..., description="Cultivar ID reference")
@@ -34,4 +35,5 @@ class SetupRead(SetupBase):
     cultivar: Optional[CultivarRead] = None
     soil: Optional[SoilRead] = None
     season: Optional[SeasonRead] = None
+    configuration_files: List[ConfigurationFileRead] = []
     model_config = ConfigDict(from_attributes=True)
