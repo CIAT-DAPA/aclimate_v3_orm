@@ -13,6 +13,11 @@ class MngConfigurationFileService(BaseService[MngConfigurationFile, Configuratio
         with self._session_scope(db) as session:
             objs = session.query(self.model).filter(self.model.setup_id == setup_id).all()
             return [ConfigurationFileRead.model_validate(obj) for obj in objs]
+    
+    def validate_file(self, obj_in: ConfigurationFileCreate):
+        """Realiza la validación usando una sesión interna"""
+        with self._session_scope() as session:
+            MngConfigurationFileValidator.create_validate(session, obj_in)
 
     def _validate_create(self, obj_in: ConfigurationFileCreate, db: Optional[Session] = None):
                 MngConfigurationFileValidator.create_validate(db, obj_in)
