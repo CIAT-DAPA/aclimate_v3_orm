@@ -289,7 +289,7 @@ def test_get_by_cultivar_with_relations(setup_service, mock_db):
     # Agregar relaciones ficticias
     mock_setup.cultivar = None
     mock_setup.soil = None
-    mock_setup.configuration_files = [None]
+    mock_setup.configuration_files = []
     mock_setup.season = None
 
     # Configurar el mock
