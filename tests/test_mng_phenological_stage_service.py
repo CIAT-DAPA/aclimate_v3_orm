@@ -155,8 +155,8 @@ def test_delete_stage(stage_service, mock_db):
     
     # Verificar resultados
     assert result is True
-    # Como no hay campo enable, debería eliminarse físicamente
-    mock_db.delete.assert_called_once_with(existing_stage)
+    # Debería ser un soft delete (deshabilitar)
+    assert existing_stage.enable is False
     mock_db.commit.assert_called_once()
 
 def test_create_stage_validation_failure(stage_service, mock_db):

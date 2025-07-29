@@ -1,5 +1,6 @@
 from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict
+from .mng_crop_schema import CropRead
 
 class PhenologicalStageBase(BaseModel):
     crop_id: int = Field(..., gt=0, description="ID del cultivo")
@@ -10,6 +11,7 @@ class PhenologicalStageBase(BaseModel):
     duration_avg_day: Optional[int] = Field(None, description="Duración promedio (días)")
     start_model: Optional[str] = Field(None, max_length=100, description="Modelo de inicio")
     end_model: Optional[str] = Field(None, max_length=100, description="Modelo de fin")
+    enable: Optional[bool] = Field(default=True, description="Habilitado")
 
 class PhenologicalStageCreate(PhenologicalStageBase):
     pass
@@ -23,7 +25,9 @@ class PhenologicalStageUpdate(BaseModel):
     duration_avg_day: Optional[int] = None
     start_model: Optional[str] = Field(None, max_length=100)
     end_model: Optional[str] = Field(None, max_length=100)
+    enable: Optional[bool] = Field(default=True)
 
 class PhenologicalStageRead(PhenologicalStageBase):
     id: int
     model_config = ConfigDict(from_attributes=True)
+    crop: Optional[CropRead]

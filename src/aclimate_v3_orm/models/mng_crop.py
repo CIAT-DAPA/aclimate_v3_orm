@@ -17,4 +17,4 @@ class MngCrop(Base):
     soils = relationship("MngSoil", back_populates="crop")
     cultivars = relationship("MngCultivar", back_populates="crop")
     stages = relationship("MngPhenologicalStage", back_populates="crop")
-    seasons = relationship("Season", back_populates="crop")
+    seasons = relationship("MngSeason", back_populates="crop")

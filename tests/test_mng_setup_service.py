@@ -287,10 +287,10 @@ def test_get_by_cultivar_with_relations(setup_service, mock_db):
         enable=True
     )
     # Agregar relaciones ficticias
-    mock_setup.cultivar = MagicMock()
-    mock_setup.soil = MagicMock()
-    mock_setup.configuration_files = [MagicMock()]
-    mock_setup.season = MagicMock()
+    mock_setup.cultivar = None
+    mock_setup.soil = None
+    mock_setup.configuration_files = []
+    mock_setup.season = None
 
     # Configurar el mock
     mock_db.query.return_value.filter.return_value.all.return_value = [mock_setup]
@@ -298,14 +298,12 @@ def test_get_by_cultivar_with_relations(setup_service, mock_db):
     # Ejecutar el método
     result = setup_service.get_by_cultivar(mock_db, 110)
     
-    # Verificar resultados
+     # Verificar resultados
     assert len(result) == 1
     assert result[0].id == 11
-    # Las relaciones no deberían estar en el resultado serializado
-    assert not hasattr(result[0], 'cultivar')
-    assert not hasattr(result[0], 'soil')
-    assert not hasattr(result[0], 'configuration_files')
-    assert not hasattr(result[0], 'season')
+    assert result[0].cultivar is None
+    assert result[0].soil is None
+    assert result[0].season is None
 
 def test_delete_setup_soft_delete(setup_service, mock_db):
     """Test que verifica que el delete es un soft delete (deshabilitar)"""

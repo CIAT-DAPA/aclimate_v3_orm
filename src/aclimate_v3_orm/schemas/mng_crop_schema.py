@@ -5,8 +5,8 @@ from pydantic import BaseModel, Field, ConfigDict
 class CropBase(BaseModel):
     name: str = Field(..., max_length=255, description="Nombre del cultivo")
     enable: bool = Field(default=True, description="Habilitado")
-    register: Optional[datetime] = Field(None, description="Fecha de registro")
-    updated: Optional[datetime] = Field(None, description="Fecha de actualización")
+    registered_at: Optional[datetime] = Field(None, alias="register", description="Registration timestamp")
+    updated_at: Optional[datetime] = Field(None, alias="updated", description="Last update timestamp")
 
 class CropCreate(BaseModel):
     name: str = Field(..., max_length=255)

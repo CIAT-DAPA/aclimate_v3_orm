@@ -7,8 +7,8 @@ class ConfigurationFileBase(BaseModel):
     name: str = Field(..., max_length=255, description="Nombre del archivo")
     path: str = Field(..., max_length=255, description="Ruta del archivo")
     enable: bool = Field(default=True, description="Habilitado")
-    register: Optional[datetime] = Field(None, description="Fecha de registro")
-    updated: Optional[datetime] = Field(None, description="Fecha de actualización")
+    registered_at: Optional[datetime] = Field(None, alias="register", description="Registration timestamp")
+    updated_at: Optional[datetime] = Field(None, alias="updated", description="Last update timestamp")
 
 class ConfigurationFileCreate(BaseModel):
     setup_id: int = Field(..., gt=0)
@@ -24,4 +24,5 @@ class ConfigurationFileUpdate(BaseModel):
 
 class ConfigurationFileRead(ConfigurationFileBase):
     id: int
+    name: str
     model_config = ConfigDict(from_attributes=True)
