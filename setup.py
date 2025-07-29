@@ -16,10 +16,10 @@ setup(
     ],
     python_requires=">=3.10",
     install_requires=[
-        "sqlalchemy==2.0.41",
-        "psycopg2==2.9.10",
-        "python-dotenv==1.1.0",
-        "typing_extensions==4.13.2",
-        "pydantic==2.11.4"
+        "sqlalchemy>=2.0.41",
+        "psycopg2>=2.9.10",
+        "python-dotenv>=1.1.0",
+        "typing_extensions>=4.13.2",
+        "pydantic>=2.11.4"
     ]
 )
