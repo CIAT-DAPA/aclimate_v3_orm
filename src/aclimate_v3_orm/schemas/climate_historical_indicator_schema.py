@@ -3,6 +3,7 @@ from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict, field_validator
 from ..enums import Period
 from .mng_indicators_schema import IndicatorRead
+from .mng_location_schema import LocationRead
 
 # ========== ClimateHistoricalIndicator Schemas ==========
 class ClimateHistoricalIndicatorBase(BaseModel):
@@ -56,4 +57,5 @@ class ClimateHistoricalIndicatorRead(ClimateHistoricalIndicatorBase):
     """Complete historical record including read-only fields (ORM compatible)"""
     id: int
     indicator: Optional[IndicatorRead] = None
+    location: Optional[LocationRead] = None
     model_config = ConfigDict(from_attributes=True)
