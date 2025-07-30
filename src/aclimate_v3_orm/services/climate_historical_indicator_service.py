@@ -2,7 +2,7 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 from datetime import date
 from ..services.base_service import BaseService
-from ..models import ClimateHistoricalIndicator
+from ..models import ClimateHistoricalIndicator, MngLocation, MngIndicator
 from ..validations import MngClimateMeasureNameValidator
 from ..schemas import (
     ClimateHistoricalIndicatorCreate,
@@ -27,6 +27,32 @@ class ClimateHistoricalIndicatorService(
             objs = (
                 session.query(self.model)
                 .filter(self.model.indicator_id == indicator_id)
+                .all()
+            )
+            return [ClimateHistoricalIndicatorRead.model_validate(obj) for obj in objs]
+        
+    def get_by_indicator_name(self, indicator_name: str, db: Optional[Session] = None) -> List[ClimateHistoricalIndicatorRead]:
+        """Get records by indicator name"""
+        with self._session_scope(db) as session:
+            objs = (
+                session.query(self.model)
+                .join(self.model.indicator)
+                .filter(MngIndicator.name == indicator_name)
+                .all()
+            )
+            return [ClimateHistoricalIndicatorRead.model_validate(obj) for obj in objs]
+
+    def get_by_location_and_indicator_name(self, location_name: str, indicator_name: str, db: Optional[Session] = None) -> List[ClimateHistoricalIndicatorRead]:
+        """Get records by location name and indicator name"""
+        with self._session_scope(db) as session:
+            objs = (
+                session.query(self.model)
+                .join(self.model.indicator)
+                .join(self.model.location)
+                .filter(
+                    MngLocation.name == location_name,
+                    MngIndicator.name == indicator_name
+                )
                 .all()
             )
             return [ClimateHistoricalIndicatorRead.model_validate(obj) for obj in objs]
