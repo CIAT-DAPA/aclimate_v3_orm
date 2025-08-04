@@ -8,6 +8,8 @@ class MngCountryValidator:
     def validate_name(name: str):
         if not name:
             raise ValueError("The 'name' field is required.")
+        if name != name.upper():
+            raise ValueError("The 'name' field must be uppercase.")
 
     @staticmethod
     def validate_iso2(iso2: str):
