@@ -155,6 +155,24 @@ class ClimateHistoricalMonthlyService(
             ).filter(self.model.location_id == location_id).one()
             return {"location_id": location_id, "min_date": min_date, "max_date": max_date}
 
+    def get_max_min_by_location_id(self, location_id: int, db: Optional[Session] = None) -> List[Optional[ClimateHistoricalMonthlyRead]]:
+        """
+        Get the records with the maximum and minimum date for a given location_id.
+        Returns a list: [max_record, min_record]. If no records, returns [].
+        """
+        with self._session_scope(db) as session:
+            query = session.query(self.model).filter(self.model.location_id == location_id)
+            max_record = query.order_by(self.model.date.desc()).first()
+            min_record = query.order_by(self.model.date.asc()).first()
+            result = []
+            if max_record:
+                result.append(ClimateHistoricalMonthlyRead.model_validate(max_record))
+            if min_record and (min_record != max_record):
+                result.append(ClimateHistoricalMonthlyRead.model_validate(min_record))
+            elif min_record and (min_record == max_record):
+                result = [ClimateHistoricalMonthlyRead.model_validate(max_record)]
+            return result
+        
     def _validate_create(self, obj_in: ClimateHistoricalMonthlyCreate, db: Optional[Session] = None):
         """Automatic validation called from BaseService.create()"""
         ClimateHistoricalMonthlyValidator.create_validate(db, obj_in)
