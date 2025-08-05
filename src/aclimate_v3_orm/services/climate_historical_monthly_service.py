@@ -155,22 +155,34 @@ class ClimateHistoricalMonthlyService(
             ).filter(self.model.location_id == location_id).one()
             return {"location_id": location_id, "min_date": min_date, "max_date": max_date}
 
-    def get_max_min_by_location_id(self, location_id: int, db: Optional[Session] = None) -> List[Optional[ClimateHistoricalMonthlyRead]]:
+    def get_max_min_by_location_id(self, location_id: int, db: Optional[Session] = None) -> List[dict]:
         """
-        Get the records with the maximum and minimum date for a given location_id.
-        Returns a list: [max_record, min_record]. If no records, returns [].
+        Returns a list of dicts with min/max value and date for each measure_id at a given location_id.
+        Each dict contains: measure_id, measure_name, location_id, location_name, min_value, min_date, max_value, max_date
         """
         with self._session_scope(db) as session:
-            query = session.query(self.model).filter(self.model.location_id == location_id)
-            max_record = query.order_by(self.model.date.desc()).first()
-            min_record = query.order_by(self.model.date.asc()).first()
+            measures = session.query(self.model.measure_id).filter(self.model.location_id == location_id).distinct().all()
             result = []
-            if max_record:
-                result.append(ClimateHistoricalMonthlyRead.model_validate(max_record))
-            if min_record and (min_record != max_record):
-                result.append(ClimateHistoricalMonthlyRead.model_validate(min_record))
-            elif min_record and (min_record == max_record):
-                result = [ClimateHistoricalMonthlyRead.model_validate(max_record)]
+            for (measure_id,) in measures:
+                min_record = session.query(self.model).filter(
+                    self.model.location_id == location_id,
+                    self.model.measure_id == measure_id
+                ).order_by(self.model.date.asc()).first()
+                max_record = session.query(self.model).filter(
+                    self.model.location_id == location_id,
+                    self.model.measure_id == measure_id
+                ).order_by(self.model.date.desc()).first()
+                if min_record and max_record:
+                    result.append({
+                        "measure_id": measure_id,
+                        "measure_name": getattr(min_record.measure, "name", None),
+                        "location_id": location_id,
+                        "location_name": getattr(min_record.location, "name", None),
+                        "min_value": min_record.value,
+                        "min_date": min_record.date,
+                        "max_value": max_record.value,
+                        "max_date": max_record.date
+                    })
             return result
         
     def _validate_create(self, obj_in: ClimateHistoricalMonthlyCreate, db: Optional[Session] = None):
