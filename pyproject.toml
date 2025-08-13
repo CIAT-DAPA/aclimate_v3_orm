@@ -1,33 +1,28 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = [ "setuptools>=61.0",]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "aclimate_v3_orm"
-version = "3.0.0"
+version = "v0.0.31"
 description = "ORM for AClimate database and its methods"
-authors = [{ name = "santiago123x", email = "s.calderon@cgiar.com" }]
 readme = "README.md"
 requires-python = ">=3.10"
-license = { text = "MIT" }
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "Operating System :: OS Independent",
-]
-dependencies = [
-    "sqlalchemy>=2.0.41",
-    "psycopg2>=2.9.10",
-    "python-dotenv>=1.1.0",
-    "typing_extensions>=4.13.2",
-    "pydantic>=2.11.4",
-]
+classifiers = [ "Programming Language :: Python :: 3", "Operating System :: OS Independent",]
+dependencies = [ "sqlalchemy>=2.0.41", "psycopg2>=2.9.10", "python-dotenv>=1.1.0", "typing_extensions>=4.13.2", "pydantic>=2.11.4",]
+[[project.authors]]
+name = "santiago123x"
+email = "s.calderon@cgiar.com"
+
+[project.license]
+text = "MIT"
 
 [project.urls]
 Homepage = "https://github.com/CIAT-DAPA/aclimate_v3_orm"
 Download = "https://github.com/CIAT-DAPA/aclimate_v3_orm"
 
-[tool.setuptools]
-package-dir = { "" = "src" }
+[tool.setuptools.package-dir]
+"" = "src"
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = [ "src",]
