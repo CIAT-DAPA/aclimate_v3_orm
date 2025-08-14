@@ -270,6 +270,6 @@ aclimate_v3_orm/
 │     └── database/ # Database connection management
 │
 ├── tests/ # Test suite organized by service
-├── setup.py # Package configuration
+├── pyproject.toml # Package configuration
 └── requirements.txt # Package dependencies
 ```
