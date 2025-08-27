@@ -61,4 +61,4 @@ class ClimateMeasureRead(ClimateMeasureBase):
     """Full measure schema with read-only fields (ORM compatible)"""
     id: int
     
-    model_config = ConfigDict(from_attributes=True)  # ORM compatibility
+    model_config = ConfigDict(from_attributes=True)

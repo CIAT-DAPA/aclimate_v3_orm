@@ -26,8 +26,7 @@ class ClimateHistoricalDailyRead(ClimateHistoricalDailyBase):
     """Complete daily climate record including read-only fields"""
     id: int
     
-    # Relationships (uncomment if needed in responses)
     location: Optional[LocationRead] = None
     measure: Optional[ClimateMeasureRead] = None
     
-    model_config = ConfigDict(from_attributes=True)  # Enable ORM compatibility
+    model_config = ConfigDict(from_attributes=True)

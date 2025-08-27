@@ -22,3 +22,6 @@ from .forecast import Forecast
 from .forecast_analogue import ForecastAnalogue
 from .historical_agroclimatic_indicator import HistoricalAgroclimaticIndicator
 from .phenological_stage_stress import PhenologicalStageStress
+from .role import Role
+from .user import User
+from .user_access import UserAccess

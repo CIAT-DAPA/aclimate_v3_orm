@@ -35,4 +35,4 @@ class SoilRead(SoilBase):
     id: int
     country: Optional[CountryRead] = None
     crop: Optional[CropRead] = None
-    model_config = ConfigDict(from_attributes=True)  # Enable ORM compatibility
+    model_config = ConfigDict(from_attributes=True)
