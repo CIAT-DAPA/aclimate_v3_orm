@@ -22,3 +22,6 @@ from .forecast_validation import ForecastValidator
 from .forecast_analogue_validation import ForecastAnalogueValidator
 from .historical_agroclimatic_indicator_validation import HistoricalAgroclimaticIndicatorValidator
 from .phenological_stage_stress_validation import PhenologicalStageStressValidator
+from .user_validation import UserValidator
+from .role_validation import RoleValidator
+from .user_access_validation import UserAccessValidator
