@@ -1,8 +1,7 @@
 import pytest
-from unittest.mock import create_autospec, MagicMock, patch
+from unittest.mock import create_autospec, patch
 from sqlalchemy.orm import Session
-from datetime import date, datetime, timezone
-from typing import List
+from datetime import datetime, timezone
 
 # Import your project classes
 from aclimate_v3_orm.models import MngIndicator
@@ -36,7 +35,8 @@ def test_create_indicator(indicator_service, mock_db):
         name="Temperature",
         short_name="TEMP",
         unit="°C",
-        description="Average temperature"
+        description="Average temperature",
+        indicator_category_id=1
     )
     
     # Mock database operations
@@ -64,8 +64,8 @@ def test_create_indicator(indicator_service, mock_db):
 def test_get_by_name(indicator_service, mock_db):
     """Test getting indicators by name"""
     mock_indicators = [
-        MngIndicator(id=1, name="Temperature", type="climate", short_name="TEMP", unit="°C"),
-        MngIndicator(id=2, name="Temperature", type="climate", short_name="TEMP2", unit="°C")
+        MngIndicator(id=1, name="Temperature", type="climate", short_name="TEMP", unit="°C", indicator_category_id=1),
+        MngIndicator(id=2, name="Temperature", type="climate", short_name="TEMP2", unit="°C", indicator_category_id=1)
     ]
     
     mock_db.query.return_value.filter.return_value.all.return_value = mock_indicators
@@ -77,8 +77,8 @@ def test_get_by_name(indicator_service, mock_db):
 def test_get_by_type(indicator_service, mock_db):
     """Test getting indicators by type"""
     mock_indicators = [
-        MngIndicator(id=1, name="Temp", type="climate", short_name="TEMP", unit="°C"),
-        MngIndicator(id=2, name="Rain", type="climate", short_name="RAIN", unit="mm")
+        MngIndicator(id=1, name="Temp", type="climate", short_name="TEMP", unit="°C", indicator_category_id=1),
+        MngIndicator(id=2, name="Rain", type="climate", short_name="RAIN", unit="mm", indicator_category_id=1)
     ]
     
     mock_db.query.return_value.filter.return_value.all.return_value = mock_indicators
@@ -93,11 +93,12 @@ def test_validate_create_duplicate(indicator_service, mock_db):
         type="climate",
         name="Temperature",
         short_name="TEMP",
-        unit="°C"
+        unit="°C",
+        indicator_category_id=1
     )
     
     # Mock existing indicator
-    mock_db.query.return_value.filter.return_value.first.return_value = MngIndicator(id=99, name="Temperature")
+    mock_db.query.return_value.filter.return_value.first.return_value = MngIndicator(id=99, name="Temperature", indicator_category_id=1)
     
     with patch.object(IndicatorValidator, 'validate_name', side_effect=ValueError("Name exists")):
         with pytest.raises(ValueError) as excinfo:

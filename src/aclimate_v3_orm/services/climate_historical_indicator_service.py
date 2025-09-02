@@ -2,8 +2,7 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 from datetime import date
 from ..services.base_service import BaseService
-from ..models import ClimateHistoricalIndicator, MngLocation, MngIndicator
-from ..validations import MngClimateMeasureNameValidator
+from ..models import ClimateHistoricalIndicator, MngLocation, MngIndicator, MngIndicatorCategory
 from ..schemas import (
     ClimateHistoricalIndicatorCreate,
     ClimateHistoricalIndicatorRead,
@@ -102,6 +101,30 @@ class ClimateHistoricalIndicatorService(
                 .all()
             )
             return [ClimateHistoricalIndicatorRead.model_validate(obj) for obj in objs]
+    
+    def get_by_category_id(self, category_id: int, db: Optional[Session] = None) -> List[ClimateHistoricalIndicatorRead]:
+        """Get records by indicator category ID"""
+        with self._session_scope(db) as session:
+            objs = (
+                session.query(self.model)
+                .join(MngIndicator)
+                .filter(MngIndicator.indicator_category_id == category_id)
+                .all()
+            )
+            return [ClimateHistoricalIndicatorRead.model_validate(obj) for obj in objs]
+    
+    def get_by_category_name(self, category_name: str, db: Optional[Session] = None) -> List[ClimateHistoricalIndicatorRead]:
+        """Get records by indicator category name"""
+        
+        with self._session_scope(db) as session:
+            objs = (
+                session.query(self.model)
+                .join(MngIndicator)
+                .join(MngIndicatorCategory)
+                .filter(MngIndicatorCategory.name == category_name)
+                .all()
+            )
+            return [ClimateHistoricalIndicatorRead.model_validate(obj) for obj in objs]
         
     def get_max_min_by_location_id(self, location_id: int, db: Optional[Session] = None) -> List[dict]:
         """
@@ -135,7 +158,6 @@ class ClimateHistoricalIndicatorService(
 
     def _validate_create(self, obj_in: ClimateHistoricalIndicatorCreate, db: Optional[Session] = None):
         """Automatic validation called from BaseService.create()"""
-        print(obj_in)
         # Validate indicator exists
         if not db.query(ClimateHistoricalIndicator).filter(ClimateHistoricalIndicator.id == obj_in.indicator_id).first():
             raise ValueError(f"No indicator found with ID {obj_in.indicator_id}")

@@ -1,8 +1,7 @@
 import pytest
 from unittest.mock import create_autospec, MagicMock, patch
 from sqlalchemy.orm import Session
-from datetime import date, datetime
-from typing import List
+from datetime import date
 from pydantic import ValidationError
 
 # Import your project classes
@@ -16,10 +15,6 @@ from aclimate_v3_orm.services import (
 )
 from aclimate_v3_orm.validations import (
     ClimateHistoricalIndicatorValidator
-)
-
-from aclimate_v3_orm.enums import (
-    Period
 )
 
 # ---- Fixtures ----
@@ -44,7 +39,8 @@ def test_create_historical_indicator(historical_indicator_service, mock_db):
         name="TEMPERATURA", 
         short_name="TEMP", 
         unit="°C", 
-        enable=True
+        enable=True,
+        indicator_category_id=1
     )
     mock_location = MngLocation(id=1, 
                                 admin_2_id=1, 

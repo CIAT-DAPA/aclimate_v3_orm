@@ -3,8 +3,8 @@ from typing import Optional, Dict
 from pydantic import BaseModel, Field, ConfigDict
 
 class CountryIndicatorBase(BaseModel):
-    country_id: int = Field(..., description="Country ID")
-    indicator_id: int = Field(..., description="Indicator ID")
+    country_id: int = Field(..., gt=0, description="Country ID")
+    indicator_id: int = Field(..., gt=0, description="Indicator ID")
     spatial_forecast: bool = Field(default=False, description="Whether the indicator should run spatially for forecast")
     spatial_climate: bool = Field(default=False, description="Whether the indicator should run spatially for climate")
     location_forecast: bool = Field(default=False, description="Whether the indicator should run by location for forecast")
@@ -12,8 +12,8 @@ class CountryIndicatorBase(BaseModel):
     criteria: Optional[Dict] = Field(None, description="Configuration to determine at which level the indicator should run (e.g., full map, admin 1, admin 2)")
 
 class CountryIndicatorCreate(BaseModel):
-    country_id: int = Field(..., description="Country ID")
-    indicator_id: int = Field(..., description="Indicator ID")
+    country_id: int = Field(..., gt=0, description="Country ID")
+    indicator_id: int = Field(..., gt=0, description="Indicator ID")
     spatial_forecast: bool = Field(default=False, description="Whether the indicator should run spatially for forecast")
     spatial_climate: bool = Field(default=False, description="Whether the indicator should run spatially for climate")
     location_forecast: bool = Field(default=False, description="Whether the indicator should run by location for forecast")

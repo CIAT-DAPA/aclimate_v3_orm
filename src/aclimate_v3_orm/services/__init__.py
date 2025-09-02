@@ -27,3 +27,4 @@ from .role_service import RoleService
 from .user_access_service import UserAccessService
 from .user_service import UserService
 from .mng_country_indicator_service import MngCountryIndicatorService
+from .mng_indicator_category_service import MngIndicatorCategoryService
