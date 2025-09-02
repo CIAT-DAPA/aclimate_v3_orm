@@ -1,7 +1,7 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from ..services.base_service import BaseService
-from ..models import MngIndicator
+from ..models import MngIndicator, MngIndicatorCategory
 from ..validations import IndicatorValidator
 from ..schemas import (
     IndicatorCreate,
@@ -60,6 +60,34 @@ class MngIndicatorService(
             if enabled is not None:
                 query = query.filter(self.model.enable == enabled)
             objs = query.all()
+            return [IndicatorRead.model_validate(obj) for obj in objs]
+        
+    def get_by_category_id(self, category_id: int, enabled: bool = True, db: Optional[Session] = None) -> List[IndicatorRead]:
+        """Get indicators by category ID"""
+        with self._session_scope(db) as session:
+            objs = session.query(self.model)\
+                .filter(
+                    self.model.indicator_category_id == category_id,
+                    self.model.enable == enabled
+                )\
+                .all()
+            return [IndicatorRead.model_validate(obj) for obj in objs]
+
+    def get_by_category_name(self,
+                            category_name: str,
+                            enabled: bool = True,
+                            db: Optional[Session] = None) -> List[IndicatorRead]:
+        """Get indicators by category name"""
+        with self._session_scope(db) as session:
+            objs = (
+                session.query(self.model)
+                .join(MngIndicatorCategory)
+                .filter(
+                    MngIndicatorCategory.name == category_name,
+                    self.model.enable == enabled
+                )
+                .all()
+            )
             return [IndicatorRead.model_validate(obj) for obj in objs]
 
     def _validate_create(self, obj_in: IndicatorCreate, db: Optional[Session] = None):

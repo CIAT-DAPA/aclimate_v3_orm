@@ -17,5 +17,6 @@ class MngCountry(Base):
     forecasts = relationship('Forecast', back_populates='country')
     cultivars = relationship('MngCultivar', back_populates='country')
     soils = relationship('MngSoil', back_populates='country')
-    forecasts = relationship('Forecast', back_populates='country')
     data_sources = relationship('MngDataSource', back_populates='country')
+    user_accesses = relationship('UserAccess', back_populates='country')
+    country_indicators = relationship('MngCountryIndicator', back_populates='country', cascade="all, delete-orphan")

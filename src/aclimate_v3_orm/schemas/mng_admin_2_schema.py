@@ -31,8 +31,7 @@ class Admin2Read(Admin2Base):
     """Complete Admin2 schema including read-only fields and relationships"""
     id: int
     
-    # Relationships (uncomment if needed in responses)
     admin_1: Optional[Admin1Read] = None
     country: Optional[CountryRead] = None
     
-    model_config = ConfigDict(from_attributes=True)  # Enable ORM compatibility
+    model_config = ConfigDict(from_attributes=True)
