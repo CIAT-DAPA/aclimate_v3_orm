@@ -22,3 +22,8 @@ from .forecast_schema import ForecastCreate, ForecastRead, ForecastUpdate
 from .forecast_analogue_schema import ForecastAnalogueCreate, ForecastAnalogueRead, ForecastAnalogueUpdate
 from .historical_agroclimatic_indicator_schema import HistoricalAgroclimaticIndicatorCreate, HistoricalAgroclimaticIndicatorRead, HistoricalAgroclimaticIndicatorUpdate
 from .phenological_stage_stress_schema import PhenologicalStageStressCreate, PhenologicalStageStressRead, PhenologicalStageStressUpdate
+from .role_schema import RoleCreate, RoleRead, RoleUpdate
+from .user_schema import UserCreate, UserRead, UserUpdate
+from .user_access_schema import UserAccessCreate, UserAccessRead, UserAccessUpdate
+from .mng_country_indicator_schema import CountryIndicatorCreate, CountryIndicatorRead, CountryIndicatorUpdate
+from .mng_indicator_category_schema import IndicatorCategoryCreate, IndicatorCategoryRead, IndicatorCategoryUpdate

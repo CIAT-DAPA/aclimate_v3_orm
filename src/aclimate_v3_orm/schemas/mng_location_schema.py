@@ -2,7 +2,7 @@ from typing import Optional
 from .mng_admin_1_schema import Admin1Read
 from .mng_admin_2_schema import Admin2Read
 from .mng_country_schema import CountryRead
-from .mng_source_schema import SourceRead  # Asegúrate de que el import es correcto
+from .mng_source_schema import SourceRead
 from pydantic import BaseModel, Field, field_validator, ConfigDict
 from datetime import datetime
 
@@ -80,4 +80,4 @@ class LocationRead(LocationBase):
     country: Optional[CountryRead] = None
     source: Optional[SourceRead] = None
     
-    model_config = ConfigDict(from_attributes=True)  # ORM compatibility
+    model_config = ConfigDict(from_attributes=True)

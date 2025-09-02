@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict, field_validator
 
 class CountryBase(BaseModel):
@@ -51,4 +51,4 @@ class CountryRead(CountryBase):
     """Complete country schema including read-only fields"""
     id: int
     
-    model_config = ConfigDict(from_attributes=True)  # Enable ORM compatibility
+    model_config = ConfigDict(from_attributes=True)

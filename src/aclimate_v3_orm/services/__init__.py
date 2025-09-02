@@ -23,3 +23,8 @@ from .forecast_service import ForecastService
 from .forecast_analogue_service import ForecastAnalogueService
 from .historical_agroclimatic_indicator_service import HistoricalAgroclimaticIndicatorService
 from .phenological_stage_stress_service import PhenologicalStageStressService
+from .role_service import RoleService
+from .user_access_service import UserAccessService
+from .user_service import UserService
+from .mng_country_indicator_service import MngCountryIndicatorService
+from .mng_indicator_category_service import MngIndicatorCategoryService
