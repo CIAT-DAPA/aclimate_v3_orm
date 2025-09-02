@@ -25,3 +25,4 @@ from .phenological_stage_stress_schema import PhenologicalStageStressCreate, Phe
 from .role_schema import RoleCreate, RoleRead, RoleUpdate
 from .user_schema import UserCreate, UserRead, UserUpdate
 from .user_access_schema import UserAccessCreate, UserAccessRead, UserAccessUpdate
+from .mng_country_indicator_schema import CountryIndicatorCreate, CountryIndicatorRead, CountryIndicatorUpdate

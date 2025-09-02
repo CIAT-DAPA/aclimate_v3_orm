@@ -26,3 +26,4 @@ from .phenological_stage_stress_service import PhenologicalStageStressService
 from .role_service import RoleService
 from .user_access_service import UserAccessService
 from .user_service import UserService
+from .mng_country_indicator_service import MngCountryIndicatorService

@@ -25,3 +25,4 @@ from .phenological_stage_stress import PhenologicalStageStress
 from .role import Role
 from .user import User
 from .user_access import UserAccess
+from .mng_country_indicator import MngCountryIndicator
