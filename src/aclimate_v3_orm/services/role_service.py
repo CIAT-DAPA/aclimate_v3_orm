@@ -10,16 +10,15 @@ class RoleService(BaseService[Role, RoleCreate, RoleRead, RoleUpdate]):
     def __init__(self):
         super().__init__(Role, RoleCreate, RoleRead, RoleUpdate)
 
-    def get_by_name(self, name: str, enabled: bool = True, db: Optional[Session] = None) -> List[RoleRead]:
+    def get_by_name(self, name: str, db: Optional[Session] = None) -> List[RoleRead]:
         """Get roles by name"""
         with self._session_scope(db) as session:
             objs = session.query(self.model).filter(
-                self.model.name == name,
-                self.model.enable == enabled
+                self.model.name == name
             ).all()
             return [RoleRead.model_validate(obj) for obj in objs]
 
-    def get_by_app(self, app: str, enabled: bool = True, db: Optional[Session] = None) -> List[RoleRead]:
+    def get_by_app(self, app: str, db: Optional[Session] = None) -> List[RoleRead]:
         """Get roles by app enum value (accepts string or Apps enum)"""
         if isinstance(app, str):
             try:
@@ -28,14 +27,14 @@ class RoleService(BaseService[Role, RoleCreate, RoleRead, RoleUpdate]):
                 raise ValueError(f"Invalid app value: {app}")
         else:
             app_enum = app
+        
         with self._session_scope(db) as session:
             objs = session.query(self.model).filter(
-                self.model.app == app_enum,
-                self.model.enable == enabled
+                self.model.app == app_enum
             ).all()
             return [RoleRead.model_validate(obj) for obj in objs]
 
-    def get_by_name_and_app(self, name: str, app: str, enabled: bool = True, db: Optional[Session] = None) -> Optional[RoleRead]:
+    def get_by_name_and_app(self, name: str, app: str, db: Optional[Session] = None) -> Optional[RoleRead]:
         """Get role by name and app (unique combination)"""
         if isinstance(app, str):
             try:
@@ -44,11 +43,11 @@ class RoleService(BaseService[Role, RoleCreate, RoleRead, RoleUpdate]):
                 raise ValueError(f"Invalid app value: {app}")
         else:
             app_enum = app
+            
         with self._session_scope(db) as session:
             obj = session.query(self.model).filter(
                 self.model.name == name,
-                self.model.app == app_enum,
-                self.model.enable == enabled
+                self.model.app == app_enum
             ).first()
             return RoleRead.model_validate(obj) if obj else None
 

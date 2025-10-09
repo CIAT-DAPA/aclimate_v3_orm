@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from datetime import date
 from ..services.base_service import BaseService
 from ..models import ClimateHistoricalIndicator, MngLocation, MngIndicator, MngIndicatorCategory
+from ..enums import Period
 from ..schemas import (
     ClimateHistoricalIndicatorCreate,
     ClimateHistoricalIndicatorRead,
@@ -155,7 +156,36 @@ class ClimateHistoricalIndicatorService(
                         "max_end_date": max_record.end_date
                     })
             return result
+            
 
+    def get_by_location_date_period(self, location_id: int, start_date: date, end_date: date, period: Period, db: Optional[Session] = None) -> List[ClimateHistoricalIndicatorRead]:
+        """
+        Get climate historical indicators by location, date range and period.
+        
+        Args:
+            location_id: ID of the location
+            start_date: Start date for filtering
+            end_date: End date for filtering  
+            period: Period enum (DAILY, MONTHLY, etc.)
+            db: Database session
+            
+        Returns:
+            List of climate historical indicators filtered by criteria
+        """
+        with self._session_scope(db) as session:
+            objs = (
+                session.query(self.model)
+                .filter(
+                    self.model.location_id == location_id,
+                    self.model.period == period,
+                    self.model.start_date >= start_date,
+                    self.model.end_date <= end_date
+                )
+                .order_by(self.model.start_date)
+                .all()
+            )
+            return [ClimateHistoricalIndicatorRead.model_validate(obj) for obj in objs]
+        
     def _validate_create(self, obj_in: ClimateHistoricalIndicatorCreate, db: Optional[Session] = None):
         """Automatic validation called from BaseService.create()"""
         # Validate indicator exists
@@ -169,3 +199,4 @@ class ClimateHistoricalIndicatorService(
         # Validate date range consistency
         if obj_in.end_date and obj_in.start_date > obj_in.end_date:
             raise ValueError("Start date cannot be after end date")
+    

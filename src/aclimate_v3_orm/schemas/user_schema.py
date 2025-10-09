@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel, Field, ConfigDict, field_validator
 from .role_schema import RoleRead
 from datetime import datetime
@@ -49,6 +49,11 @@ class UserUpdate(BaseModel):
 class UserRead(UserBase):
     id: int
     role: Optional[RoleRead] = None
+    accesses: List['UserAccessRead'] = []
     model_config = ConfigDict(from_attributes=True)
+
+# Import for forward reference
+from .user_access_schema import UserAccessRead
+UserRead.model_rebuild()
     
     
