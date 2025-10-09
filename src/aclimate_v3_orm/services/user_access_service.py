@@ -71,3 +71,24 @@ class UserAccessService(BaseService[UserAccess, UserAccessCreate, UserAccessRead
     def _validate_create(self, obj_in: UserAccessCreate, db: Optional[Session] = None):
         """Automatic validation called from BaseService.create()"""
         UserAccessValidator.create_validate(db, obj_in)
+
+    def delete_by_user_and_country(self, user_id: int, country_id: int, db: Optional[Session] = None) -> int:
+        """Delete all user accesses for a specific user and country combination."""
+        with self._session_scope(db) as session:
+            deleted_count = session.query(self.model).filter(
+                self.model.user_id == user_id,
+                self.model.country_id == country_id
+            ).delete(synchronize_session=False)
+            session.commit()
+            return deleted_count
+
+    def delete_by_user_country_and_module(self, user_id: int, country_id: int, module: str, db: Optional[Session] = None) -> bool:
+        """Delete a specific user access by user_id, country_id and module."""
+        with self._session_scope(db) as session:
+            deleted_count = session.query(self.model).filter(
+                self.model.user_id == user_id,
+                self.model.country_id == country_id,
+                self.model.module == module
+            ).delete(synchronize_session=False)
+            session.commit()
+            return deleted_count > 0
