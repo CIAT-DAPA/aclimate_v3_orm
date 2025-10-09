@@ -9,6 +9,7 @@ class MngAdmin2(Base):
     id = Column(BigInteger, primary_key=True)
     admin_1_id = Column(BigInteger, ForeignKey('mng_admin_1.id'), nullable=False)
     name = Column(String(255), nullable=False)
+    ext_id = Column(String(255), default='')
     visible = Column(Boolean, default=True)
     enable = Column(Boolean, default=True)
     register = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))

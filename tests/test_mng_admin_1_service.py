@@ -27,8 +27,8 @@ def test_get_by_country_id(admin1_service, mock_db):
     # Configurar datos de prueba
     country_id = 1
     mock_admin1s = [
-        MngAdmin1(id=1, country_id=country_id, name="Region 1", enable=True),
-        MngAdmin1(id=2, country_id=country_id, name="Region 2", enable=True)
+        MngAdmin1(id=1, country_id=country_id, name="Region 1", ext_id="EXT1", enable=True),
+        MngAdmin1(id=2, country_id=country_id, name="Region 2", ext_id="EXT2", enable=True)
     ]
     
     # Configurar el mock
@@ -52,7 +52,7 @@ def test_get_by_country_id_disabled(admin1_service, mock_db):
     # Configurar datos de prueba
     country_id = 1
     mock_admin1s = [
-        MngAdmin1(id=1, country_id=country_id, name="Region 1", enable=False)
+        MngAdmin1(id=1, country_id=country_id, name="Region 1", ext_id="", enable=False)
     ]
     
     # Configurar el mock
@@ -74,7 +74,7 @@ def test_get_by_country_name_with_patch(admin1_service, mock_db):
     # Crear mock para country con atributos reales (no MagicMock vacío)
     mock_country = MngCountry(id=1, name=country_name, iso2="TC", enable=True)
     
-    mock_admin1 = MngAdmin1(id=1, country_id=1, name="Region 1", enable=True, country=mock_country)
+    mock_admin1 = MngAdmin1(id=1, country_id=1, name="Region 1", ext_id="CTRY1", enable=True, country=mock_country)
     
     mock_db.query.return_value.join.return_value.filter.return_value.all.return_value = [mock_admin1]
 
@@ -91,8 +91,8 @@ def test_get_all_enabled(admin1_service, mock_db):
     """Test para obtener todas las regiones Admin1 habilitadas"""
     # Configurar datos de prueba
     mock_admin1s = [
-        MngAdmin1(id=1, country_id=1, name="Region 1", enable=True),
-        MngAdmin1(id=2, country_id=1, name="Region 2", enable=True)
+        MngAdmin1(id=1, country_id=1, name="Region 1", ext_id="ALL1", enable=True),
+        MngAdmin1(id=2, country_id=1, name="Region 2", ext_id="ALL2", enable=True)
     ]
     
     # Configurar el mock
@@ -109,8 +109,8 @@ def test_get_all_include_disabled(admin1_service, mock_db):
     """Test para obtener todas las regiones Admin1 incluyendo deshabilitadas"""
     # Configurar datos de prueba
     mock_admin1s = [
-        MngAdmin1(id=1, country_id=1, name="Region 1", enable=True),
-        MngAdmin1(id=2, country_id=1, name="Region 2", enable=False)
+        MngAdmin1(id=1, country_id=1, name="Region 1", ext_id="EN1", enable=True),
+        MngAdmin1(id=2, country_id=1, name="Region 2", ext_id="", enable=False)
     ]
     
     # Configurar el mock sin filtro enable
@@ -129,7 +129,7 @@ def test_get_by_name(admin1_service, mock_db):
     # Configurar datos de prueba
     region_name = "TestRegion"
     mock_admin1s = [
-        MngAdmin1(id=1, country_id=1, name=region_name, enable=True)
+        MngAdmin1(id=1, country_id=1, name=region_name, ext_id="NAME1", enable=True)
     ]
     
     # Configurar el mock
@@ -146,11 +146,12 @@ def test_get_by_name(admin1_service, mock_db):
 def test_create_admin1_valid(admin1_service, mock_db):
     """Test para crear una región Admin1 válida"""
     # Configurar datos de prueba
-    admin1_data = Admin1Create(country_id=1, name="New Region")
+    admin1_data = Admin1Create(country_id=1, name="New Region", ext_id="NEW1")
     mock_new_admin1 = MngAdmin1(
         id=1, 
         country_id=admin1_data.country_id, 
         name=admin1_data.name, 
+        ext_id=admin1_data.ext_id,
         enable=True
     )
     
@@ -189,6 +190,7 @@ def test_update_admin1(admin1_service, mock_db):
         id=admin1_id,
         country_id=1,
         name="Old Region",
+        ext_id="OLD1",
         enable=True
     )
     
@@ -216,6 +218,7 @@ def test_delete_admin1(admin1_service, mock_db):
         id=admin1_id,
         country_id=1,
         name="Region to Delete",
+        ext_id="DEL1",
         enable=True
     )
     
@@ -234,10 +237,10 @@ def test_delete_admin1(admin1_service, mock_db):
 def test_validate_create_duplicate_name(admin1_service, mock_db):
     """Test para validar nombre duplicado al crear Admin1"""
     # Configurar datos de prueba
-    admin1_data = Admin1Create(country_id=1, name="Duplicate Region")
+    admin1_data = Admin1Create(country_id=1, name="Duplicate Region", ext_id="DUP1")
     
     # Configurar el mock para simular que ya existe
-    mock_db.query.return_value.filter.return_value.first.return_value = MngAdmin1(id=99, name="Duplicate Region")
+    mock_db.query.return_value.filter.return_value.first.return_value = MngAdmin1(id=99, name="Duplicate Region", ext_id="DUP1")
     
     # Mockear la validación para que lance excepción
     with patch.object(MngAdmin1Validator, 'create_validate', side_effect=ValueError("Name already exists")):
@@ -254,6 +257,7 @@ def test_partial_update_admin1(admin1_service, mock_db):
         id=admin1_id,
         country_id=1,
         name="Existing Region",
+        ext_id="EXIST1",
         enable=True
     )
     update_data = Admin1Update(enable=False)  # Solo actualizar enable

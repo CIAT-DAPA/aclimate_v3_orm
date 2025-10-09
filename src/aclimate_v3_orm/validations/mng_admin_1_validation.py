@@ -24,9 +24,21 @@ class MngAdmin1Validator:
             raise ValueError(f"An Admin1 with the name '{name}' already exists in this country.")
 
     @staticmethod
+    def validate_unique_ext_id(db: Session, ext_id: str, country_id: int):
+        """ Validate if the ext_id is unique within the same country (ignoring empty strings) """
+        if ext_id and ext_id.strip():  # Only validate if ext_id is not empty
+            existing_admin1 = db.query(MngAdmin1).filter(
+                MngAdmin1.ext_id == ext_id, 
+                MngAdmin1.country_id == country_id
+            ).first()
+            if existing_admin1:
+                raise ValueError(f"An Admin1 with the ext_id '{ext_id}' already exists in this country.")
+
+    @staticmethod
     def create_validate(db: Session, obj_in):
         """ Validate fields before creating a new Admin1 record """
         # Validate the fields for the new Admin1 entry
         MngAdmin1Validator.validate_name(obj_in.name)
         MngAdmin1Validator.validate_country_id(db, obj_in.country_id)
         MngAdmin1Validator.validate_unique_name(db, obj_in.name, obj_in.country_id)
+        MngAdmin1Validator.validate_unique_ext_id(db, obj_in.ext_id, obj_in.country_id)
