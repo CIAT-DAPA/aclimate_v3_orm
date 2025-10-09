@@ -132,8 +132,8 @@ def test_get_by_country_id(climatology_service, mock_db):
     """Test para obtener registros por country_id"""
     country_id = 1
     mock_country = MngCountry(id=country_id, name="Test Country", iso2="CL", enable=True)
-    mock_admin1 = MngAdmin1(id=1, country=mock_country, name="Test", enable=True, country_id=country_id)
-    mock_admin2 = MngAdmin2(id=1, admin_1=mock_admin1, name="Test", enable=True, admin_1_id=1, visible=True)
+    mock_admin1 = MngAdmin1(id=1, country=mock_country, name="Test", ext_id="CLIM1", enable=True, country_id=country_id)
+    mock_admin2 = MngAdmin2(id=1, admin_1=mock_admin1, name="Test", ext_id="CLIM2_CTY", enable=True, admin_1_id=1, visible=True)
     mock_location = MngLocation(id=1, admin_2_id=1, admin_2=mock_admin2,
                                 name="Test Location",
                                 latitude=12.34,
@@ -170,8 +170,8 @@ def test_get_by_country_name(climatology_service, mock_db):
     """Test para obtener registros por nombre de país"""
     country_name = "Test Country"
     mock_country = MngCountry(id=1, name=country_name, iso2="CL", enable=True)
-    mock_admin1 = MngAdmin1(id=1, country=mock_country, name="Test", enable=True, country_id=1)
-    mock_admin2 = MngAdmin2(id=1, admin_1=mock_admin1, name="Test", enable=True, admin_1_id=1, visible=True)
+    mock_admin1 = MngAdmin1(id=1, country=mock_country, name="Test", ext_id="CLIM1_NAME", enable=True, country_id=1)
+    mock_admin2 = MngAdmin2(id=1, admin_1=mock_admin1, name="Test", ext_id="CLIM2_NAME", enable=True, admin_1_id=1, visible=True)
     mock_location = MngLocation(id=1, admin_2_id=1, admin_2=mock_admin2,
                                 name="Test Location",
                                 latitude=12.34,
@@ -210,8 +210,8 @@ def test_get_by_admin1_id(climatology_service, mock_db):
     admin1_id = 1
     
     # Configurar objetos relacionados
-    mock_admin1 = MngAdmin1(id=admin1_id, country_id=1, name="region 1", enable=True)
-    mock_admin2 = MngAdmin2(id=1, admin_1_id=admin1_id, name="region2", visible=True, enable=True, admin_1=mock_admin1)
+    mock_admin1 = MngAdmin1(id=admin1_id, country_id=1, name="region 1", ext_id="REG1", enable=True)
+    mock_admin2 = MngAdmin2(id=1, admin_1_id=admin1_id, name="region2", ext_id="REG2", visible=True, enable=True, admin_1=mock_admin1)
     mock_location = MngLocation(id=1,
                                 admin_2_id=1, 
                                 admin_2=mock_admin2,

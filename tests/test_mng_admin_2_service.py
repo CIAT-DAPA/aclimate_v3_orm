@@ -26,8 +26,8 @@ def test_get_by_admin1_id(admin2_service, mock_db):
     """Test para obtener regiones Admin2 por admin1_id"""
     admin1_id = 1
     mock_admin2s = [
-        MngAdmin2(id=1, admin_1_id=admin1_id, name="Region 2-1", visible=True, enable=True),
-        MngAdmin2(id=2, admin_1_id=admin1_id, name="Region 2-2", visible=True, enable=True)
+        MngAdmin2(id=1, admin_1_id=admin1_id, name="Region 2-1", ext_id="R2-1", visible=True, enable=True),
+        MngAdmin2(id=2, admin_1_id=admin1_id, name="Region 2-2", ext_id="R2-2", visible=True, enable=True)
     ]
     
     mock_db.query.return_value.filter.return_value.all.return_value = mock_admin2s
@@ -43,8 +43,8 @@ def test_get_by_admin1_id(admin2_service, mock_db):
 def test_get_by_admin1_name(admin2_service, mock_db):
     """Test para obtener regiones Admin2 por nombre de Admin1"""
     admin1_name = "TestAdmin1"
-    mock_admin1 = MngAdmin1(id=1, name=admin1_name, enable=True, country_id=1)
-    mock_admin2 = MngAdmin2(id=1, admin_1_id=1, name="Region 2-1", visible=True, enable=True)
+    mock_admin1 = MngAdmin1(id=1, name=admin1_name, ext_id="A1_NAME", enable=True, country_id=1)
+    mock_admin2 = MngAdmin2(id=1, admin_1_id=1, name="Region 2-1", ext_id="A2_NAME", visible=True, enable=True)
     mock_admin2.admin_1 = mock_admin1
     
     # Configurar mocks complejos para el join
@@ -70,8 +70,8 @@ def test_get_by_country_id(admin2_service, mock_db):
 
     # Crear objetos mock con relaciones simuladas
     mock_country = MngCountry(id=country_id, name="TestCountry", iso2="CL", enable=True)
-    mock_admin1 = MngAdmin1(id=1, country_id=country_id, country=mock_country, name="Test", enable=True)
-    mock_admin2 = MngAdmin2(id=1, admin_1_id=1, name="Region 2-1", visible=True, enable=True)
+    mock_admin1 = MngAdmin1(id=1, country_id=country_id, country=mock_country, name="Test", ext_id="TEST_A1", enable=True)
+    mock_admin2 = MngAdmin2(id=1, admin_1_id=1, name="Region 2-1", ext_id="TEST_A2", visible=True, enable=True)
     mock_admin2.admin_1 = mock_admin1
 
     # Mocks de SQLAlchemy para las llamadas en cadena
@@ -104,8 +104,8 @@ def test_get_by_country_name(admin2_service, mock_db):
     
     # 1. Configurar objetos de prueba con relaciones
     mock_country = MngCountry(id=1, name=country_name, iso2="CL", enable=True)
-    mock_admin1 = MngAdmin1(id=1, country_id=1, country=mock_country, enable=True, name="Test")
-    mock_admin2 = MngAdmin2(id=1, admin_1_id=1, name="Region 2-1", visible=True, enable=True)
+    mock_admin1 = MngAdmin1(id=1, country_id=1, country=mock_country, enable=True, name="Test", ext_id="CTRY_A1")
+    mock_admin2 = MngAdmin2(id=1, admin_1_id=1, name="Region 2-1", ext_id="CTRY_A2", visible=True, enable=True)
     mock_admin2.admin_1 = mock_admin1
     
     # 2. Configurar mocks para la cadena de llamadas
@@ -136,8 +136,8 @@ def test_get_by_country_name(admin2_service, mock_db):
 def test_get_all_enabled(admin2_service, mock_db):
     """Test para obtener todas las regiones Admin2 habilitadas"""
     mock_admin2s = [
-        MngAdmin2(id=1, admin_1_id=1, name="Region 2-1", visible=True, enable=True),
-        MngAdmin2(id=2, admin_1_id=1, name="Region 2-2", visible=True, enable=True)
+        MngAdmin2(id=1, admin_1_id=1, name="Region 2-1", ext_id="ALL_R1", visible=True, enable=True),
+        MngAdmin2(id=2, admin_1_id=1, name="Region 2-2", ext_id="ALL_R2", visible=True, enable=True)
     ]
     
     mock_db.query.return_value.filter.return_value.all.return_value = mock_admin2s
@@ -152,7 +152,7 @@ def test_get_by_name(admin2_service, mock_db):
     """Test para obtener regiones Admin2 por nombre"""
     region_name = "TestRegion"
     mock_admin2 = [
-        MngAdmin2(id=1, admin_1_id=1, name=region_name, visible=True, enable=True)
+        MngAdmin2(id=1, admin_1_id=1, name=region_name, ext_id="BY_NAME", visible=True, enable=True)
     ]
     
     mock_db.query.return_value.filter.return_value.all.return_value = mock_admin2
@@ -165,7 +165,7 @@ def test_get_by_name(admin2_service, mock_db):
 def test_get_by_visible(admin2_service, mock_db):
     """Test para obtener regiones Admin2 por visibilidad"""
     mock_admin2s = [
-        MngAdmin2(id=1, admin_1_id=1, name="Visible Region", visible=True, enable=True)
+        MngAdmin2(id=1, admin_1_id=1, name="Visible Region", ext_id="VIS1", visible=True, enable=True)
     ]
     
     mock_db.query.return_value.filter.return_value.all.return_value = mock_admin2s
@@ -178,11 +178,12 @@ def test_get_by_visible(admin2_service, mock_db):
 # ---- Tests para create ----
 def test_create_admin2_valid(admin2_service, mock_db):
     """Test para crear una región Admin2 válida"""
-    admin2_data = Admin2Create(admin_1_id=1, name="New Region")
+    admin2_data = Admin2Create(admin_1_id=1, name="New Region", ext_id="NEW_A2")
     mock_new_admin2 = MngAdmin2(
         id=1, 
         admin_1_id=admin2_data.admin_1_id, 
         name=admin2_data.name, 
+        ext_id=admin2_data.ext_id,
         enable=True,
         visible=True
     )
@@ -214,6 +215,7 @@ def test_update_admin2(admin2_service, mock_db):
         id=admin2_id,
         admin_1_id=1,
         name="Old Region",
+        ext_id="UPD_OLD",
         visible=True,
         enable=True
     )
@@ -234,6 +236,7 @@ def test_delete_admin2(admin2_service, mock_db):
         id=admin2_id,
         admin_1_id=1,
         name="Region to Delete",
+        ext_id="DEL_A2",
         enable=True
     )
     
@@ -248,10 +251,10 @@ def test_delete_admin2(admin2_service, mock_db):
 # ---- Tests de validación ----
 def test_validate_create_duplicate(admin2_service, mock_db):
     """Test para validar duplicados al crear Admin2"""
-    admin2_data = Admin2Create(admin_1_id=1, name="Duplicate Region")
+    admin2_data = Admin2Create(admin_1_id=1, name="Duplicate Region", ext_id="DUP_A2")
     
     # Simular que ya existe
-    mock_db.query.return_value.filter.return_value.first.return_value = MngAdmin2(id=99, name="Duplicate Region")
+    mock_db.query.return_value.filter.return_value.first.return_value = MngAdmin2(id=99, name="Duplicate Region", ext_id="DUP_A2")
     
     with patch.object(MngAdmin2Validator, 'create_validate', side_effect=ValueError("Name already exists")):
         with pytest.raises(ValueError) as excinfo:
