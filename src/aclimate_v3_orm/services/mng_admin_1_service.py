@@ -69,6 +69,22 @@ class MngAdmin1Service(BaseService[MngAdmin1, Admin1Create, Admin1Read, Admin1Up
             )
             return [Admin1Read.model_validate(obj) for obj in objs]
 
+    def get_by_ext_id(self,
+                      ext_id: str,
+                      enabled: bool = True,
+                      db: Optional[Session] = None) -> Optional[Admin1Read]:
+        """Get admin1 region by external ID"""
+        with self._session_scope(db) as session:
+            obj = (
+                session.query(self.model)
+                .filter(
+                    self.model.ext_id == ext_id,
+                    self.model.enable == enabled
+                )
+                .first()
+            )
+            return Admin1Read.model_validate(obj) if obj else None
+
     def _validate_create(self, obj_in: Admin1Create, db: Optional[Session] = None):
         """Validation hook called automatically from BaseService.create()"""
         MngAdmin1Validator.create_validate(db, obj_in)

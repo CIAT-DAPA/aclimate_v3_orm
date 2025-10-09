@@ -80,6 +80,22 @@ class MngAdmin2Service(BaseService[MngAdmin2, Admin2Create, Admin2Read, Admin2Up
             objs = session.query(self.model).filter(self.model.visible == visible, self.model.enable == enabled).all()
             return [Admin2Read.model_validate(obj) for obj in objs]
 
+    def get_by_ext_id(self,
+                      ext_id: str,
+                      enabled: bool = True,
+                      db: Optional[Session] = None) -> Optional[Admin2Read]:
+        """Get admin2 region by external ID"""
+        with self._session_scope(db) as session:
+            obj = (
+                session.query(self.model)
+                .filter(
+                    self.model.ext_id == ext_id,
+                    self.model.enable == enabled
+                )
+                .first()
+            )
+            return Admin2Read.model_validate(obj) if obj else None
+
     def _validate_create(self, obj_in: Admin2Create, db: Optional[Session] = None):
         """Validate before creating a new admin2 region"""
         MngAdmin2Validator.create_validate(db, obj_in)

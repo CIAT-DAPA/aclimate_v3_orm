@@ -1,10 +1,9 @@
 from typing import List, Optional
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from ..services.base_service import BaseService
-from ..models import User
+from ..models import User, UserAccess, Role
 from ..validations import UserValidator
 from ..schemas import UserCreate, UserRead, UserUpdate
-from ..models import Role
 from ..enums import Apps
 
 class UserService(BaseService[User, UserCreate, UserRead, UserUpdate]):
@@ -12,10 +11,14 @@ class UserService(BaseService[User, UserCreate, UserRead, UserUpdate]):
         super().__init__(User, UserCreate, UserRead, UserUpdate)
 
     def get_by_keycloak_ext_id(self, keycloak_ext_id: str, enabled: bool = True, db: Optional[Session] = None) -> List[UserRead]:
-        """Get users by external Keycloak ID"""
+        """Get users by external Keycloak ID with relationships loaded"""
         ext_id = keycloak_ext_id.strip() if keycloak_ext_id else keycloak_ext_id
         with self._session_scope(db) as session:
-            objs = session.query(self.model).filter(
+            objs = session.query(self.model).options(
+                joinedload(User.role),
+                joinedload(User.accesses).joinedload(UserAccess.country),
+                joinedload(User.accesses).joinedload(UserAccess.role)
+            ).filter(
                 self.model.keycloak_ext_id == ext_id,
                 self.model.enable == enabled
             ).all()

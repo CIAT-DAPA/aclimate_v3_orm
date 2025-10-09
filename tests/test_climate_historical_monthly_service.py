@@ -129,8 +129,8 @@ def test_get_by_country_id(monthly_service, mock_db):
     """Test para obtener registros por country_id"""
     country_id = 1
     mock_country = MngCountry(id=country_id, name="Test Country", iso2="CL", enable=True)
-    mock_admin1 = MngAdmin1(id=1, country=mock_country, name="Test", enable=True, country_id=country_id)
-    mock_admin2 = MngAdmin2(id=1, admin_1=mock_admin1, name="Test", enable=True, admin_1_id=1, visible=True)
+    mock_admin1 = MngAdmin1(id=1, country=mock_country, name="Test", ext_id="CLIM1", enable=True, country_id=country_id)
+    mock_admin2 = MngAdmin2(id=1, admin_1=mock_admin1, name="Test", ext_id="CLIM2_CTY", enable=True, admin_1_id=1, visible=True)
     mock_location = MngLocation(id=1, admin_2_id=1, admin_2=mock_admin2,
                                 name="Test Location",
                                 latitude=12.34,
@@ -165,8 +165,8 @@ def test_get_by_country_id(monthly_service, mock_db):
 def test_get_by_admin1_id(monthly_service, mock_db):
     """Test para obtener registros por admin1_id"""
     admin1_id = 1
-    mock_admin1 = MngAdmin1(id=admin1_id, name="Test", enable=True, country_id=1)
-    mock_admin2 = MngAdmin2(id=1, admin_1=mock_admin1, name="Test", enable=True, admin_1_id=admin1_id, visible=True)
+    mock_admin1 = MngAdmin1(id=admin1_id, name="Test", ext_id="REG1", enable=True, country_id=1)
+    mock_admin2 = MngAdmin2(id=1, admin_1=mock_admin1, name="Test", ext_id="REG2", enable=True, admin_1_id=admin1_id, visible=True)
     mock_location = MngLocation(id=1, admin_2_id=1, admin_2=mock_admin2,
                                 name="Test Location",
                                 latitude=12.34,

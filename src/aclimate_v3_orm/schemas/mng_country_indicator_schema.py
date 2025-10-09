@@ -1,6 +1,8 @@
 from datetime import datetime
 from typing import Optional, Dict
 from pydantic import BaseModel, Field, ConfigDict
+from .mng_country_schema import CountryRead
+from .mng_indicators_schema import IndicatorRead
 
 class CountryIndicatorBase(BaseModel):
     country_id: int = Field(..., gt=0, description="Country ID")
@@ -29,4 +31,6 @@ class CountryIndicatorUpdate(BaseModel):
 
 class CountryIndicatorRead(CountryIndicatorBase):
     id: int
+    country: Optional[CountryRead] = None
+    indicator: Optional[IndicatorRead] = None
     model_config = ConfigDict(from_attributes=True)

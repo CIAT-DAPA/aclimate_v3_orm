@@ -227,8 +227,8 @@ def test_get_by_country_id(location_service, mock_db):
     """Test para obtener ubicaciones por country_id"""
     country_id = 1
     mock_country = MngCountry(id=1, name="Test Country", iso2="CC", enable=True)
-    mock_admin1 = MngAdmin1(id=1, country_id=country_id, name="Test", country=mock_country, enable=True)
-    mock_admin2 = MngAdmin2(id=1, admin_1_id=1, admin_1=mock_admin1, name="Test", visible=True, enable=True)
+    mock_admin1 = MngAdmin1(id=1, country_id=country_id, ext_id="REG1", name="Test", country=mock_country, enable=True)
+    mock_admin2 = MngAdmin2(id=1, admin_1_id=1, admin_1=mock_admin1, name="Test", ext_id="REG2", visible=True, enable=True)
     mock_location = MngLocation(id=1, 
                                 admin_2_id=1, 
                                 name="Test Location",
@@ -262,7 +262,7 @@ def test_get_by_country_id(location_service, mock_db):
 def test_get_by_admin1_id(location_service, mock_db):
     """Test para obtener ubicaciones por admin1_id"""
     admin1_id = 1
-    mock_admin2 = MngAdmin2(id=1, admin_1_id=admin1_id, name="Test", visible=True, enable=True)
+    mock_admin2 = MngAdmin2(id=1, admin_1_id=admin1_id, ext_id="REG2", name="Test", visible=True, enable=True)
     mock_location = MngLocation(id=1, 
                                 admin_2_id=1, 
                                 name="Test Location",
@@ -295,8 +295,8 @@ def test_get_by_country_name(location_service, mock_db):
     """Test para obtener ubicaciones por nombre de país"""
     country_name = "Test Country"
     mock_country = MngCountry(id=1, name=country_name, iso2="CC", enable=True)
-    mock_admin1 = MngAdmin1(id=1, country=mock_country, name="test", enable=True, country_id=1)
-    mock_admin2 = MngAdmin2(id=1, admin_1=mock_admin1, admin_1_id=1, name="test", visible=True, enable=True)
+    mock_admin1 = MngAdmin1(id=1, country=mock_country, name="test", ext_id="CLIM1", enable=True, country_id=1)
+    mock_admin2 = MngAdmin2(id=1, admin_1=mock_admin1, admin_1_id=1, name="test", ext_id="CLIM2_CTY", visible=True, enable=True)
     mock_location = MngLocation(id=1, 
                                 admin_2_id=1, 
                                 name="Test Location",
@@ -332,8 +332,8 @@ def test_get_by_country_name(location_service, mock_db):
 def test_get_by_admin1_name(location_service, mock_db):
     """Test para obtener ubicaciones por nombre de admin1"""
     admin1_name = "Test Admin1"
-    mock_admin1 = MngAdmin1(id=1, name=admin1_name, enable=True, country_id=1)
-    mock_admin2 = MngAdmin2(id=1, admin_1=mock_admin1,name="test", admin_1_id=1, visible=True, enable=True)
+    mock_admin1 = MngAdmin1(id=1, name=admin1_name, enable=True, ext_id="REG1", country_id=1)
+    mock_admin2 = MngAdmin2(id=1, admin_1=mock_admin1,name="test", admin_1_id=1, ext_id="REG2", visible=True, enable=True)
     mock_location = MngLocation(id=1, 
                                 admin_2_id=1, 
                                 name="Test Location",
@@ -387,7 +387,7 @@ def test_get_by_admin2_id(location_service, mock_db):
 def test_get_by_admin2_name(location_service, mock_db):
     """Test para obtener ubicaciones por nombre de admin2"""
     admin2_name = "Test Admin2"
-    mock_admin2 = MngAdmin2(id=1, name=admin2_name, admin_1_id=1, visible=True, enable=True)
+    mock_admin2 = MngAdmin2(id=1, name=admin2_name, admin_1_id=1, ext_id="REG2", visible=True, enable=True)
     mock_location = MngLocation(id=1, 
                                 admin_2_id=1, 
                                 name="Test Location",
