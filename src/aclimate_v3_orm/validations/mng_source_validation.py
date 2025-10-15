@@ -14,9 +14,9 @@ class MngSourceValidator:
 
     @staticmethod
     def validate_type(source_type: str):
-        """Validate source type is MA or AU"""
-        if source_type not in [SourceType.MANUAL, SourceType.AUTOMATIC]:
-            raise ValueError("Source type must be either 'MA' (Manual) or 'AU' (Automatic)")
+        """Validate source type is MA, AU, SP, PL, or TP"""
+        if source_type not in [SourceType.MANUAL, SourceType.AUTOMATIC, SourceType.SPATIAL, SourceType.PLUVIOMETER, SourceType.THERMOPLUVIOMETER]:
+            raise ValueError("Source type must be either 'MA' (Manual), 'AU' (Automatic), 'SP' (Spatial), 'PL' (Pluviometer), or 'TP' (Thermoplviometer)")
 
     @staticmethod
     def validate_unique_name(db: Session, name: str, exclude_id: int = None):
