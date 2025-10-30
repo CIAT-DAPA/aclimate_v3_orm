@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, Enum, F
 from sqlalchemy.orm import relationship
 from datetime import datetime, timezone
 from ..database.base import Base
-from ..enums import IndicatorsType
+from ..enums import IndicatorsType, Period
 
 
 class MngIndicator(Base):
@@ -13,6 +13,7 @@ class MngIndicator(Base):
     name = Column(String(150), nullable=False)
     short_name = Column(String(50), nullable=False)
     unit = Column(String(25), nullable=False)
+    temporality = Column(Enum(Period), nullable=False)
     description = Column(Text)
     indicator_category_id = Column(Integer, ForeignKey('mng_indicator_category.id'), nullable=True)
     enable = Column(Boolean, default=True)
