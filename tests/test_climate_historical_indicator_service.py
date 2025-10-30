@@ -36,7 +36,8 @@ def test_create_historical_indicator(historical_indicator_service, mock_db):
     mock_indicator = MngIndicator(
         id=1, 
         type="climate", 
-        name="TEMPERATURA", 
+        name="TEMPERATURA",
+        temporality="monthly",
         short_name="TEMP", 
         unit="°C", 
         enable=True,

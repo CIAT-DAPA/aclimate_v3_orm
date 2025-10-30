@@ -34,6 +34,7 @@ def test_create_indicator(indicator_service, mock_db):
         type="climate",
         name="Temperature",
         short_name="TEMP",
+        temporality="monthly",
         unit="°C",
         description="Average temperature",
         indicator_category_id=1
@@ -64,8 +65,8 @@ def test_create_indicator(indicator_service, mock_db):
 def test_get_by_name(indicator_service, mock_db):
     """Test getting indicators by name"""
     mock_indicators = [
-        MngIndicator(id=1, name="Temperature", type="climate", short_name="TEMP", unit="°C", indicator_category_id=1),
-        MngIndicator(id=2, name="Temperature", type="climate", short_name="TEMP2", unit="°C", indicator_category_id=1)
+        MngIndicator(id=1, name="Temperature", type="climate", temporality="monthly", short_name="TEMP", unit="°C", indicator_category_id=1),
+        MngIndicator(id=2, name="Temperature", type="climate", temporality="monthly", short_name="TEMP2", unit="°C", indicator_category_id=1)
     ]
     
     mock_db.query.return_value.filter.return_value.all.return_value = mock_indicators
@@ -77,8 +78,8 @@ def test_get_by_name(indicator_service, mock_db):
 def test_get_by_type(indicator_service, mock_db):
     """Test getting indicators by type"""
     mock_indicators = [
-        MngIndicator(id=1, name="Temp", type="climate", short_name="TEMP", unit="°C", indicator_category_id=1),
-        MngIndicator(id=2, name="Rain", type="climate", short_name="RAIN", unit="mm", indicator_category_id=1)
+        MngIndicator(id=1, name="Temp", type="climate", temporality="monthly", short_name="TEMP", unit="°C", indicator_category_id=1),
+        MngIndicator(id=2, name="Rain", type="climate", temporality="monthly", short_name="RAIN", unit="mm", indicator_category_id=1)
     ]
     
     mock_db.query.return_value.filter.return_value.all.return_value = mock_indicators
@@ -94,6 +95,7 @@ def test_validate_create_duplicate(indicator_service, mock_db):
         name="Temperature",
         short_name="TEMP",
         unit="°C",
+        temporality="monthly",
         indicator_category_id=1
     )
     
