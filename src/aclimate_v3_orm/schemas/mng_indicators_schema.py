@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict
-from ..enums import IndicatorsType
+from ..enums import IndicatorsType, Period
 from .mng_indicator_category_schema import IndicatorCategoryRead
 
 class IndicatorBase(BaseModel):
@@ -10,6 +10,7 @@ class IndicatorBase(BaseModel):
     name: str = Field(..., max_length=150)
     short_name: str = Field(..., max_length=50)
     unit: str = Field(..., max_length=25)
+    temporality: Period = Field(..., description="Time period classification")
     description: Optional[str] = None
     indicator_category_id: int = Field(..., gt=0, description="Category ID for the indicator")
     enable: Optional[bool] = Field(default=True, description="Whether the source is enabled")
@@ -24,6 +25,7 @@ class IndicatorCreate(BaseModel):
     name: str = Field(..., max_length=150)
     short_name: str = Field(..., max_length=50)
     unit: str = Field(..., max_length=25)
+    temporality: Period = Field(..., description="Time period classification")
     description: Optional[str] = None
     indicator_category_id: int = Field(..., gt=0, description="Category ID for the indicator")
     enable: Optional[bool] = Field(default=True, description="Whether the source is enabled")
@@ -34,6 +36,7 @@ class IndicatorUpdate(BaseModel):
     name: Optional[str] = Field(None, max_length=150)
     short_name: Optional[str] = Field(None, max_length=50)
     unit: Optional[str] = Field(None, max_length=25)
+    temporality: Optional[Period] = None
     description: Optional[str] = None
     indicator_category_id: Optional[int] = Field(None, gt=0, description="Category ID for the indicator")
     enable: Optional[bool] = Field(default=True, description="Whether the source is enabled")

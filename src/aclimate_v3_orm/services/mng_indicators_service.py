@@ -53,6 +53,16 @@ class MngIndicatorService(
                 .all()
             return [IndicatorRead.model_validate(obj) for obj in objs]
 
+    def get_by_temporality(self, temporality: str, db: Optional[Session] = None) -> List[IndicatorRead]:
+        """Get records by temporality type"""
+        with self._session_scope(db) as session:
+            objs = (
+                session.query(self.model)
+                .filter(self.model.temporality == temporality)
+                .all()
+            )
+            return [IndicatorRead.model_validate(obj) for obj in objs]
+
     def get_all_enabled(self, db: Optional[Session] = None, enabled: bool = True) -> List[IndicatorRead]:
         """Get all indicators filtered by enabled status"""
         with self._session_scope(db) as session:
