@@ -168,5 +168,80 @@ class ClimateHistoricalDailyService(
                     })
             return result
         
+    def get_latest_by_location(self, location_id: int, days: int = 1, db: Optional[Session] = None) -> Optional[dict]:
+        """
+        Get the latest climate data for a location within the last N days.
+        Returns a dict with the most recent date and all available climate measures.
+        
+        Args:
+            location_id: ID of the location
+            days: Number of days to look back (default: 1, use 0 for no date limit)
+            db: Database session
+            
+        Returns:
+            Dict with date and measures list containing all climate data, or None if no data found
+        """
+        with self._session_scope(db) as session:
+            from datetime import datetime, timedelta
+            
+            # Get the most recent date with data
+            if days > 0:
+                # Calculate the date range
+                end_date = datetime.now().date()
+                start_date = end_date - timedelta(days=days)
+                
+                latest_date_query = (
+                    session.query(func.max(self.model.date))
+                    .filter(
+                        self.model.location_id == location_id,
+                        self.model.date >= start_date,
+                        self.model.date <= end_date
+                    )
+                    .scalar()
+                )
+            else:
+                # No date limit - get the most recent date overall
+                latest_date_query = (
+                    session.query(func.max(self.model.date))
+                    .filter(self.model.location_id == location_id)
+                    .scalar()
+                )
+            
+            if not latest_date_query:
+                return None
+            
+            # Get all measures for that date with JOIN to load measure relationship
+            records = (
+                session.query(self.model)
+                .join(self.model.measure)
+                .filter(
+                    self.model.location_id == location_id,
+                    self.model.date == latest_date_query
+                )
+                .all()
+            )
+            
+            if not records:
+                return None
+            
+            # Build result dict with date and measures list
+            measures = []
+            for record in records:
+                if record.measure:
+                    measures.append({
+                        "measure_id": record.measure_id,
+                        "measure_name": record.measure.name,
+                        "measure_short_name": record.measure.short_name,
+                        "measure_unit": record.measure.unit,
+                        "value": record.value
+                    })
+            
+            result = {
+                "date": latest_date_query,
+                "measures": measures
+            }
+            
+            return result
+        
     def _validate_create(self, obj_in: ClimateHistoricalDailyCreate, db: Optional[Session] = None):
         ClimateHistoricalDailyValidator.create_validate(db, obj_in)
