@@ -1,25 +1,15 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = [ "setuptools>=61.0",]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "aclimate_v3_orm"
-version = "v0.0.41"
+version = "v0.0.42"
 description = "ORM for AClimate database and its methods"
 readme = "README.md"
 requires-python = ">=3.10"
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "Operating System :: OS Independent",
-]
-dependencies = [
-    "sqlalchemy>=2.0.41",
-    "psycopg2>=2.9.10",
-    "python-dotenv>=1.1.0",
-    "typing_extensions>=4.13.2",
-    "pydantic>=2.11.4",
-    "alembic>=1.18.2",
-]
+classifiers = [ "Programming Language :: Python :: 3", "Operating System :: OS Independent",]
+dependencies = [ "sqlalchemy>=2.0.41", "psycopg2>=2.9.10", "python-dotenv>=1.1.0", "typing_extensions>=4.13.2", "pydantic>=2.11.4", "alembic>=1.18.2",]
 [[project.authors]]
 name = "santiago123x"
 email = "s.calderon@cgiar.com"
@@ -34,8 +24,8 @@ Download = "https://github.com/CIAT-DAPA/aclimate_v3_orm"
 [tool.setuptools.package-dir]
 "" = "src"
 
-[tool.setuptools.packages.find]
-where = ["src"]
-
 [tool.setuptools.package-data]
-aclimate_v3_orm = ["alembic.ini", "migrations/script.py.mako"]
+aclimate_v3_orm = [ "alembic.ini", "migrations/script.py.mako",]
+
+[tool.setuptools.packages.find]
+where = [ "src",]
