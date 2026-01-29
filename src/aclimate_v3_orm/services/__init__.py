@@ -28,3 +28,4 @@ from .user_access_service import UserAccessService
 from .user_service import UserService
 from .mng_country_indicator_service import MngCountryIndicatorService
 from .mng_indicator_category_service import MngIndicatorCategoryService
+from .mng_indicators_features_service import MngIndicatorsFeaturesService

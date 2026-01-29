@@ -17,3 +17,4 @@ class MngCountryIndicator(Base):
 
     country = relationship('MngCountry', back_populates='country_indicators')
     indicator = relationship('MngIndicator', back_populates='country_indicators')
+    indicator_features = relationship('MngIndicatorsFeatures', back_populates='country_indicator', cascade="all, delete-orphan")

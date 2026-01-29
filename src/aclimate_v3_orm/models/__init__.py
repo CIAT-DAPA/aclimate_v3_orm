@@ -27,3 +27,4 @@ from .user import User
 from .user_access import UserAccess
 from .mng_country_indicator import MngCountryIndicator
 from .mng_indicator_category import MngIndicatorCategory
+from .mng_indicators_features import MngIndicatorsFeatures
