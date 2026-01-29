@@ -27,3 +27,4 @@ from .user_schema import UserCreate, UserRead, UserUpdate
 from .user_access_schema import UserAccessCreate, UserAccessRead, UserAccessUpdate
 from .mng_country_indicator_schema import CountryIndicatorCreate, CountryIndicatorRead, CountryIndicatorUpdate
 from .mng_indicator_category_schema import IndicatorCategoryCreate, IndicatorCategoryRead, IndicatorCategoryUpdate
+from .mng_indicators_features_schema import IndicatorFeatureCreate, IndicatorFeatureRead, IndicatorFeatureUpdate

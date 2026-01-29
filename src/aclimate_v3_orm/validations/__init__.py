@@ -27,3 +27,4 @@ from .role_validation import RoleValidator
 from .user_access_validation import UserAccessValidator
 from .mng_country_indicator_validation import MngCountryIndicatorValidator
 from .mng_indicator_category_validation import MngIndicatorCategoryValidator
+from .mng_indicators_features_validation import MngIndicatorsFeaturesValidator
