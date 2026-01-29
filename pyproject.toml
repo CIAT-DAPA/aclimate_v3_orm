@@ -35,3 +35,6 @@ Download = "https://github.com/CIAT-DAPA/aclimate_v3_orm"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+aclimate_v3_orm = ["alembic.ini", "migrations/script.py.mako"]
