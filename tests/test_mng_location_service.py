@@ -26,6 +26,7 @@ def test_create_location(location_service, mock_db):
     # 1. Configurar datos de prueba válidos
     location_data = LocationCreate(
         name="Test Location",
+        machine_name="test-location",
         admin_2_id=1,
         source_id=1,
         latitude=12.34,
@@ -67,6 +68,7 @@ def test_update_location(location_service, mock_db):
         admin_2_id=1,
         source_id=1,
         name="Original Location",
+        machine_name="original-location",
         enable=True,
         altitude=23,
         ext_id="Test1",
@@ -91,6 +93,7 @@ def test_delete_location(location_service, mock_db):
         admin_2_id=1,
         source_id=1,
         name="Location to Delete",
+        machine_name="location-to-delete",
         enable=True,
         altitude=23,
         ext_id="Test1",
@@ -112,7 +115,8 @@ def test_get_by_visible(location_service, mock_db):
     """Test simplificado para obtener ubicaciones por visibilidad"""
     # Configurar datos de prueba
     visible_location = MngLocation(id=1, 
-                    name="Visible Location", 
+                    name="Visible Location",
+                    machine_name="visible-location", 
                     visible=True, 
                     enable=True,
                     altitude=23,
@@ -122,7 +126,8 @@ def test_get_by_visible(location_service, mock_db):
                     source_id=1,
                     admin_2_id=1)
     hidden_location = MngLocation(id=2, 
-                    name="Hidden Location", 
+                    name="Hidden Location",
+                    machine_name="hidden-location", 
                     visible=False, 
                     enable=True,
                     altitude=24,
@@ -152,7 +157,8 @@ def test_get_by_ext_id(location_service, mock_db):
     """Test para obtener ubicaciones por ID externo"""
     ext_id = "EXT123"
     mock_location = MngLocation(id=1, 
-                                ext_id=ext_id, 
+                                ext_id=ext_id,
+                                machine_name="test-location", 
                                 name="Test Location", 
                                 enable=True,
                                 latitude=12.34,
@@ -174,7 +180,8 @@ def test_get_by_name(location_service, mock_db):
     location_name = "Test Location"
     mock_location = [
         MngLocation(id=1,
-                    name=location_name, 
+                    name=location_name,
+                    machine_name="test-location", 
                     enable=True,
                     latitude=12.34,
                     longitude=56.78,
@@ -195,7 +202,8 @@ def test_get_all_enable(location_service, mock_db):
     """Test para obtener todas las ubicaciones habilitadas"""
     mock_locations = [
         MngLocation(id=1, 
-                    name="Location 1", 
+                    name="Location 1",
+                    machine_name="location-1", 
                     enable=True,admin_2_id=1, 
                     latitude=12.34,
                     longitude=56.78,
@@ -204,7 +212,8 @@ def test_get_all_enable(location_service, mock_db):
                     source_id=1,
                     visible=True),
         MngLocation(id=2, 
-                    name="Location 2", 
+                    name="Location 2",
+                    machine_name="location-2", 
                     enable=True,
                     admin_2_id=1,
                     latitude=12.34,
@@ -232,6 +241,7 @@ def test_get_by_country_id(location_service, mock_db):
     mock_location = MngLocation(id=1, 
                                 admin_2_id=1, 
                                 name="Test Location",
+                                machine_name="test-location-country",
                                 latitude=12.34,
                                 longitude=56.78,
                                 altitude=23,
@@ -266,6 +276,7 @@ def test_get_by_admin1_id(location_service, mock_db):
     mock_location = MngLocation(id=1, 
                                 admin_2_id=1, 
                                 name="Test Location",
+                                machine_name="test-location-admin1",
                                 latitude=12.34,
                                 longitude=56.78,
                                 altitude=23,
@@ -300,6 +311,7 @@ def test_get_by_country_name(location_service, mock_db):
     mock_location = MngLocation(id=1, 
                                 admin_2_id=1, 
                                 name="Test Location",
+                                machine_name="test-location",
                                 latitude=12.34,
                                 longitude=56.78,
                                 altitude=23,
@@ -337,6 +349,7 @@ def test_get_by_admin1_name(location_service, mock_db):
     mock_location = MngLocation(id=1, 
                                 admin_2_id=1, 
                                 name="Test Location",
+                                machine_name="test-location-admin1-name",
                                 latitude=12.34,
                                 longitude=56.78,
                                 altitude=23,
@@ -369,6 +382,7 @@ def test_get_by_admin2_id(location_service, mock_db):
     mock_location = MngLocation(id=1, 
                                 admin_2_id=admin2_id, 
                                 name="Test Location",
+                                machine_name="test-location-admin2",
                                 latitude=12.34,
                                 longitude=56.78,
                                 altitude=23,
@@ -391,6 +405,7 @@ def test_get_by_admin2_name(location_service, mock_db):
     mock_location = MngLocation(id=1, 
                                 admin_2_id=1, 
                                 name="Test Location",
+                                machine_name="test-location-admin2-name",
                                 latitude=12.34,
                                 longitude=56.78,
                                 altitude=23,
@@ -422,6 +437,7 @@ def test_validate_create_duplicate(location_service, mock_db):
         admin_2_id=1,
         source_id=1,
         name="Duplicate Location",
+        machine_name="duplicate-location",
         ext_id="DUPL123",
         latitude=12.34,
         longitude=56.78,
@@ -431,7 +447,7 @@ def test_validate_create_duplicate(location_service, mock_db):
     )
     
     # Simular que ya existe
-    mock_db.query.return_value.filter.return_value.first.return_value = MngLocation(id=99, name="Duplicate Location")
+    mock_db.query.return_value.filter.return_value.first.return_value = MngLocation(id=99, name="Duplicate Location", machine_name="duplicate-location", admin_2_id=1, source_id=1, latitude=0, longitude=0, altitude=0, ext_id="DUP")
     
     with patch.object(MngLocationValidator, 'create_validate', side_effect=ValueError("Location already exists")):
         with pytest.raises(ValueError) as excinfo:
@@ -447,6 +463,7 @@ def test_get_by_source_id(location_service, mock_db):
         MngLocation(
             id=1,
             name="Location 1",
+            machine_name="location-src-1",
             source_id=source_id,
             enable=True,
             altitude=23,
@@ -459,6 +476,7 @@ def test_get_by_source_id(location_service, mock_db):
         MngLocation(
             id=2,
             name="Location 2",
+            machine_name="location-src-2",
             source_id=source_id,
             enable=True,
             altitude=23,
@@ -491,6 +509,7 @@ def test_get_by_source_type(location_service, mock_db):
         MngLocation(
             id=1,
             name="Manual Location 1",
+            machine_name="manual-location-1",
             source_id=1,
             enable=True,
             admin_2_id=1,
@@ -521,3 +540,140 @@ def test_get_by_source_type(location_service, mock_db):
     assert result[0].name == "Manual Location 1"
     assert result[0].source.source_type == source_type
     query_mock.join.assert_called_once_with(MngLocation.source)
+
+# ---- Tests para machine_name ----
+def test_get_by_machine_name(location_service, mock_db):
+    """Test para obtener ubicación por machine_name"""
+    machine_name = "test-station-01"
+    mock_location = MngLocation(
+        id=1,
+        name="Test Station 01",
+        machine_name=machine_name,
+        ext_id="TS01",
+        admin_2_id=1,
+        source_id=1,
+        latitude=12.34,
+        longitude=56.78,
+        altitude=100,
+        enable=True,
+        visible=True
+    )
+    
+    mock_db.query.return_value.filter.return_value.first.return_value = mock_location
+    
+    result = location_service.get_by_machine_name(machine_name, db=mock_db)
+    
+    assert result is not None
+    assert result.machine_name == machine_name
+    assert result.name == "Test Station 01"
+
+def test_get_by_machine_name_not_found(location_service, mock_db):
+    """Test para obtener ubicación por machine_name inexistente"""
+    machine_name = "non-existent"
+    
+    mock_db.query.return_value.filter.return_value.first.return_value = None
+    
+    result = location_service.get_by_machine_name(machine_name, db=mock_db)
+    
+    assert result is None
+
+def test_validate_machine_name_format_valid():
+    """Test para validar formato válido de machine_name"""
+    valid_names = [
+        "station-01",
+        "test-station",
+        "my-weather-station-2024",
+        "station123",
+        "a-b-c-d"
+    ]
+    
+    for name in valid_names:
+        # No debería lanzar excepción
+        MngLocationValidator.validate_machine_name_format(name)
+
+def test_validate_machine_name_format_invalid():
+    """Test para validar formato inválido de machine_name"""
+    invalid_names = [
+        "Station-01",  # Mayúsculas
+        "station_01",  # Guion bajo
+        "station 01",  # Espacio
+        "station--01",  # Doble guion
+        "-station",    # Empieza con guion
+        "station-",    # Termina con guion
+        "",            # Vacío
+        "UPPERCASE",   # Todo mayúsculas
+        "test@station", # Caracteres especiales
+    ]
+    
+    for name in invalid_names:
+        with pytest.raises(ValueError) as excinfo:
+            MngLocationValidator.validate_machine_name_format(name)
+        assert "machine_name" in str(excinfo.value).lower()
+
+def test_validate_unique_machine_name(mock_db):
+    """Test para validar unicidad de machine_name al crear"""
+    machine_name = "existing-station"
+    
+    # Simular que ya existe una ubicación con ese machine_name
+    mock_db.query.return_value.filter.return_value.first.return_value = MngLocation(
+        id=99,
+        machine_name=machine_name,
+        name="Existing Station",
+        admin_2_id=1,
+        source_id=1,
+        latitude=12.34,
+        longitude=56.78,
+        altitude=100,
+        ext_id="EX01"
+    )
+    
+    with pytest.raises(ValueError) as excinfo:
+        MngLocationValidator.validate_unique_machine_name(mock_db, machine_name)
+    
+    assert "machine_name" in str(excinfo.value)
+    assert machine_name in str(excinfo.value)
+
+def test_validate_unique_machine_name_on_update(mock_db):
+    """Test para validar unicidad de machine_name al actualizar (excluyendo el mismo registro)"""
+    machine_name = "station-01"
+    location_id = 1
+    
+    # Simular que NO existe otra ubicación con ese machine_name (solo la que estamos actualizando)
+    mock_query = MagicMock()
+    mock_db.query.return_value = mock_query
+    mock_query.filter.return_value = mock_query
+    mock_query.first.return_value = None
+    
+    # No debería lanzar excepción
+    MngLocationValidator.validate_unique_machine_name(mock_db, machine_name, location_id)
+
+def test_create_location_with_machine_name(location_service, mock_db):
+    """Test para crear ubicación con machine_name válido"""
+    location_data = LocationCreate(
+        name="New Station",
+        machine_name="new-station",
+        admin_2_id=1,
+        source_id=1,
+        latitude=12.34,
+        longitude=56.78,
+        altitude=100,
+        ext_id="NS01"
+    )
+    
+    # Configurar mocks
+    mock_db.query.return_value.filter.return_value.first.return_value = None
+    mock_db.add.return_value = None
+    mock_db.commit.return_value = None
+    
+    def mock_refresh(obj):
+        obj.id = 1
+        obj.enable = True
+    
+    mock_db.refresh.side_effect = mock_refresh
+    
+    with patch.object(MngLocationValidator, 'create_validate'):
+        result = location_service.create(location_data, db=mock_db)
+    
+    assert isinstance(result, LocationRead)
+    assert result.machine_name == "new-station"
+    assert result.name == "New Station"

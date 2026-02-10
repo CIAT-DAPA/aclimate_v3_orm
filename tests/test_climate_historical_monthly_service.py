@@ -99,6 +99,7 @@ def test_get_by_location_name(monthly_service, mock_db):
     location_name = "Test Location"
     mock_location = MngLocation(id=1, admin_2_id=1,
                                 name=location_name,
+                                machine_name="test-location",
                                 latitude=12.34,
                                 longitude=56.78,
                                 altitude=23,
@@ -133,6 +134,7 @@ def test_get_by_country_id(monthly_service, mock_db):
     mock_admin2 = MngAdmin2(id=1, admin_1=mock_admin1, name="Test", ext_id="CLIM2_CTY", enable=True, admin_1_id=1, visible=True)
     mock_location = MngLocation(id=1, admin_2_id=1, admin_2=mock_admin2,
                                 name="Test Location",
+                                machine_name="test-location-country",
                                 latitude=12.34,
                                 longitude=56.78,
                                 altitude=23,
@@ -169,6 +171,7 @@ def test_get_by_admin1_id(monthly_service, mock_db):
     mock_admin2 = MngAdmin2(id=1, admin_1=mock_admin1, name="Test", ext_id="REG2", enable=True, admin_1_id=admin1_id, visible=True)
     mock_location = MngLocation(id=1, admin_2_id=1, admin_2=mock_admin2,
                                 name="Test Location",
+                                machine_name="test-location-admin1",
                                 latitude=12.34,
                                 longitude=56.78,
                                 altitude=23,

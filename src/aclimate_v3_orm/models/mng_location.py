@@ -10,6 +10,7 @@ class MngLocation(Base):
     admin_2_id = Column(BigInteger, ForeignKey('mng_admin_2.id'), nullable=False)
     source_id = Column(Integer, ForeignKey('mng_source.id'), nullable=False)
     name = Column(String(255), nullable=False)
+    machine_name = Column(String(120), nullable=False, unique=True)
     ext_id = Column(String(255), nullable=False)
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)

@@ -102,6 +102,7 @@ def test_get_by_location_name(climatology_service, mock_db):
     location_name = "Test Location"
     mock_location = MngLocation(id=1, admin_2_id=1,
                                 name=location_name,
+                                machine_name="test-location",
                                 source_id=1,
                                 latitude=12.34,
                                 longitude=56.78,
@@ -136,6 +137,7 @@ def test_get_by_country_id(climatology_service, mock_db):
     mock_admin2 = MngAdmin2(id=1, admin_1=mock_admin1, name="Test", ext_id="CLIM2_CTY", enable=True, admin_1_id=1, visible=True)
     mock_location = MngLocation(id=1, admin_2_id=1, admin_2=mock_admin2,
                                 name="Test Location",
+                                machine_name="test-location-country",
                                 latitude=12.34,
                                 source_id=1,
                                 longitude=56.78,
@@ -174,6 +176,7 @@ def test_get_by_country_name(climatology_service, mock_db):
     mock_admin2 = MngAdmin2(id=1, admin_1=mock_admin1, name="Test", ext_id="CLIM2_NAME", enable=True, admin_1_id=1, visible=True)
     mock_location = MngLocation(id=1, admin_2_id=1, admin_2=mock_admin2,
                                 name="Test Location",
+                                machine_name="test-location-country-name",
                                 latitude=12.34,
                                 longitude=56.78,
                                 altitude=23,
@@ -215,6 +218,7 @@ def test_get_by_admin1_id(climatology_service, mock_db):
     mock_location = MngLocation(id=1,
                                 admin_2_id=1, 
                                 admin_2=mock_admin2,
+                                machine_name="test-location-admin1",
                                 latitude=12.34,
                                 longitude=56.78,
                                 visible=True,
