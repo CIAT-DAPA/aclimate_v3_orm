@@ -46,6 +46,7 @@ def test_create_historical_indicator(historical_indicator_service, mock_db):
     mock_location = MngLocation(id=1, 
                                 admin_2_id=1, 
                                 name="Test Location",
+                                machine_name="test-location",
                                 latitude=12.34,
                                 longitude=56.78,
                                 altitude=23,

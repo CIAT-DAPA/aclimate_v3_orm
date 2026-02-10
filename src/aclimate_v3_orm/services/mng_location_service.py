@@ -36,6 +36,15 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
             ).all()
             return [LocationRead.model_validate(obj) for obj in objs]
 
+    def get_by_machine_name(self, machine_name: str, enabled: bool = True, db: Optional[Session] = None) -> Optional[LocationRead]:
+        """Obtiene ubicación por machine_name"""
+        with self._session_scope(db) as session:
+            obj = session.query(self.model).filter(
+                self.model.machine_name == machine_name, 
+                self.model.enable == enabled
+            ).first()
+            return LocationRead.model_validate(obj) if obj else None
+
     def get_all_enable(self, db: Optional[Session] = None, enable: bool = True) -> List[LocationRead]:
         """Obtiene todas las ubicaciones filtradas por estado habilitado"""
         with self._session_scope(db) as session:
