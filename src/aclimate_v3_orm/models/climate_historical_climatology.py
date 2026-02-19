@@ -1,4 +1,4 @@
-from sqlalchemy import Column, BigInteger, Integer, Float, ForeignKey
+from sqlalchemy import Column, BigInteger, Integer, Float, ForeignKey, Index
 from sqlalchemy.orm import relationship
 from ..database.base import Base
 
@@ -10,6 +10,11 @@ class ClimateHistoricalClimatology(Base):
     measure_id = Column(Integer, ForeignKey("mng_climate_measure.id"), nullable=False)
     month = Column(Integer, nullable=False)
     value = Column(Float, nullable=False)
+
+    __table_args__ = (
+        Index('ix_climatology_location_measure_month', location_id, measure_id, month, unique=True),
+    )
+
 
     location = relationship("MngLocation", back_populates="climatology_data")
     measure = relationship("MngClimateMeasure", back_populates="climatology_data")
