@@ -1,4 +1,4 @@
-from sqlalchemy import Column, BigInteger, String, Float, Boolean, DateTime, ForeignKey, Integer
+from sqlalchemy import Column, BigInteger, String, Float, Boolean, DateTime, ForeignKey, Integer, Index
 from sqlalchemy.orm import relationship
 from ..database.base import Base
 from datetime import datetime, timezone
@@ -19,6 +19,13 @@ class MngLocation(Base):
     register = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
     visible = Column(Boolean, default=True)
+
+    __table_args__ = (
+        Index('ix_location_admin2', admin_2_id),
+        Index('ix_location_source', source_id),
+        Index('ix_location_ext_id', ext_id),
+        Index('ix_location_machine_name', machine_name)
+    )
 
 
     admin_2 = relationship('MngAdmin2', back_populates='location')
