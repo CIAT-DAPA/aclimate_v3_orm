@@ -23,18 +23,18 @@ def upgrade() -> None:
     # Add new value to Period enum
     # Note: This operation cannot be run inside a transaction in PostgreSQL
     op.execute("COMMIT")  # Commit the current transaction
-    op.execute("ALTER TYPE period ADD VALUE IF NOT EXISTS 'multiyear_monthly'")
+    op.execute("ALTER TYPE period ADD VALUE IF NOT EXISTS 'MULTIYEAR_MONTHLY'")
 
 
 def downgrade() -> None:
     """Downgrade schema."""
     # PostgreSQL doesn't support removing enum values directly
-    # We need to recreate the enum type without 'multiyear_monthly'
+    # We need to recreate the enum type without 'MULTIYEAR_MONTHLY'
     
-    # Step 1: Create a new temporary enum type without 'multiyear_monthly'
+    # Step 1: Create a new temporary enum type without 'MULTIYEAR_MONTHLY'
     op.execute("""
         CREATE TYPE period_old AS ENUM (
-            'daily', 'monthly', 'annual', 'seasonal', 'decadal', 'other'
+            'DAILY', 'MONTHLY', 'ANNUAL', 'SEASONAL', 'DECADAL', 'OTHER'
         )
     """)
     
