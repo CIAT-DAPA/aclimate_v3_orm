@@ -62,7 +62,7 @@ class MngAdmin1Service(BaseService[MngAdmin1, Admin1Create, Admin1Read, Admin1Up
             objs = (
                 session.query(self.model)
                 .filter(
-                    self.model.name == name,
+                    self.model.name.ilike(f"%{name}%"),
                     self.model.enable == enabled
                 )
                 .all()
