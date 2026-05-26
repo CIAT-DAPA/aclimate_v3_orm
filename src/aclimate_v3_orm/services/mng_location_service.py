@@ -31,7 +31,7 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
         """Obtiene ubicaciones por nombre"""
         with self._session_scope(db) as session:
             objs = session.query(self.model).filter(
-                self.model.name == name, 
+                self.model.name.like(f"%{name}%"), 
                 self.model.enable == enabled
             ).all()
             return [LocationRead.model_validate(obj) for obj in objs]
