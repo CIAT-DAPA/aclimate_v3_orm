@@ -71,7 +71,7 @@ class MngAdmin2Service(BaseService[MngAdmin2, Admin2Create, Admin2Read, Admin2Up
     def get_by_name(self, name: str, enabled: bool = True, db: Optional[Session] = None) -> List[Admin2Read]:
         """Get admin2 regions by name"""
         with self._session_scope(db) as session:
-            objs = session.query(self.model).filter(self.model.name == name, self.model.enable == enabled).all()
+            objs = session.query(self.model).filter(self.model.name.ilike(f"%{name}%"), self.model.enable == enabled).all()
             return [Admin2Read.model_validate(obj) for obj in objs]
     
     def get_by_visible(self, visible: bool, enabled: bool = True, db: Optional[Session] = None) -> List[Admin2Read]:
