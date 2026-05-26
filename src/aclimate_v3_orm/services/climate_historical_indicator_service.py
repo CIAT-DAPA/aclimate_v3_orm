@@ -189,11 +189,11 @@ class ClimateHistoricalIndicatorService(
     def _validate_create(self, obj_in: ClimateHistoricalIndicatorCreate, db: Optional[Session] = None):
         """Automatic validation called from BaseService.create()"""
         # Validate indicator exists
-        if not db.query(ClimateHistoricalIndicator).filter(ClimateHistoricalIndicator.id == obj_in.indicator_id).first():
+        if not db.query(MngIndicator).filter(MngIndicator.id == obj_in.indicator_id).first():
             raise ValueError(f"No indicator found with ID {obj_in.indicator_id}")
         
         # Validate location exists
-        if not db.query(ClimateHistoricalIndicator).filter(ClimateHistoricalIndicator.id == obj_in.location_id).first():
+        if not db.query(MngLocation).filter(MngLocation.id == obj_in.location_id).first():
             raise ValueError(f"No location found with ID {obj_in.location_id}")
         
         # Validate date range consistency
