@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, Boolean, String, Text, ForeignKey
 import sqlalchemy
 from sqlalchemy.orm import relationship
 from ..database.base import Base
@@ -14,6 +14,9 @@ class MngCountryIndicator(Base):
     location_forecast = Column(Boolean, default=False)
     location_climate = Column(Boolean, default=False)
     criteria = Column('criteria', sqlalchemy.JSON, nullable=True)
+    description = Column(Text, nullable=True)
+    store = Column(String(255), nullable=True)
+    workspace = Column(String(255), nullable=True)
 
     country = relationship('MngCountry', back_populates='country_indicators')
     indicator = relationship('MngIndicator', back_populates='country_indicators')

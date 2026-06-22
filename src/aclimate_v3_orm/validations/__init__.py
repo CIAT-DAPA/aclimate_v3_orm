@@ -28,3 +28,4 @@ from .user_access_validation import UserAccessValidator
 from .mng_country_indicator_validation import MngCountryIndicatorValidator
 from .mng_indicator_category_validation import MngIndicatorCategoryValidator
 from .mng_indicators_features_validation import MngIndicatorsFeaturesValidator
+from .mng_country_climate_measure_validation import MngCountryClimateMeasureValidator

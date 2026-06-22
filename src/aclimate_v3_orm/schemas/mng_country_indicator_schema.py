@@ -13,6 +13,9 @@ class CountryIndicatorBase(BaseModel):
     location_forecast: bool = Field(default=False, description="Whether the indicator should run by location for forecast")
     location_climate: bool = Field(default=False, description="Whether the indicator should run by location for climate")
     criteria: Optional[Dict] = Field(None, description="Configuration to determine at which level the indicator should run (e.g., full map, admin 1, admin 2)")
+    description: Optional[str] = Field(None, description="Country-specific description of the indicator")
+    store: Optional[str] = Field(None, max_length=255, description="Store path or identifier (optional, only if special)")
+    workspace: Optional[str] = Field(None, max_length=255, description="Workspace identifier (optional, only if special)")
 
 class CountryIndicatorCreate(BaseModel):
     country_id: int = Field(..., gt=0, description="Country ID")
@@ -22,6 +25,9 @@ class CountryIndicatorCreate(BaseModel):
     location_forecast: bool = Field(default=False, description="Whether the indicator should run by location for forecast")
     location_climate: bool = Field(default=False, description="Whether the indicator should run by location for climate")
     criteria: Optional[Dict] = Field(None, description="Configuration to determine at which level the indicator should run (e.g., full map, admin 1, admin 2)")
+    description: Optional[str] = Field(None, description="Country-specific description of the indicator")
+    store: Optional[str] = Field(None, max_length=255, description="Store path or identifier (optional, only if special)")
+    workspace: Optional[str] = Field(None, max_length=255, description="Workspace identifier (optional, only if special)")
 
 class CountryIndicatorUpdate(BaseModel):
     spatial_forecast: Optional[bool] = None
@@ -29,6 +35,9 @@ class CountryIndicatorUpdate(BaseModel):
     location_forecast: Optional[bool] = None
     location_climate: Optional[bool] = None
     criteria: Optional[Dict] = None
+    description: Optional[str] = None
+    store: Optional[str] = None
+    workspace: Optional[str] = None
 
 class CountryIndicatorRead(CountryIndicatorBase):
     id: int
