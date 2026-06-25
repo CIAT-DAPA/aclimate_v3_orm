@@ -18,3 +18,4 @@ class MngClimateMeasure(Base):
     daily_measurements = relationship("ClimateHistoricalDaily", back_populates="measure")
     monthly_measurements = relationship("ClimateHistoricalMonthly", back_populates="measure")
     climatology_data = relationship("ClimateHistoricalClimatology", back_populates="measure")
+    country_climate_measures = relationship('MngCountryClimateMeasure', back_populates='measure', cascade="all, delete-orphan")

@@ -20,3 +20,4 @@ class MngCountry(Base):
     data_sources = relationship('MngDataSource', back_populates='country')
     user_accesses = relationship('UserAccess', back_populates='country')
     country_indicators = relationship('MngCountryIndicator', back_populates='country', cascade="all, delete-orphan")
+    country_climate_measures = relationship('MngCountryClimateMeasure', back_populates='country', cascade="all, delete-orphan")
