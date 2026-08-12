@@ -168,17 +168,17 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
             search = f"%{search_text}%"
             objs = (
                 session.query(self.model)
-                .join(self.model.admin_2)      # MngAdmin2
-                .join(MngAdmin2.admin_1)       # MngAdmin1
-                .join(MngAdmin1.country)       # MngCountry
+                .join(self.model.admin_2)
+                .join(MngAdmin2.admin_1)
+                .join(MngAdmin1.country)
                 .filter(
                     or_(
-                        self.model.name.like(search),
-                        self.model.machine_name.like(search),
-                        self.model.ext_id.like(search),
-                        MngAdmin2.name.like(search),
-                        MngAdmin1.name.like(search),
-                        MngCountry.name.like(search),
+                        self.model.name.ilike(search),
+                        self.model.machine_name.ilike(search),
+                        self.model.ext_id.ilike(search),
+                        MngAdmin2.name.ilike(search),
+                        MngAdmin1.name.ilike(search),
+                        MngCountry.name.ilike(search),
                     ),
                     self.model.enable == enabled
                 )
