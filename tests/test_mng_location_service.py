@@ -677,3 +677,50 @@ def test_create_location_with_machine_name(location_service, mock_db):
     assert isinstance(result, LocationRead)
     assert result.machine_name == "new-station"
     assert result.name == "New Station"
+
+def test_search_by_name_machine_ext_id_and_hierarchy(location_service, mock_db):
+    """Test for partial match search on name, machine_name, ext_id, or hierarchy"""
+    search_text = "test"
+
+    mock_country = MngCountry(id=1, name="Test Country", iso2="CC", enable=True)
+    mock_admin1 = MngAdmin1(id=1, country=mock_country, name="Test Admin1", ext_id="REG1", enable=True, country_id=1)
+    mock_admin2 = MngAdmin2(id=1, admin_1=mock_admin1, admin_1_id=1, name="Test Admin2", ext_id="REG2", visible=True, enable=True)
+    mock_location = MngLocation(
+        id=1,
+        admin_2_id=1,
+        name="Test Location",
+        machine_name="test-location",
+        latitude=12.34,
+        longitude=56.78,
+        altitude=23,
+        ext_id="TEST1",
+        source_id=1,
+        visible=True,
+        enable=True,
+        admin_2=mock_admin2,
+    )
+
+    # Configure mocks for: query -> join -> join -> join -> filter -> distinct -> all
+    query_mock = MagicMock()
+    join1_mock = MagicMock()
+    join2_mock = MagicMock()
+    join3_mock = MagicMock()
+    filter_mock = MagicMock()
+    distinct_mock = MagicMock()
+
+    mock_db.query.return_value = query_mock
+    query_mock.join.return_value = join1_mock
+    join1_mock.join.return_value = join2_mock
+    join2_mock.join.return_value = join3_mock
+    join3_mock.filter.return_value = filter_mock
+    filter_mock.distinct.return_value = distinct_mock
+    distinct_mock.all.return_value = [mock_location]
+
+    result = location_service.search_by_name_machine_ext_id_and_hierarchy(search_text, db=mock_db)
+
+    assert len(result) == 1
+    assert result[0].name == "Test Location"
+    query_mock.join.assert_called_once_with(MngLocation.admin_2)
+    join1_mock.join.assert_called_once_with(MngAdmin2.admin_1)
+    join2_mock.join.assert_called_once_with(MngAdmin1.country)
+    filter_mock.distinct.assert_called_once()

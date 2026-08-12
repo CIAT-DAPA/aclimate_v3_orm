@@ -1,4 +1,5 @@
 from typing import List, Optional
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from ..services.base_service import BaseService
 from ..models import MngLocation, MngCountry, MngAdmin1, MngAdmin2, MngSource
@@ -151,6 +152,37 @@ class MngLocationService(BaseService[MngLocation, LocationCreate, LocationRead, 
                     MngSource.source_type == source_type,
                     self.model.enable == enabled
                 )
+                .all()
+            )
+            return [LocationRead.model_validate(obj) for obj in objs]
+
+    def search_by_name_machine_ext_id_and_hierarchy(
+        self,
+        search_text: str,
+        enabled: bool = True,
+        db: Optional[Session] = None
+    ) -> List[LocationRead]:
+        """Search locations by partial match on name, machine_name, ext_id,
+        or hierarchy (admin2, admin1, country)."""
+        with self._session_scope(db) as session:
+            search = f"%{search_text}%"
+            objs = (
+                session.query(self.model)
+                .join(self.model.admin_2)      # MngAdmin2
+                .join(MngAdmin2.admin_1)       # MngAdmin1
+                .join(MngAdmin1.country)       # MngCountry
+                .filter(
+                    or_(
+                        self.model.name.like(search),
+                        self.model.machine_name.like(search),
+                        self.model.ext_id.like(search),
+                        MngAdmin2.name.like(search),
+                        MngAdmin1.name.like(search),
+                        MngCountry.name.like(search),
+                    ),
+                    self.model.enable == enabled
+                )
+                .distinct()
                 .all()
             )
             return [LocationRead.model_validate(obj) for obj in objs]
