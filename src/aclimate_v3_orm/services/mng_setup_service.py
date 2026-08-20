@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session, joinedload
 from ..services.base_service import BaseService
 from ..models import MngSetup
 from ..schemas import SetupCreate, SetupRead, SetupUpdate
+from ..validations import MngSetupValidator
 
 class MngSetupService(BaseService[MngSetup, SetupCreate, SetupRead, SetupUpdate]):
     def __init__(self):
@@ -32,3 +33,7 @@ class MngSetupService(BaseService[MngSetup, SetupCreate, SetupRead, SetupUpdate]
             if filters:
                 query = query.filter_by(**filters)
             return [self.read_schema.model_validate(obj) for obj in query.all()]
+
+    def _validate_create(self, obj_in: SetupCreate, db: Optional[Session] = None):
+        """Automatic validation called from BaseService.create()"""
+        MngSetupValidator.create_validate(db, obj_in)
