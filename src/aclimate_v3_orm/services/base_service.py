@@ -153,14 +153,17 @@ class BaseService(Generic[T, CreateSchemaType, ReadSchemaType, UpdateSchemaType]
         with self._session_scope(db) as session:
             for i in range(0, len(objs_in), batch_size):
                 batch = objs_in[i:i + batch_size]
+
+                for obj in batch:
+                    self._validate_create(obj, session)
+
                 batch_data = [obj.model_dump() for obj in batch]
-                
                 session.bulk_insert_mappings(self.model, batch_data)
                 session.flush()
                 created_count += len(batch)
-            
+
             session.commit()
-        
+
         return created_count
 
     def update(self, id: int, obj_in: UpdateSchemaType | Dict[str, Any], db: Optional[Session] = None) -> Optional[ReadSchemaType]:
