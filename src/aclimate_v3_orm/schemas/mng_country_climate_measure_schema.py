@@ -1,5 +1,6 @@
 from typing import Optional, List
 from pydantic import BaseModel, Field, ConfigDict
+from ..enums import Period
 from .mng_country_schema import CountryRead
 from .mng_climate_measure_schema import ClimateMeasureRead
 
@@ -11,6 +12,7 @@ class CountryClimateMeasureBase(BaseModel):
     spatial_climate: bool = Field(default=False, description="Whether the measure should run spatially for climate")
     location_forecast: bool = Field(default=False, description="Whether the measure should run by location for forecast")
     location_climate: bool = Field(default=False, description="Whether the measure should run by location for climate")
+    temporality: List[Period] = Field(default_factory=list, description="List of time periods supported by the country climate measure")
     description: Optional[str] = Field(None, description="Country-specific description of the climate measure")
     store: Optional[str] = Field(None, max_length=255, description="Store path or identifier (optional, only if special)")
     workspace: Optional[str] = Field(None, max_length=255, description="Workspace identifier (optional, only if special)")
@@ -23,6 +25,7 @@ class CountryClimateMeasureCreate(BaseModel):
     spatial_climate: bool = Field(default=False, description="Whether the measure should run spatially for climate")
     location_forecast: bool = Field(default=False, description="Whether the measure should run by location for forecast")
     location_climate: bool = Field(default=False, description="Whether the measure should run by location for climate")
+    temporality: List[Period] = Field(default_factory=list, description="List of time periods supported by the country climate measure")
     description: Optional[str] = Field(None, description="Country-specific description of the climate measure")
     store: Optional[str] = Field(None, max_length=255, description="Store path or identifier (optional, only if special)")
     workspace: Optional[str] = Field(None, max_length=255, description="Workspace identifier (optional, only if special)")
@@ -33,6 +36,7 @@ class CountryClimateMeasureUpdate(BaseModel):
     spatial_climate: Optional[bool] = None
     location_forecast: Optional[bool] = None
     location_climate: Optional[bool] = None
+    temporality: Optional[List[Period]] = None
     description: Optional[str] = None
     store: Optional[str] = None
     workspace: Optional[str] = None
