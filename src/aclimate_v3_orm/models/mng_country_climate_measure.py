@@ -1,6 +1,8 @@
-from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, Boolean, ForeignKey, Enum
+from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import relationship
 from ..database.base import Base
+from ..enums import Period
 
 
 class MngCountryClimateMeasure(Base):
@@ -13,6 +15,7 @@ class MngCountryClimateMeasure(Base):
     spatial_climate = Column(Boolean, default=False)
     location_forecast = Column(Boolean, default=False)
     location_climate = Column(Boolean, default=False)
+    temporality = Column(ARRAY(Enum(Period)), nullable=False, default=list)
     description = Column(Text, nullable=True)
     store = Column(String(255), nullable=True)
     workspace = Column(String(255), nullable=True)
