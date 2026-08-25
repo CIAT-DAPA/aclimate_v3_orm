@@ -18,6 +18,19 @@ class MngCountryClimateMeasureValidator:
     @staticmethod
     def create_validate(db: Session, obj_in: CountryClimateMeasureCreate):
         MngCountryClimateMeasureValidator.validate_unique_country_measure(db, obj_in.country_id, obj_in.measure_id)
+        MngCountryClimateMeasureValidator.validate_configs(obj_in)
+
+    @staticmethod
+    def validate_configs(obj_in: CountryClimateMeasureCreate):
+        """Validate that configs are present when the corresponding flag is enabled."""
+        if obj_in.spatial_climate and not obj_in.spatial_climate_conf:
+            raise ValueError(
+                "spatial_climate_conf is required when spatial_climate is True."
+            )
+        if obj_in.location_climate and not obj_in.location_climate_conf:
+            raise ValueError(
+                "location_climate_conf is required when location_climate is True."
+            )
 
     @staticmethod
     def update_validate(db: Session, obj_in: dict, config_id: int):
